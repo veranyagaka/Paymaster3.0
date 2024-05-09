@@ -8,8 +8,10 @@ Contains the static files, the css etc
 ### env
 # NOTE
 > deployment to heroku
-> following the framework
+> following the framework - routes, models, controllers, etc
 > various pages
-> links and redirection ans what not
-> 
+> links and redirection and what not
+> using of other tools  and techniques
+> DELIVERABLES AND MODULES!!!!
+> finally the actual calcualtionS
 <!-- npm init, npm install express-!>
