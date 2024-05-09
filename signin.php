@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PayMaster - Sign In</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="css/login.css">
 </head>
 <body>
 <div class="header">
@@ -30,6 +30,8 @@
 </div>
 <div class="footer">
     &copy; <?php echo(date('Y'))?> PayMaster. All rights reserved.
+    <a href="terms-of-use.php">Terms of Use</a> | 
+    <a href="privacy-policy.php">Privacy Policy</a>
 </div>
 </body>
 </html>
