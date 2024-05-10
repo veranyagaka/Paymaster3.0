@@ -15,3 +15,5 @@ Contains the static files, the css etc
 > DELIVERABLES AND MODULES!!!!
 > finally the actual calcualtionS
 <!-- npm init, npm install express-!>
+the tools to learn 
+ figma, docker, sql
