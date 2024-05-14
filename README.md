@@ -17,3 +17,4 @@ Contains the static files, the css etc
 <!-- npm init, npm install express-!>
 the tools to learn 
  figma, docker, sql
+system deliverables
