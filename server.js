@@ -4,9 +4,6 @@ require('dotenv').config();
 const port = process.env.PORT || 3000;
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/landingpage.html');
-});
 //redirection trial - to signin.php
 const { spawn } = require('child_process');
 const path = require('path');
@@ -51,3 +48,8 @@ app.get('/registration.php', (req, res) => {
 app.listen(port, () => {
     console.log(`PayMaster app listening at http://localhost:${port}`);
 });
+// routes here
+const adminRouter = require('./routes/admin');
+app.use('/', adminRouter);
+const landingRouter = require('./routes/landing');
+app.use('/', landingRouter);
