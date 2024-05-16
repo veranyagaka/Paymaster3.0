@@ -18,3 +18,4 @@ Contains the static files, the css etc
 the tools to learn 
  figma, docker, sql
 system deliverables
+implemetnted routes sort off?
