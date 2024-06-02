@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`PayMaster app listening at http://localhost:${port}`);
 });
 const path = require('path');
 
@@ -26,6 +26,10 @@ app.use(express.static(path.join(__dirname, '../frontend/public')));
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/public', 'login.html'));
 });
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/public', 'register.html'));
+  });
+
 app.get('/profile', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/public', 'profile.html'));
 });
@@ -107,7 +111,7 @@ app.get('/registration.php', (req, res) => {
 // ends here
 app.listen(port, () => {
     console.log(`PayMaster app listening at http://localhost:${port}`);
-});
+});/*
 // routes here
 const adminRouter = require('./routes/admin');
 app.use('/', adminRouter);
