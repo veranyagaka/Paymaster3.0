@@ -34,8 +34,20 @@ app.get('/profile', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/public', 'profile.html'));
 });
 // MySQL connection
-
 const database = require('./database.js')
+app.get('/test', (req, res) => {
+  database.query('SELECT 1 + 1 AS solution', (err, results) => {
+      if (err) {
+          console.error('Database query error:', err);
+          res.status(500).json({ error: 'Database connection failed' });
+      } else {
+          console.log('Database connection successful:', results);
+          res.json({ message: 'Database connection successful', results });
+      }
+  });
+});
+
+
 
 // Login route
 app.post('/login', async (req, res) => {
@@ -61,7 +73,9 @@ app.post('/login', async (req, res) => {
       }
     );
   });
-
+app.get('/profile', (req, res) => {
+  res.send('Welcome to your profile page!');
+  });
 /*const express = require('express');
 const app = express();
 require('dotenv').config();
