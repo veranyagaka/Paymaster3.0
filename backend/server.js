@@ -47,8 +47,6 @@ app.get('/test', (req, res) => {
   });
 });
 
-
-
 // Login route
 app.post('/login', async (req, res) => {
     const { employeeID, password } = req.body;
@@ -76,57 +74,44 @@ app.post('/login', async (req, res) => {
 app.get('/profile', (req, res) => {
   res.send('Welcome to your profile page!');
   });
-/*const express = require('express');
-const app = express();
-require('dotenv').config();
-const port = process.env.PORT || 3000;
-app.use(express.static('public'));
+// Register route
+app.post('/register', async (req, res) => {
+  const { firstName, lastName, password } = req.body;
 
-//redirection trial - to signin.php
-const { spawn } = require('child_process');
-const path = require('path');
-app.get('/signin.php', (req, res) => {
-    const phpPath = '/opt/lampp/bin/php-cgi'; // Replace 'full/path/to/php-cgi' with the actual path to php-cgi
-    const phpScriptPath = path.join(__dirname, 'signin.php');
-    
-    const php = spawn(phpPath, ['-f', phpScriptPath]);
+  // Hash the password before storing it in the database
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-    php.stdout.on('data', (data) => {
-        res.send(data.toString());
-    });
+  // Insert new employee into the database
+  database.query(
+    'INSERT INTO Employee (FirstName, LastName) VALUES (?, ?)',
+    [firstName, lastName],
+    (err, result) => {
+      if (err) {
+        console.error('Error registering employee:', err);
+        res.status(500).json({ error: 'Internal server error' });
+      } else {
+        // Get the newly created employee ID
+        const employeeID = result.insertId;
 
-    php.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-    });
-
-    php.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-    });
+        // Insert login credentials for the new employee
+        database.query(
+          'INSERT INTO employee_login (EmployeeID, Password) VALUES (?, ?)',
+          [employeeID, hashedPassword],
+          (err, result) => {
+            if (err) {
+              console.error('Error creating login credentials:', err);
+              res.status(500).json({ error: 'Internal server error' });
+            } else {
+              res.status(201).json({ message: 'Employee registered successfully!', redirectTo: '/login' });
+            }
+          }
+        );
+      }
+    }
+  );
 });
-////ends here
-// -registration.php
-app.get('/registration.php', (req, res) => {
-    const phpPath = '/opt/lampp/bin/php-cgi'; // Replace 'full/path/to/php-cgi' with the actual path to php-cgi
-    const phpScriptPath = path.join(__dirname, 'registration.php');
-    
-    const php = spawn(phpPath, ['-f', phpScriptPath]);
+ /* 
 
-    php.stdout.on('data', (data) => {
-        res.send(data.toString());
-    });
-
-    php.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-    });
-
-    php.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-    });});
-// ends here
-app.listen(port, () => {
-    console.log(`PayMaster app listening at http://localhost:${port}`);
-});/*
-// routes here
 const adminRouter = require('./routes/admin');
 app.use('/', adminRouter);
 const landingRouter = require('./routes/landing');
