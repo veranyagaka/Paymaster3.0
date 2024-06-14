@@ -2,37 +2,37 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
 //const config = require('/config');
-const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2');
+const path = require('path');
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true })); 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../frontend/views'));
 
-
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/public', 'index.html'));
+  res.render('land');
 });
 
 app.listen(port, () => {
     console.log(`PayMaster app listening at http://localhost:${port}`);
 });
-const path = require('path');
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../frontend/public')));
 
 // Catch-all handler to return the React app
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/public', 'login.html'));
+  res.render('login');
 });
 app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/public', 'register.html'));
+  res.render('register');
   });
-
-app.get('/profile', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/public', 'profile.html'));
-});
 // MySQL connection
 const database = require('./database.js')
 app.get('/test', (req, res) => {
@@ -50,70 +50,86 @@ app.get('/test', (req, res) => {
 // Login route
 app.post('/login', async (req, res) => {
     const { employeeID, password } = req.body;
-  
-    database.query(
-      'SELECT * FROM employee_login WHERE employeeID = ?',
-      [employeeID],
-      async (err, result) => {
-        if (err) {
-          res.status(500).json({ error: 'Internal server error' });
-        } else if (result.length === 0) {
-          res.status(401).json({ error: 'Invalid employeeID or password' });
-        } else {
-          const isPasswordValid = await bcrypt.compare(password, result[0].password);
-          if (isPasswordValid) {
-            const token = jwt.sign({ employeeID: result[0].employeeID }, 'your_secret_key', { expiresIn: '1h' });
-            res.json({ token, redirectTo: '/profile' });
-        } else {
-            res.status(401).json({ error: 'Invalid employee_id or password' });
-          }
-        }
+    try {
+      const [result] = await database.query(
+        'SELECT * FROM Employee WHERE EmployeeID = ?',
+        [employeeID]
+      );
+      console.log('Queried user:', result);
+      if (!result.length) {
+        return res.status(401).json({ error: 'Invalid employeeID2 or password' });
       }
-    );
-  });
-app.get('/profile', (req, res) => {
-  res.send('Welcome to your profile page!');
-  });
+  
+      const validPassword = await bcrypt.compare(password, result[0].password);
+  
+      if (!validPassword) {
+        return res.status(401).json({ error: 'Invalid employeeID or password' });
+      }
+            console.log('Stored Password:', result[0].password);
+            //maybe jwt functionality?
+            res.send({ message: 'Login successful.', redirect: '/profile' });
+          } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Internal server error' });
+          }
+        });
 // Register route
 app.post('/register', async (req, res) => {
-  const { firstName, lastName, password } = req.body;
+  const { email, password } = req.body;
+  console.log(`Received email: ${email}, password: ${password}`);
 
-  // Hash the password before storing it in the database
-  const hashedPassword = await bcrypt.hash(password, 10);
+  if (!email || !password) {
+    return res.status(400).send('Email and password are required');
+  }
+  const existingUserSql = 'SELECT * FROM Employee WHERE email = ?';
 
-  // Insert new employee into the database
-  database.query(
-    'INSERT INTO Employee (FirstName, LastName) VALUES (?, ?)',
-    [firstName, lastName],
-    (err, result) => {
-      if (err) {
-        console.error('Error registering employee:', err);
-        res.status(500).json({ error: 'Internal server error' });
-      } else {
-        // Get the newly created employee ID
-        const employeeID = result.insertId;
-
-        // Insert login credentials for the new employee
-        database.query(
-          'INSERT INTO employee_login (EmployeeID, Password) VALUES (?, ?)',
-          [employeeID, hashedPassword],
-          (err, result) => {
-            if (err) {
-              console.error('Error creating login credentials:', err);
-              res.status(500).json({ error: 'Internal server error' });
-            } else {
-              res.status(201).json({ message: 'Employee registered successfully!', redirectTo: '/login' });
-            }
-          }
-        );
-      }
+  try {
+    const [rows] = await database.query(existingUserSql, [email]);
+    if (rows.length > 0) {
+      return res.status(409).send('Email already exists');
     }
-  );
-});
- /* 
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Internal server error');
+  }
 
-const adminRouter = require('./routes/admin');
-app.use('/', adminRouter);
-const landingRouter = require('./routes/landing');
-app.use('/', landingRouter);
-*/
+  // Hash password before storing
+  const saltRounds = 10; // Adjust salt rounds for security
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+  const sql = 'INSERT INTO Employee (email, password) VALUES (?, ?)';
+  try {
+    await database.query(sql, [email, hashedPassword]);
+    res.send({ message: 'Registration successful. Please login.', redirect: '/login' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Registration failed');
+  }
+  //
+});
+app.get('/profile', (req, res) => {
+  const employee = {
+    name: 'John Doe',
+    position: 'Software Engineer',
+    department: 'Development',
+    email: 'john.doe@example.com',
+    phone: '123-456-7890',
+    about: 'John is a dedicated software engineer with 5 years of experience in web development.'
+  };
+  res.render('profile', { employee });
+});
+
+//admin page
+function isAdmin(req, res, next) {
+  if (!req.user || !req.user.isAdmin) {
+    return res.status(401).send('Unauthorized');
+  }
+  next();
+}
+
+app.get('/admin', isAdmin, (req, res) => {
+  res.render('admin'); 
+});
+app.get('/ad',(req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/admin', 'index.html'));
+});
