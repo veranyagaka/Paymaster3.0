@@ -127,9 +127,26 @@ function isAdmin(req, res, next) {
   next();
 }
 
-app.get('/admin', isAdmin, (req, res) => {
-  res.render('admin'); 
+app.get('/admin', (req, res) => {
+  res.render('admin-dashboard'); 
 });
-app.get('/ad',(req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/admin', 'index.html'));
+app.get('/ad', async (req, res) => {
+  try {
+      // Retrieve employees from the database
+      const [rows] = await database.query('SELECT * FROM Employee');
+      res.render('admin.ejs', { employees: rows });
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  }
+});
+app.get('/profile/:id', async (req, res) => {
+  try {
+      const [rows] = await database.query('SELECT * FROM Employee WHERE employeeID = ?', [req.params.id]);
+      const employee = rows[0];
+      res.render('profile', { employee });
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  }
 });

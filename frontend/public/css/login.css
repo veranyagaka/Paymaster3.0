@@ -97,4 +97,10 @@ body {
   .forgot-link:hover {
     text-decoration: underline;
   }
-  
+  .forget {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 25px 0 35px 0;
+    color: #3f3838;
+  }

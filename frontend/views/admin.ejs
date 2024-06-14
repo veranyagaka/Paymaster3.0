@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management</title>
+</head>
+<body>
+    <h1>Employee Management</h1>
+
+    <!-- Form to add new employee -->
+    <h2>Add Employee</h2>
+    <form action="/add" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="position">Position:</label>
+        <input type="text" id="position" name="position" required><br>
+        <label for="department">Department:</label>
+        <input type="text" id="department" name="department" required><br>
+        <button type="submit">Add Employee</button>
+    </form>
+
+    <!-- Table to display all employees -->
+    <h2>All Employees</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Department</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% employees.forEach(employee => { %>
+                <tr>
+                    <td><%= employee.name %></td>
+                    <td><%= employee.position %></td>
+                    <td><%= employee.department %></td>
+                    <td>
+                        <a href="/edit/<%= employee.id %>">Edit</a>
+                        <form action="/delete/<%= employee.id %>" method="POST" style="display:inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>
