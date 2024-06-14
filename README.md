@@ -1,5 +1,9 @@
 # CS_Project1
--[] Better css for the pages
-# connection to mysql not workking
-# register and login not working
+# Paymaster -Payroll Management System
+-[x] Better css for the pages
+-[] Administrator login
+-[]Profile pages
+
+
+
 what are you doing bro
