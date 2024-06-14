@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paymaster Sign Up Form</title>
+  <link rel="stylesheet" href="/css/registration.css">
+</head>
+<body>
+  <div class="wrapper">
+    <form action="/register" method="POST">
+      <h2>Register</h2>
+        <div class="input-field">
+        <input type="text" id="email" name="email" required>
+        <label>Enter your email</label>
+      </div>     
+      <div class="input-field">
+        <input type="password" id="password" name="password" required>
+        <label>Enter your password</label>
+      </div>
+      <div class="forget">
+        <label for="remember">
+          <input type="checkbox" id="remember">
+          <p>Remember me</p>
+        </label>
+      </div>
+      <button type="submit">Sign Up</button>
+      <div class="register">
+        <p>Already have an account? <a href="/login">Login</a></p>
+      </div>
+    </form>
+  </div>
+  <script>
+    function handleSubmit(event) {
+      event.preventDefault();
+      const formData = {
+        employeeID: event.target.employeeID.value,
+        email: event.target.email.value,
+        password: event.target.password.value,
+      };
+      console.log('Form submitted:', formData);
+      // Add your form submission logic here
+    }
+  </script>
+</body>
+</html>
+  

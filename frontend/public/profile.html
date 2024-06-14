@@ -6,17 +6,283 @@
   <title>Employee Profile</title>
   <link rel="stylesheet" href="style.css">
 </head>
+<div> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+ body {
+  background-color: #181818;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #242424;
+  border-bottom: 1px solid #333;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.search-bar {
+  background-color: #303030;
+  border: 1px solid #444;
+  border-radius: 25px;
+  padding: 5px 15px;
+  width: 300px;
+  margin-right: 20px;
+  display: flex;
+}
+
+.search-bar input {
+  background-color: #303030;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  padding: 5px 10px;
+  width: 100%;
+  border-radius: 25px;
+}
+
+.search-bar input:focus {
+  outline: none;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  width: 35px;
+  height: 35px;
+  margin-right: 15px;
+  border-radius: 50%;
+  background-color: #242424;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.icon:hover {
+  background-color: #303030;
+}
+
+.icon-img {
+  width: 20px;
+  height: 20px;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: #303030;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.tooltip:after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #303030 transparent;
+}
+
+.icon:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.icon:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.icon:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.icon:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+.menu-icon {
+    margin-right: auto; 
+}
+
+.menu-icon i {
+    color: #fff; 
+}
+.settings-icon {
+    margin-left: auto; 
+}
+
+.settings-icon i {
+    color: #fff; 
+}
+.container {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .sidebar {
+    background-color: #2d4b6f;
+    color: white;
+    width: 250px;
+    padding: 20px;
+  }
+  
+  .sidebar img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 0 auto 20px auto;
+  }
+  
+  .sidebar h1, .sidebar p {
+    text-align: center;
+  }
+  
+  .sidebar nav {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .sidebar nav button {
+    background-color: #1a334e;
+    color: white;
+    padding: 10px;
+    border: none;
+    width: 100%;
+    text-align: left;
+  }
+  
+  .sidebar nav ul {
+    list-style-type: none;
+    padding: 5px;
+  }
+  
+  .sidebar nav ul li {
+    margin: 10px 20px;
+    padding: 5px 10px;
+  }
+  
+  .sidebar nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+  }
+  .maincontainer {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+  </style>
+</head>
 <body>
+  <div class="nav-bar">
+    <div class="logo">
+      <img src="#" alt="Paymaster Logo">
+      <span>Paymaster</span>
+    </div>
+    <div class="menu-icon icon" data-tooltip="Menu">
+        <i class="fas fa-bars"></i>
+        <span class="tooltip">Menu</span>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search">
+      <span class="tooltip">Search</span>
+      <div class="icon" data-tooltip="Search">
+        <i class="fas fa-search"></i>
+      </div>
+    </div>
+    <div class="icons">
+      <div class="icon" data-tooltip="Notification">
+        <i class="fas fa-bell"></i>
+        <span class="tooltip">Notification</span>
+      </div>
+
+      <div class="settings-icon icon" data-tooltip="Settings">
+        <i class="fas fa-cog"></i>
+        <span class="tooltip">Settings</span>
+    </div>
+      <div class="icon" data-tooltip="Account">
+        <i class="fas fa-user"></i>
+        <span class="tooltip">Account</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const icons = document.querySelectorAll('.icon');
+    icons.forEach(icon => {
+      icon.addEventListener('mouseover', () => {
+        icon.querySelector('.tooltip').style.visibility = 'visible';
+        icon.querySelector('.tooltip').style.opacity = 1;
+      });
+      icon.addEventListener('mouseout', () => {
+        icon.querySelector('.tooltip').style.visibility = 'hidden';
+        icon.querySelector('.tooltip').style.opacity = 0;
+      });
+    });
+  </script>
+</div>
+<body>
+  <div class = 'profilecontainer'>
+    <div class="sidebar">
+      <img src="{% static 'images/profile-icon.jpg' %}" alt="Profile Picture">
+      <h1>{{ employee.first_name }} {{ employee.last_name }}</h1>
+      <p>{{ employee.employee_id }}</p>
+      <p>{{ employee.email_address }}</p>
+      <nav>
+        <ul>
+          <li><a href="" class="icon-sidebar"><i class="fas fa-home"></i> Home</a></li>
+          <li><a href="" class="icon-sidebar"><i class="fas fa-money-bill-wave"></i> PaySlip</a></li>
+          <li><a href="" class="icon-sidebar"><i class="fas fa-cog"></i> Settings</a></li>
+          <li><a href="" class="icon-sidebar"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+
+
+        </ul>
+        </nav>
+
+  </div>
   <h1>Employee Profile</h1>
   <div class="profile-container">
     <img src="profile-picture.jpg" alt="Employee profile picture">
-    <div class="info-section">
-      <h2>[Employee Name]</h2>
-      <p><b>Job Title:</b> [Job Title]</p>
-      <p><b>Department:</b> [Department]</p>
-      <p><b>Email:</b> <a href="mailto:[Email Address]">[Email Address]</a></p>
-      <p><b>Bio:</b> [Short employee bio]</p>
-    </div>
+    <div class="profile-container">
+      <img src="${employee.profile_picture}" alt="Employee profile picture">
+      <div class="info-section">
+        <h2>${employee.first_name} ${employee.last_name}</h2>
+        <div class = 'maincontainer'>
+
+        <p><b>Job Title:</b> ${employee.job_title}</p>
+        <p><b>Department:</b> ${employee.department}</p>
+        <p><b>Email:</b> <a href="mailto:${employee.email}">${employee.email}</a></p>
+        <p><b>Bio:</b> ${employee.bio}</p>
+      </div>
+
+  </div>
   </div>
   <script src="script.js"></script>  </body>
 </html>

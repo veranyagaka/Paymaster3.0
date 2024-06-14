@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Profile</title>
+  <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-img">
+        <img src="https://via.placeholder.com/150" alt="Profile Image">
+      </div>
+      <div class="profile-nav-info">
+        <h3 class="user-name"><%= employee.name %></h3>
+        <div class="address">
+          <p class="state"><%= employee.position %>,</p>
+          <span class="country"><%= employee.department %></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-bd">
+      <div class="left-side">
+        <div class="profile-side">
+          <p class="email"><i class="fa fa-envelope"></i> <%= employee.email %></p>
+          <p class="phone"><i class="fa fa-phone"></i> <%= employee.phone %></p>
+        </div>
+      </div>
+      <div class="right-side">
+        <div class="profile-body">
+          <h3>About</h3>
+          <p><%= employee.about %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+  <div class="container">
+    <div class="login-box">
+      <div class="illustration">
+        <h1>Welcome Back</h1>
+      </div>
+      <div class="login-form">
+        <h2>Employee Login</h2>
+        <form action= '/login' method="POST" id="loginForm">
+          <div class="input-group">
+            <span class="input-icon">&#9993;</span>
+            <input type="text" id="employeeID" name="employeeID" placeholder="EmployeeID" required>
+          </div>
+          <div class="input-group">
+            <span class="input-icon">&#128274;</span>
+            <input type="password" id="password" name="password"placeholder="Password" required>
+          </div>
+          <button type="submit" class="btn-login">Login</button>
+          <a href="#" class="forgot-link">Forgot Username / Password?</a>
+          <p>Don't have an account? <a href="register">Sign Up</a></p>
+
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      
+      const email = event.target.email.value;
+      const password = event.target.password.value;
+      
+      try {
+        const response = await fetch('/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+          console.log(result.message);
+          if (result.redirect) {
+            window.location.href = result.redirect;
+          }
+        } else {
+          console.error('Error:', result);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+  </script>
+</body>
+</html>
