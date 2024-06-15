@@ -1,0 +1,105 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    width: 250px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-right: 1px solid #ddd;
+}
+
+.calendar-section, .events-section {
+    margin-bottom: 20px;
+}
+
+.calendar-header, .events-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #c2185b;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.icon {
+    font-size: 20px;
+}
+
+.title {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.toggle {
+    font-size: 20px;
+}
+
+.calendar-body, .events-body {
+    background-color: white;
+    padding: 10px;
+    display: none;
+}
+
+.month {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.month-nav {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.month-title {
+    font-size: 16px;
+}
+
+.weekdays, .days {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.weekdays div, .days div {
+    width: calc(100% / 7);
+    text-align: center;
+    padding: 5px 0;
+}
+
+.days div {
+    cursor: pointer;
+}
+
+.days div.selected {
+    background-color: #c2185b;
+    color: white;
+    border-radius: 50%;
+}
+
+.event-date {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.events-list {
+    font-size: 14px;
+}
+
+.help-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #c2185b;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 24px;
+}

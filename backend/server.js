@@ -14,9 +14,16 @@ app.set('views', path.join(__dirname, '../frontend/views'));
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
-
+function displayFullDate() {
+  const today = new Date();
+  const day = today.getDate();
+  const month = today.toLocaleString('default', { month: 'long' });
+  const year = today.getFullYear();
+  const fullDate = `${day} ${month} ${year}`;
+  return fullDate;
+}
 app.get('/', (req, res) => {
-  res.render('land');
+  res.render('land', {displayFullDate});
 });
 
 app.listen(port, () => {
