@@ -10,19 +10,19 @@
     <%- include('sidebar') %>
 
     <h1>Employee Management</h1>
+    <% if (locals.errorMessage) { %>
+        <p style="color: red;"><%= locals.errorMessage %></p>
+    <% } %>
 
-    <!-- Form to add new employee -->
-    <h2>Add Employee</h2>
-    <form action="/add" method="POST">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br>
-        <label for="position">Position:</label>
-        <input type="text" id="position" name="position" required><br>
-        <label for="department">Department:</label>
-        <input type="text" id="department" name="department" required><br>
+    <form action="/admin/employees/add" method="POST">
+        <label for="name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" required><br>
+        <label for="name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" required><br>
+        <label for="position">Email:</label>
+        <input type="text" id="email" name="email" required><br>
         <button type="submit">Add Employee</button>
     </form>
-
     <!-- Table to display all employees -->
     <h2>All Employees</h2>
     <table border="1">
@@ -45,11 +45,10 @@
                     <td><%= employee.job_title %></td>
                     <td><%= employee.department %></td>
                     <td>
-                        <a href="/edit/<%= employee.id %>">Edit</a>
-                        <form action="/delete/<%= employee.id %>" method="POST" style="display:inline;">
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
+                        <form action="/admin/employees/edit/<%= employee.employeeID %>" method="POST">
+                            <button type="submit">Edit</button>      </form>  
+                        <form action="/admin/employees/delete/<%= employee.employeeID %>" method="POST">
+                            <button type="submit">Delete</button>      </form>              </td>
                 </tr>
             <% }); %>
         </tbody>
