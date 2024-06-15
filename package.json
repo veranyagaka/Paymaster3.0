@@ -27,6 +27,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.1",
     "mysql": "^2.18.1",
+    "mysql2": "^3.10.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   }
