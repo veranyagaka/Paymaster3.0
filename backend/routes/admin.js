@@ -62,22 +62,21 @@ router.post('/employees/add', async (req, res) => {
 router.post('/employees/edit/:employeeId', async (req, res) => {
   const employeeId = req.params.employeeId;
 
+  const { first_name, job_title, department } = req.body; // Destructure data from request body
+
   try {
-    // Perform the employee data retrieval asynchronously using await
-    const results = await database.query('SELECT * FROM Employee WHERE EmployeeID = ?', [employeeId]);
+    // Update employee data in the database
+    await database.query('UPDATE employee_profile SET first_name = ?, job_title = ?, department = ? WHERE employeeID = ?', [first_name, job_title, department, employeeId]);
 
-    if (results.length === 0) {
-      return res.status(404).send('Employee not found');
-    }
+    // Handle successful update (e.g., redirect to employee list, display success message)
+    res.redirect('/admin'); // Replace as needed
 
-    const employee = results[0];
-    res.render('edit', { employee }); // Assuming you have an 'edit' view set up
   } catch (error) {
-    console.error('Error fetching employee data:', error);
+    console.error('Error updating employee:', error);
+    // Handle errors (e.g., display error message to user, log the error)
     res.status(500).send('Internal Server Error');
-  }
+  } 
 });
-
   // Route to handle employee deletion
   router.post('/employees/delete/:employeeId', async (req, res) => {
     const employeeId = req.params.employeeId;
@@ -95,6 +94,24 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
     } catch (error) {
       console.error('Error deleting employee:', error);
       return res.status(500).send('Internal Server Error');
+    }
+  });
+  router.post('/edit:employeeId', async (req, res) => {
+    const employeeId = req.params.employeeId;
+
+    const { first_name, job_title, department } = req.body; // Destructure data from request body
+  
+    try {
+      // Update employee data in the database
+      await database.query('UPDATE employee_profile SET first_name = ?, job_title = ?, department = ? WHERE employeeID = ?', [first_name, job_title, department, employeeId]);
+  
+      // Handle successful update (e.g., redirect to employee list, display success message)
+      res.redirect('/admin'); // Replace as needed
+  
+    } catch (error) {
+      console.error('Error updating employee:', error);
+      // Handle errors (e.g., display error message to user, log the error)
+      res.status(500).send('Internal Server Error');
     }
   });
   

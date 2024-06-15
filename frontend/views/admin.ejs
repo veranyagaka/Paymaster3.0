@@ -50,9 +50,21 @@
                         <form action="/admin/employees/delete/<%= employee.employeeID %>" method="POST">
                             <button type="submit">Delete</button>      </form>              </td>
                 </tr>
+                <h1>Edit Employee</h1>
+
+    <form action="/admin/employees/edit/<%= employee.employeeID %>" method="POST">
+        <label for="name">First_name:</label>
+        <input type="text" id="first_name" name="first_name" placeholder="first_name"><br>
+        <label for="job_title">Job Title:</label>
+        <input type="text" id="job_title" name="job_title" ><br>
+        <label for="department">Department:</label>
+        <input type="text" id="department" name="department" ><br>
+        <button type="submit">Save Changes</button>
+      </form>
             <% }); %>
         </tbody>
     </table>
+    
     <%- include('footer') %>
 
 </body>

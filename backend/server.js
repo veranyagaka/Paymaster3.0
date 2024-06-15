@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 2000;
 //const config = require('/config');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -129,7 +129,7 @@ app.get('/profile', async (req, res) => {
   try {
       const [rows] = await database.query('SELECT * FROM employee_profile WHERE employeeID = ?', [req.params.id]);
       const employee = rows[0];
-      res.render('profile', { employee });
+      res.render('profile', { employee: employee });
   } catch (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');
