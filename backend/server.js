@@ -37,6 +37,9 @@ app.use(express.static(path.join(__dirname, '../frontend/public')));
 app.get('/login', (req, res) => {
   res.render('login');
 });
+app.get('/side', (req, res) => {
+  res.render('sidebar');
+});
 app.get('/register', (req, res) => {
   res.render('register');
   });

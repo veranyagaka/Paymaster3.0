@@ -1,0 +1,65 @@
+/* Custom styles for the sidebar */
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+#wrapper {
+    display: flex;
+    align-items: stretch;
+}
+
+#sidebar-wrapper {
+    width: 250px;
+    background-color: #343a40;
+    min-height: 100vh;
+}
+
+#page-content-wrapper {
+    width: 100%;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    margin-left: -250px;
+}
+
+.sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+}
+
+.list-group-item {
+    padding: 20px 15px;
+}
+
+.list-group-item-action {
+    background-color: #343a40;
+    color: white;
+    border: none;
+}
+
+.list-group-item-action:hover {
+    background-color: #495057;
+}
+
+.navbar-nav .nav-item .nav-link {
+    color: #495057;
+}
+
+.navbar-nav .nav-item .badge {
+    margin-left: 5px;
+}
+
+.card {
+    border: none;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0.15rem 0.35rem rgba(58, 59, 69, 0.15);
+}
+
+.card .card-body {
+    padding: 1rem;
+}
+
+.card .card-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}

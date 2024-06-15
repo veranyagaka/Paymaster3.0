@@ -7,27 +7,15 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/admin-dashboard.css">
 </head>
+<style>
+</style>
 <body>
-    <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
         <%- include('sidebar') %>
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-                <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
-                <form class="form-inline my-2 my-lg-0 ml-auto">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
-                </form>
-                <div class="navbar-nav ml-auto">
-                    <a class="nav-item nav-link" href="#">Messages <span class="badge badge-pill badge-primary">4</span></a>
-                    <a class="nav-item nav-link" href="#">Notifications <span class="badge badge-pill badge-primary">4</span></a>
-                    <a class="nav-item nav-link" href="#">Hi, Vera</a>
-                </div>
-            </nav>
-
-            <div class="container-fluid">
                 <h1 class="mt-4">Dashboard</h1>
                 <p>Admin Dashboard</p>
 
@@ -79,7 +67,7 @@
         <!-- /#page-content-wrapper -->
     </div>
     <!-- /#wrapper -->
-
+</div>
     <!-- Bootstrap and necessary scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
@@ -107,12 +95,6 @@
                     }
                 }
             }
-        });
-    </script>
-    <script>
-        $("#menu-toggle").click(function(e) {
-            e.preventDefault();
-            $("#wrapper").toggleClass("toggled");
         });
     </script>
         <%- include('footer') %>
