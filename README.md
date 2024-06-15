@@ -1,8 +1,9 @@
 # CS_Project1
 # Paymaster -Payroll Management System
--[x] Better css for the pages
--[] Administrator login
--[]Profile pages
+- [x] Better css for all the pages
+- [ ] All the 5 modules
+- [ ] Working of all the modules
+
 
 
 
