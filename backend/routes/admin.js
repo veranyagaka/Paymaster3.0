@@ -20,8 +20,8 @@ router.get('/employees', async (req, res) => {
 router.get('/attendance-records', async(req, res) => {
     try {
         // Retrieve employees from the database
-        const [attendanceRecords] = await database.query('SELECT * FROM attendance-records');
-        res.render('attendance_records', { attendanceRecords: attendanceRecords });
+        const [attendanceRecords] = await database.query('SELECT * FROM attendance_records');
+        res.render('attendance-records', { attendanceRecords: attendanceRecords });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');

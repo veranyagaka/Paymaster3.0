@@ -8,27 +8,32 @@
 </head>
 <body>
     <h1>Attendance Records</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Record ID</th>
-                <th>Employee ID</th>
-                <th>Week Start</th>
-                <th>Hours Worked</th>
-                <th>Overtime Hours</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% attendanceRecords.forEach(record => { %>
+
+    <% if (attendanceRecords.length > 0) { %>
+        <table border="1">
+            <thead>
                 <tr>
-                    <td><%= record.record_id %></td>
-                    <td><%= record.employee_id %></td>
-                    <td><%= record.week_start %></td>
-                    <td><%= record.hours_worked %></td>
-                    <td><%= record.overtime_hours %></td>
+                    <th>Record ID</th>
+                    <th>Employee ID</th>
+                    <th>Week Start</th>
+                    <th>Hours Worked</th>
+                    <th>Overtime Hours</th>
                 </tr>
-            <% }); %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <% attendanceRecords.forEach(record => { %>
+                    <tr>
+                        <td><%= record.record_id %></td>
+                        <td><%= record.employee_id %></td>
+                        <td><%= record.week_start %></td>
+                        <td><%= record.hours_worked %></td>
+                        <td><%= record.overtime_hours %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No attendance records at the moment.</p>
+    <% } %>
 </body>
 </html>
