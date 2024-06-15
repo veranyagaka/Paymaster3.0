@@ -26,8 +26,10 @@
     <table border="1">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Position</th>
+                <th>EmployeeID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Job Title</th>
                 <th>Department</th>
                 <th>Action</th>
             </tr>
@@ -35,8 +37,10 @@
         <tbody>
             <% employees.forEach(employee => { %>
                 <tr>
-                    <td><%= employee.name %></td>
-                    <td><%= employee.position %></td>
+                    <td><%= employee.employeeID %></td>
+                    <td><%= employee.first_name %></td>
+                    <td><%= employee.last_name %></td>
+                    <td><%= employee.job_title %></td>
                     <td><%= employee.department %></td>
                     <td>
                         <a href="/edit/<%= employee.id %>">Edit</a>

@@ -35,6 +35,7 @@ app.get('/register', (req, res) => {
   });
 // MySQL connection
 const database = require('./database.js')
+
 app.get('/test', (req, res) => {
   database.query('SELECT 1 + 1 AS solution', (err, results) => {
       if (err) {
@@ -133,7 +134,7 @@ app.get('/admin', (req, res) => {
 app.get('/ad', async (req, res) => {
   try {
       // Retrieve employees from the database
-      const [rows] = await database.query('SELECT * FROM Employee');
+      const [rows] = await database.query('SELECT * FROM employee_profile');
       res.render('admin.ejs', { employees: rows });
   } catch (err) {
       console.error(err);
