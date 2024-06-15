@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Records</title>
+</head>
+<body>
+    <h1>Attendance Records</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Record ID</th>
+                <th>Employee ID</th>
+                <th>Week Start</th>
+                <th>Hours Worked</th>
+                <th>Overtime Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% attendanceRecords.forEach(record => { %>
+                <tr>
+                    <td><%= record.record_id %></td>
+                    <td><%= record.employee_id %></td>
+                    <td><%= record.week_start %></td>
+                    <td><%= record.hours_worked %></td>
+                    <td><%= record.overtime_hours %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>

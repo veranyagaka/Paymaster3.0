@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 //const config = require('/config');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -36,18 +36,6 @@ app.get('/register', (req, res) => {
 // MySQL connection
 const database = require('./database.js')
 
-app.get('/test', (req, res) => {
-  database.query('SELECT 1 + 1 AS solution', (err, results) => {
-      if (err) {
-          console.error('Database query error:', err);
-          res.status(500).json({ error: 'Database connection failed' });
-      } else {
-          console.log('Database connection successful:', results);
-          res.json({ message: 'Database connection successful', results });
-      }
-  });
-});
-
 // Login route
 app.post('/login', async (req, res) => {
     const { employeeID, password } = req.body;
@@ -68,7 +56,7 @@ app.post('/login', async (req, res) => {
       }
             console.log('Stored Password:', result[0].password);
             //maybe jwt functionality?
-            res.send({ message: 'Login successful.', redirect: '/profile' });
+            res.redirect('/profile');
           } catch (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal server error' });
@@ -108,7 +96,7 @@ app.post('/register', async (req, res) => {
   }
   //
 });
-app.get('/profile', (req, res) => {
+app.get('/profile2', (req, res) => {
   const employee = {
     name: 'John Doe',
     position: 'Software Engineer',
@@ -127,23 +115,12 @@ function isAdmin(req, res, next) {
   }
   next();
 }
+const adminRouter =require('./routes/admin')
+app.use('/admin', adminRouter)
 
-app.get('/admin', (req, res) => {
-  res.render('admin-dashboard'); 
-});
-app.get('/ad', async (req, res) => {
+app.get('/profile', async (req, res) => {
   try {
-      // Retrieve employees from the database
-      const [rows] = await database.query('SELECT * FROM employee_profile');
-      res.render('admin.ejs', { employees: rows });
-  } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-  }
-});
-app.get('/profile/:id', async (req, res) => {
-  try {
-      const [rows] = await database.query('SELECT * FROM Employee WHERE employeeID = ?', [req.params.id]);
+      const [rows] = await database.query('SELECT * FROM employee_profile WHERE employeeID = ?', [req.params.id]);
       const employee = rows[0];
       res.render('profile', { employee });
   } catch (err) {

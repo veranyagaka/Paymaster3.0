@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 14, 2024 at 10:32 PM
+-- Generation Time: Jun 15, 2024 at 10:52 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -92,6 +92,56 @@ INSERT INTO `employee_profile` (`employeeID`, `first_name`, `last_name`, `job_ti
 (3, 'Aisha', 'Abdalla', 'Project Manager', 'Operations', 'aisha.abdalla@example.com', 'Aisha is an experienced project manager who excels in leading cross-functional teams.', 'profile-picture-aisha.jpg'),
 (4, 'David', 'Ochieng', 'Software Engineer', 'IT Department', 'david.ochieng@example.com', 'David is a skilled software engineer with over 5 years of experience.', 'profile-picture-david.jpg');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kenyan_salary_structure`
+--
+
+CREATE TABLE `kenyan_salary_structure` (
+  `id` int(11) NOT NULL,
+  `grade` varchar(10) NOT NULL,
+  `min_salary` decimal(10,2) NOT NULL,
+  `max_salary` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `kenyan_salary_structure`
+--
+
+INSERT INTO `kenyan_salary_structure` (`id`, `grade`, `min_salary`, `max_salary`) VALUES
+(1, 'KLR 1', 152060.00, 302980.00),
+(2, 'KLR 2', 120270.00, 180660.00),
+(3, 'KLR 3', 109089.00, 144928.00),
+(4, 'KLR 4', 89748.00, 120270.00),
+(5, 'KLR 5', 77527.00, 103894.00),
+(6, 'KLR 6', 47272.00, 63492.00),
+(7, 'KLR 7', 35275.00, 47272.00),
+(8, 'KLR 8', 30472.00, 42877.00),
+(9, 'KLR 9', 26323.00, 35275.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kenyan_tax_brackets`
+--
+
+CREATE TABLE `kenyan_tax_brackets` (
+  `id` int(11) NOT NULL,
+  `min_income` decimal(10,2) NOT NULL,
+  `max_income` decimal(20,2) NOT NULL,
+  `tax_rate` decimal(5,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `kenyan_tax_brackets`
+--
+
+INSERT INTO `kenyan_tax_brackets` (`id`, `min_income`, `max_income`, `tax_rate`) VALUES
+(1, 0.00, 24000.00, 10.00),
+(2, 24000.01, 32333.00, 25.00),
+(3, 32333.01, 999999999.00, 30.00);
+
 --
 -- Indexes for dumped tables
 --
@@ -109,6 +159,19 @@ ALTER TABLE `employee_profile`
   ADD PRIMARY KEY (`employeeID`);
 
 --
+-- Indexes for table `kenyan_salary_structure`
+--
+ALTER TABLE `kenyan_salary_structure`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `grade` (`grade`);
+
+--
+-- Indexes for table `kenyan_tax_brackets`
+--
+ALTER TABLE `kenyan_tax_brackets`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -123,6 +186,18 @@ ALTER TABLE `Employee`
 --
 ALTER TABLE `employee_profile`
   MODIFY `employeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `kenyan_salary_structure`
+--
+ALTER TABLE `kenyan_salary_structure`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `kenyan_tax_brackets`
+--
+ALTER TABLE `kenyan_tax_brackets`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
