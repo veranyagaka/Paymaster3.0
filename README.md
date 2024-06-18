@@ -1,6 +1,7 @@
 # CS_Project1
 # Paymaster -Payroll Management System
 - [x] Better css for all the pages
+- [ ] Use Bootstrap for the css
 - [ ] All the 5 modules
 - [ ] Working of all the modules
 
