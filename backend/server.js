@@ -138,3 +138,5 @@ app.get('/profile', async (req, res) => {
       res.status(500).send('Internal Server Error');
   }
 });
+const payRouter =require('./routes/payslip')
+app.use('/pay', payRouter)

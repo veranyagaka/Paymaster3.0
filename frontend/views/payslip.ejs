@@ -1,0 +1,32 @@
+<!-- views/payslip.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payslip for <%= month %> <%= year %></title>
+    <style>
+        /* Add your CSS styling here */
+    </style>
+</head>
+<body>
+    <h1>Payslip for <%= month %> <%= year %></h1>
+    <p>Employee Name: <%= employeeName %></p>
+    <p>Employee ID: <%= employeeId %></p>
+    <p>Department: <%= department %></p>
+    <h2>Earnings</h2>
+    <ul>
+        <% earnings.forEach(function(earning) { %>
+            <li><%= earning.description %>: <%= earning.amount %></li>
+        <% }); %>
+    </ul>
+    <h2>Deductions</h2>
+    <ul>
+        <% deductions.forEach(function(deduction) { %>
+            <li><%= deduction.description %>: <%= deduction.amount %></li>
+        <% }); %>
+    </ul>
+    <h2>Net Pay: <%= netPay %></h2>
+    <a href="/pay/download-payslip/<%= month %>/<%= year %>">Download PDF</a>
+</body>
+</html>
