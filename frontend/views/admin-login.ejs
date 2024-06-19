@@ -8,13 +8,13 @@
 </head>
 <body>
   <div class="wrapper">
-    <form action="/login" method="POST">
-      <h2>Employee Login</h2>
+    <form action="/admin-login" method="POST">
+      <h2>Administrator Login</h2>
       <h3>Welcome back</h3>
 
         <div class="input-field">
-        <input type="text" id="employeeID" name="employeeID" required>
-        <label>Enter your EmployeeID</label>
+        <input type="text" id="email" name="email" required>
+        <label>Enter your email</label>
       </div>     
       <div class="input-field">
         <input type="password" id="password" name="password" required>
@@ -28,8 +28,6 @@
       </div>
       <button type="submit">Login Up</button>
       <div class="register">
-          <a href="#" class="forgot-link">Forgot Username / Password?</a>
-          <p>Don't have an account? <a href="register">Sign Up</a></p>
 	</div>
     </form>
   </div>

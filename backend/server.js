@@ -125,6 +125,34 @@ function isAdmin(req, res, next) {
   }
   next();
 }
+app.get('/admin-login', (req, res) => {
+  res.render('admin-login');
+});
+app.post('/admin-login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const [result] = await database.query(
+      'SELECT * FROM admin WHERE email = ?',
+      [email]
+    );
+    console.log('Queried admin:', result);
+    if (!result.length) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    const validPassword = await bcrypt.compare(password, result[0].password);
+
+    if (!validPassword) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+          console.log('Stored Password:', result[0].password);
+          //maybe jwt functionality?
+          res.redirect('/admin');
+        } catch (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Internal server error' });
+        }
+      });
 const adminRouter =require('./routes/admin')
 app.use('/admin', adminRouter)
 
