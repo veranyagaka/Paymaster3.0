@@ -5,81 +5,223 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Management</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-siEtznLwTpEVVAzERYvOHmCTbwzW2n5qwbvSC8U1n3lOMKdWEzqyqC8kpByT5T1p" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<style>
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .table thead th {
+            background-color: #f8f9fa;
+        }
+        .container {
+            padding-top: 20px;
+        }
+		#page-content-wrapper {
+            width: 100%;
+            padding: 20px;
+        }
+        .content-header h1 {
+            margin: 0 0 20px;
+            font-size: 2rem;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .table thead th {
+            background-color: #f8f9fa;
+        }
+    </style>
 </head>
+<body>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
 <style>
-     #page-content-wrapper {
-    width: 100%;
-}
+    body {
+        font-family: 'Nunito', sans-serif;
+    }
 
-    .content-header h1 {
-        margin: 0;
-        font-size: 2rem;
+    #wrapper {
+        display: flex;
+        align-items: stretch;
+    }
+
+    #sidebar-wrapper {
+        width: 250px;
+        background-color: #343a40;
+    }
+
+    #page-content-wrapper {
+        width: 100%;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -250px;
+    }
+
+    .sidebar-heading {
+        padding: 1rem;
+        font-size: 1.2rem;
+        color: #fff;
+        background-color: #343a40;
+    }
+
+    .list-group-item {
+        padding: 20px 15px;
+        color: #fff;
+    }
+
+    .list-group-item:hover {
+        background-color: #495057;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+        color: #495057;
+    }
+
+    .navbar-nav .nav-item .badge {
+        margin-left: 5px;
     }
 </style>
-<body>
-    <%- include('sidebar') %>
-<div id="page-content-wrapper">
-        <div class="container-fluid">
-            <div class="content-header">
-    <h1>Employee Management</h1>
+
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div class="border-right" id="sidebar-wrapper">
+        <div class="logo text-center p-3">
+            <img src="/favicon.ico" alt="Paymaster Logo" style="width: 50px; height: 50px;">
+            <div class="sidebar-heading">Paymaster</div>
+        </div>
+        <div class="list-group list-group-flush">
+            <a href="/admin" class="list-group-item list-group-item-action bg-dark text-white">Dashboard</a>
+            <a href="/admin/employees" class="list-group-item list-group-item-action bg-dark text-white">Employees</a>
+            <a href="/admin/attendance-records" class="list-group-item list-group-item-action bg-dark text-white">Attendance</a>
+            <a href="/admin/leave-requests" class="list-group-item list-group-item-action bg-dark text-white">Leave</a>
+            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Salaries</a>
+            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Reports</a>
+            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Log out</a>
+        </div>
     </div>
-    <% if (locals.errorMessage) { %>
-        <p style="color: red;"><%= locals.errorMessage %></p>
-    <% } %>
+    <!-- /#sidebar-wrapper -->
 
-    <form action="/admin/employees/add" method="POST">
-        <label for="name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" required><br>
-        <label for="name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name" required><br>
-        <label for="position">Email:</label>
-        <input type="text" id="email" name="email" required><br>
-        <button type="submit">Add Employee</button>
-    </form>
-    <!-- Table to display all employees -->
-    <h2>All Employees</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>EmployeeID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Job Title</th>
-                <th>Department</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% employees.forEach(employee => { %>
-                <tr>
-                    <td><%= employee.employeeID %></td>
-                    <td><%= employee.first_name %></td>
-                    <td><%= employee.last_name %></td>
-                    <td><%= employee.job_title %></td>
-                    <td><%= employee.department %></td>
-                    <td>
-                        <form action="/admin/employees/edit/<%= employee.employeeID %>" method="POST">
-                            <button type="submit">Edit</button>      </form>  
-                        <form action="/admin/employees/delete/<%= employee.employeeID %>" method="POST">
-                            <button type="submit">Delete</button>      </form>              </td>
-                </tr>
-                <h1>Edit Employee</h1>
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
 
-    <form action="/admin/employees/edit/<%= employee.employeeID %>" method="POST">
-        <label for="name">First_name:</label>
-        <input type="text" id="first_name" name="first_name" placeholder="first_name"><br>
-        <label for="job_title">Job Title:</label>
-        <input type="text" id="job_title" name="job_title" ><br>
-        <label for="department">Department:</label>
-        <input type="text" id="department" name="department" ><br>
-        <button type="submit">Save Changes</button>
-      </form>
-            <% }); %>
-        </tbody>
-    </table>
-    
-    <%- include('footer') %>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+            <form class="form-inline my-2 my-lg-0 ml-auto">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+            </form>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-item nav-link" href="#">Messages <span class="badge badge-pill badge-primary">4</span></a>
+                <a class="nav-item nav-link" href="#">Notifications <span class="badge badge-pill badge-primary">4</span></a>
+                <a class="nav-item nav-link" href="#">Hi, Vera</a>
+            </div>
+        </nav>
+    </div>
+    <!-- /#page-content-wrapper -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+
+    <div class="container">
+<div class="content-header">
+                <h1>Employee Management</h1>
+            </div>
+            <% if (locals.errorMessage) { %>
+                <div class="alert alert-danger"><%= locals.errorMessage %></div>
+            <% } %>
+
+            <form action="/admin/employees/add" method="POST" class="mb-4">
+                <div class="form-group">
+                    <label for="first_name" class="form-label">First Name:</label>
+                    <input type="text" id="first_name" name="first_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="last_name" class="form-label">Last Name:</label>
+                    <input type="text" id="last_name" name="last_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Employee</button>
+            </form>
+
+            <!-- Table to display all employees -->
+            <h2>All Employees</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>EmployeeID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Job Title</th>
+                        <th>Department</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% employees.forEach(employee => { %>
+                        <tr>
+                            <td><%= employee.employeeID %></td>
+                            <td><%= employee.first_name %></td>
+                            <td><%= employee.last_name %></td>
+                            <td><%= employee.job_title %></td>
+                            <td><%= employee.department %></td>
+                            <td>
+                                <form action="/admin/employees/edit/<%= employee.employeeID %>" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                                </form>
+                                <form action="/admin/employees/delete/<%= employee.employeeID %>" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <h3>Edit Employee</h3>
+                                <form action="/admin/employees/edit/<%= employee.employeeID %>" method="POST">
+                                    <div class="form-group">
+                                        <label for="first_name" class="form-label">First Name:</label>
+                                        <input type="text" id="first_name" name="first_name" class="form-control" placeholder="First Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="job_title" class="form-label">Job Title:</label>
+                                        <input type="text" id="job_title" name="job_title" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="department" class="form-label">Department:</label>
+                                        <input type="text" id="department" name="department" class="form-control">
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Save Changes</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+
+            <%- include('footer') %>
         </div>
-        </div>
+    </div>    </div>
+
+</div>
+
 </body>
 </html>
