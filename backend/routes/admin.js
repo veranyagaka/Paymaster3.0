@@ -114,5 +114,13 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   });
-  
+  router.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error(err);
+        return res.redirect('/admin');
+      }
+      res.redirect('/admin-login');
+    });
+  });
 module.exports= router

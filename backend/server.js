@@ -7,6 +7,9 @@ const jwt = require('jsonwebtoken');
 const mysql = require('mysql2');
 const path = require('path');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const flash = require('connect-flash');
+
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../frontend/views'));
@@ -14,6 +17,18 @@ app.set('views', path.join(__dirname, '../frontend/views'));
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+app.use(session({
+  secret: 'your_secret_key',
+  resave: false,
+  saveUninitialized: true
+}));
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.error = req.flash('error');
+  res.locals.success = req.flash('success');
+  next();
+});
 function displayFullDate() {
   const today = new Date();
   const day = today.getDate();
@@ -119,11 +134,13 @@ app.get('/profile2', (req, res) => {
 });
 
 //admin page
-function isAdmin(req, res, next) {
-  if (!req.user || !req.user.isAdmin) {
-    return res.status(401).send('Unauthorized');
+function isAuthenticated(req, res, next) {
+  if (req.session.adminId) {
+    return next();
+  } else {
+    req.flash('error', 'You need to be logged in to view this page');
+    res.redirect('/admin-login');
   }
-  next();
 }
 app.get('/admin-login', (req, res) => {
   res.render('admin-login');
@@ -145,6 +162,7 @@ app.post('/admin-login', async (req, res) => {
     if (!validPassword) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
+          req.session.adminId = result[0].id;  // Set admin ID in session
           console.log('Stored Password:', result[0].password);
           //maybe jwt functionality?
           res.redirect('/admin');
