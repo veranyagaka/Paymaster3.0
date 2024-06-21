@@ -124,8 +124,13 @@ app.post('/register', async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
   const sql = 'INSERT INTO Employee (email, password) VALUES (?, ?)';
+
   try {
-    await database.query(sql, [email, hashedPassword]);
+    const result = await database.query(sql, [email, hashedPassword]);
+    const employeeID = result[0].insertId;
+    const profile = 'INSERT INTO employee_profile (employeeID, email) VALUES (?,?)';
+    await database.query(profile, [employeeID, email]);
+
     res.send({ message: 'Registration successful. Please login.', redirect: '/login' });
   } catch (err) {
     console.error(err);
@@ -211,3 +216,5 @@ app.get('/logout', (req, res) => {
 });
 const payRouter =require('./routes/payslip')
 app.use('/pay', payRouter)
+const accountsRouter =require('./routes/accounts')
+app.use('/accounts', accountsRouter)
