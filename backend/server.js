@@ -44,6 +44,9 @@ function displayFullDate() {
 app.get('/', (req, res) => {
   res.render('land', {displayFullDate});
 });
+app.get('/nav', (req, res) => {
+  res.render('employee-profile', {displayFullDate});
+});
 
 app.listen(port, () => {
     console.log(`PayMaster app listening at http://localhost:${port}`);
@@ -197,8 +200,11 @@ app.get('/employee-profile', async (req, res) => {
     return res.status(401).redirect('/login'); // Redirect to login if no session
   }
   try {
-      const [rows] = await database.query('SELECT * FROM employee_profile WHERE employeeID = ?', [req.params.id]);
+      const [rows] = await database.query('SELECT * FROM employee_profile WHERE employeeID = ?', [req.session.EmployeeID]);
       const employee = rows[0];
+      if (!employee) {
+        return res.status(404).send('Employee profile not found');
+      }
       res.render('employee-profile', { employee: employee });
   } catch (err) {
       console.error(err);

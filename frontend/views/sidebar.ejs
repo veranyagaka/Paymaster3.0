@@ -1,97 +1,85 @@
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
-<style>
-    body {
-        font-family: 'Nunito', sans-serif;
-    }
+<body>
+    <style>
 
-    #wrapper {
-        display: flex;
-        align-items: stretch;
-    }
+.sidebar {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            height: calc(100% - 70px);
+            width: 250px;
+            background-color: #343a40;
+            padding-top: 15px;
+        }
+        .sidebar .nav-link {
+            color: #fff;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #495057;
+        }
+        .submenu {
+            display: none;
+            background-color: #343a40;
+        }
+        .submenu .nav-link {
+            padding-left: 50px;
+            font-size: 14px;
+        }
+        .submenu .nav-link:hover {
+            background-color: #495057;
+        }
+        .active-submenu {
+            display: block;
+        }
 
-    #sidebar-wrapper {
-        width: 250px;
-        background-color: #343a40;
-    }
-
-    #page-content-wrapper {
-        width: 100%;
-    }
-
-    #wrapper.toggled #sidebar-wrapper {
-        margin-left: -250px;
-    }
-
-    .sidebar-heading {
-        padding: 1rem;
-        font-size: 1.2rem;
-        color: #fff;
-        background-color: #343a40;
-    }
-
-    .list-group-item {
-        padding: 20px 15px;
-        color: #fff;
-    }
-
-    .list-group-item:hover {
-        background-color: #495057;
-    }
-
-    .navbar-nav .nav-item .nav-link {
-        color: #495057;
-    }
-
-    .navbar-nav .nav-item .badge {
-        margin-left: 5px;
-    }
-</style>
-
-<div class="d-flex" id="wrapper">
+    </style>
     <!-- Sidebar -->
-    <div class="border-right" id="sidebar-wrapper">
-        <div class="logo text-center p-3">
-            <img src="/favicon.ico" alt="Paymaster Logo" style="width: 50px; height: 50px;">
-            <div class="sidebar-heading">Paymaster</div>
-        </div>
-        <div class="list-group list-group-flush">
-            <a href="/admin" class="list-group-item list-group-item-action bg-dark text-white">Dashboard</a>
-            <a href="/admin/employees" class="list-group-item list-group-item-action bg-dark text-white">Employees</a>
-            <a href="/admin/attendance-records" class="list-group-item list-group-item-action bg-dark text-white">Attendance</a>
-            <a href="/admin/leave-requests" class="list-group-item list-group-item-action bg-dark text-white">Leave</a>
-            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Salaries</a>
-            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Reports</a>
-            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Log out</a>
-        </div>
+    <div class="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+                <ul class="submenu">
+                    <li class="nav-item"><a class="nav-link" href="#">Account Settings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Security</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Preferences</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-lock"></i> Privacy
+                </a>
+                <ul class="submenu">
+                    <li class="nav-item"><a class="nav-link" href="#">Privacy Settings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Data Access</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-history"></i> Activity
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </li>
+        </ul>
     </div>
-    <!-- /#sidebar-wrapper -->
-
-    <!-- Page Content -->
-    <div id="page-content-wrapper">
-        <div class="container-fluid">
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-            <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
-            <form class="form-inline my-2 my-lg-0 ml-auto">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
-            </form>
-            <div class="navbar-nav ml-auto">
-                <a class="nav-item nav-link" href="#">Messages <span class="badge badge-pill badge-primary">4</span></a>
-                <a class="nav-item nav-link" href="#">Notifications <span class="badge badge-pill badge-primary">4</span></a>
-                <a class="nav-item nav-link" href="#">Hi, Vera</a>
-            </div>
-        </nav>
-    </div>
-    <!-- /#page-content-wrapper -->
-</div>
-</div>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-</script>
+    <script>
+        $(document).ready(function(){
+            $('.nav-link').click(function(){
+                $(this).siblings('.submenu').toggleClass('active-submenu');
+            });
+        });
+    </script>

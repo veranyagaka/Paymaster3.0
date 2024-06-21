@@ -2,16 +2,122 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Profile</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <%- include('navigationbar') %>
+    <%- include('sidebar') %>
+
+    <style>
+        .emp-profile {
+            padding: 3%;
+            margin-top: 3%;
+            margin-bottom: 3%;
+            border-radius: 0.5rem;
+            background: #fff;
+        }
+        .profile-img {
+            text-align: center;
+        }
+        .profile-img img {
+            width: 70%;
+            max-width: 200px; /* Adjust max-width as needed */
+            height: auto;
+        }
+        .profile-img .file {
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+            width: 70%;
+            border: none;
+            border-radius: 0;
+            font-size: 15px;
+            background: #007bff;
+            color: #fff;
+        }
+        .profile-img .file input {
+            position: absolute;
+            opacity: 0;
+            right: 0;
+            top: 0;
+        }
+        .profile-head h5 {
+            color: #333;
+        }
+        .profile-head h6 {
+            color: #0062cc;
+        }
+        .profile-head p {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #6c757d;
+        }
+        .profile-edit-btn {
+            border: none;
+            border-radius: 1.5rem;
+            width: 50%;
+            padding: 2%;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+        }
+        .profile-edit-btn:hover {
+            background-color: #0062cc;
+        }
+    </style>
 </head>
 <body>
-    <% if (employee) { %>
-        <p>Employee ID: <%= employee.employeeID %></p>
-        <p>Name: <%= employee.name %></p>
-        <% } else { %>
-        <p>Error: Profile information unavailable.</p>
-      <% } %>
-    <a href="/logout">Logout</a>
+    <!-- Main Content -->
+    <div class="container">
+        <div class="profile-content">
+            <div class="container emp-profile">
+                <div class="row">
+                    <% if (employee) { %>
 
-    </body>
+                    <div class="col-md-4">
+                        <div class="profile-img">
+                            <img src="#" alt="profile pic" class="img-fluid"/>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="profile-head">
+                            <h5><%= employee.first_name %></h5>
+                            <h6><%= employee.email %></h6>
+                            <p><%= employee.employeeID %></p>
+                        </div>
+                    </div>
+                    <% } else { %>
+                        <p>Error: Profile information unavailable.</p>
+                      <% } %>  
+                </div>
+                <form method="post">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="submit" class="btn btn-primary profile-edit-btn" name="btnAddMore" value="Edit Profile"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to toggle submenu -->
+    <script>
+        $(document).ready(function(){
+            $('.nav-link').click(function(){
+                $(this).siblings('.submenu').toggleClass('active-submenu');
+            });
+        });
+    </script>
+
+</body>
+<%- include('footer') %>
+
 </html>
