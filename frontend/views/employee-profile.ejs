@@ -10,11 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- jQuery and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <%- include('navigationbar') %>
-    <%- include('sidebar') %>
-
     <style>
         .emp-profile {
             padding: 3%;
@@ -62,7 +61,7 @@
         .profile-edit-btn {
             border: none;
             border-radius: 1.5rem;
-            width: 50%;
+            width: auto;
             padding: 2%;
             font-weight: 600;
             color: #fff;
@@ -89,33 +88,66 @@
                     <div class="col-md-8">
                         <div class="profile-head">
                             <h5><%= employee.first_name %></h5>
+                            <h5><%= employee.last_name %></h5>
                             <h6><%= employee.email %></h6>
                             <p><%= employee.employeeID %></p>
+                            <h5><%= employee.department %></h5>
+                            <h5><%= employee.bio %></h5>
+
                         </div>
                     </div>
                     <% } else { %>
                         <p>Error: Profile information unavailable.</p>
                       <% } %>  
                 </div>
-                <form method="post">
+                <form action="/accounts/employees/edit/<%= employee.employeeID %>" method="POST"  class="d-inline">
                     <div class="row">
-                        <div class="col-md-12">
-                            <input type="submit" class="btn btn-primary profile-edit-btn" name="btnAddMore" value="Edit Profile"/>
+                        <div class="col-md-12 text-md-right">
+                            <button class="btn btn-primary profile-edit-btn" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/accounts/employees/edit/<%= employee.employeeID %>" method="POST">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="Enter first name">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="Enter last name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter email">
+                        </div>
+                        <!-- Add more form fields as needed -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
     <!-- JavaScript to toggle submenu -->
-    <script>
-        $(document).ready(function(){
-            $('.nav-link').click(function(){
-                $(this).siblings('.submenu').toggleClass('active-submenu');
-            });
-        });
-    </script>
+    <script src =sidebar.js></script>
 
 </body>
 <%- include('footer') %>

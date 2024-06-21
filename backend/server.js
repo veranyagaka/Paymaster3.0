@@ -14,8 +14,16 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../frontend/views'));
 
 // Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('frontend'));
+app.use(express.static(path.join(__dirname, '../frontend/')));
 app.use(express.json());
+app.use(express.static('public', { 
+  setHeaders: (res, path) => {
+      if (path.endsWith('.js')) {
+          res.setHeader('Content-Type', 'text/javascript');
+      }
+  }
+}));
 app.use(session({
   secret: 'your_secret_key_here',
   resave: false,
@@ -45,7 +53,7 @@ app.get('/', (req, res) => {
   res.render('land', {displayFullDate});
 });
 app.get('/nav', (req, res) => {
-  res.render('employee-profile', {displayFullDate});
+  res.render('navigationbar', {displayFullDate});
 });
 
 app.listen(port, () => {

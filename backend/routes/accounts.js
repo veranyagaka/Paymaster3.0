@@ -25,4 +25,23 @@ router.post('/apply_leave', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+router.post('/employees/edit/:employeeId', async (req, res) => {
+    const employeeId = req.params.employeeId;
+  
+    const { first_name, job_title, department } = req.body; // Destructure data from request body
+  
+    try {
+      // Update employee data in the database
+      await database.query('UPDATE employee_profile SET first_name = ?, job_title = ?, department = ? WHERE employeeID = ?', [first_name, job_title, department, employeeId]);
+  
+      // Handle successful update (e.g., redirect to employee list, display success message)
+      res.redirect('/employee-profile'); // Replace as needed
+  
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      // Handle errors (e.g., display error message to user, log the error)
+      res.status(500).send('Internal Server Error');
+    } 
+  });
 module.exports= router

@@ -152,8 +152,6 @@
             }
         }
     </style>
-</head>
-<body>
     <div class="nav-bar">
         <div class="logo">
             <img src="/favicon.ico" alt="Paymaster Logo">
@@ -164,7 +162,7 @@
             <span class="tooltip">Menu</span>
         </div>
         <div class="profile-links">
-            <a href="/dashboard">
+            <a href="/">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
             </a><br/>
             <a href="/finance">
@@ -177,9 +175,6 @@
             <a href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
-            <form id="logout-form" action="/logout" method="POST" style="display: none;">
-                <!-- CSRF token or other necessary hidden inputs -->
-            </form>
         </div>
         <div class="icons">
             <div class="icon" data-tooltip="Notification">
@@ -196,4 +191,88 @@
             </div>
         </div>
     </div>
+<!-- Include necessary CSS styles specific to sidebar -->
+<style>
+    .sidebar {
+        position: fixed;
+        top: 90px; /* Adjust as needed */
+        left: 0;
+        height: calc(100% - 90px); /* Adjust as needed */
+        width: 250px;
+        background-color: #343a40;
+        transition: left 0.3s ease; 
+        padding-top: 15px;
+    }
+    .sidebar .nav-link {
+        color: #fff;
+        padding: 10px 15px;
+        font-size: 16px;
+    }
+    .sidebar .nav-link i {
+        margin-right: 10px;
+    }
+    .sidebar .nav-link:hover {
+        background-color: #495057;
+    }
+    .sidebar-active {
+        left: 0; /* Show sidebar by moving it to the left edge */
+}
+    .submenu {
+        display: none;
+        background-color: #343a40;
+    }
+    .submenu .nav-link {
+        padding-left: 50px;
+        font-size: 14px;
+    }
+    .submenu .nav-link:hover {
+        background-color: #495057;
+    }
+    .active-submenu {
+        display: block;
+    }
+</style>
+
+<!-- Sidebar HTML -->
+<div class="sidebar">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fas fa-user"></i> Profile
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+            <ul class="submenu">
+                <li class="nav-item"><a class="nav-link" href="#">Change Password</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Change Profile Pic</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Preferences - Dark Mode</a></li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fas fa-lock"></i> Privacy
+            </a>
+            <ul class="submenu">
+                <li class="nav-item"><a class="nav-link" href="#">Privacy Settings</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Data Access</a></li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fas fa-history"></i> Activity
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- JavaScript to toggle submenu -->
+<script type='text/javascript' src="/sidebar.js"></script>
 </head>
