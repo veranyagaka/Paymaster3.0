@@ -167,51 +167,51 @@
             color: #fff;
         }
         .profile-links {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.profile-links p {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.profile-links a {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #000;
-    margin: 0 10px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.profile-links a:hover {
-    background-color: #f0f0f0;
-}
-
-.profile-links a i {
-    margin-right: 5px;
-}
-
-.profile-links a + a {
-    margin-top: 10px;
-}
-
-/* Horizontal layout */
-@media (min-width: 768px) {
-    .profile-links {
-        flex-direction: row;
-    }
-
-    .profile-links a + a {
-        margin-top: 0;
-        margin-left: 10px;
-    }
-}
-   </style>
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .profile-links p {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .profile-links a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #000;
+            margin: 0 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .profile-links a:hover {
+            background-color: #f0f0f0;
+        }
+        .profile-links a i {
+            margin-right: 5px;
+        }
+        .profile-links a + a {
+            margin-top: 10px;
+        }
+        /* Horizontal layout */
+        @media (min-width: 768px) {
+            .profile-links {
+                flex-direction: row;
+            }
+            .profile-links a + a {
+                margin-top: 0;
+                margin-left: 10px;
+            }
+        }
+        .right-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="nav-bar">
@@ -230,7 +230,7 @@
             <a href="/finance">
                 <i class="fas fa-dollar-sign"></i> Finance
             </a><br/>
-            <a href="/employee-benefits">
+            <a href="/employee-attendance">
                 <i class="fas fa-hand-holding-usd"></i> Attendance
             </a><br/>
 
@@ -264,9 +264,12 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="main-content">
-          
+    <div class="col-md-2">
+        <div class="right-section">
+            <h3>Right Section</h3>
+            <p>This section floats to the right.</p>
+        </div>
+    </div>
     <div class="container emp-profile">
         <form method="post">
             <div class="row">
@@ -314,7 +317,7 @@
                         <a href="#">PHP, .Net</a><br/>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <div class="tab-content profile-tab" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <div class="row">
@@ -394,15 +397,9 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </form>
     </div>
-        <div class="floating-column">
-            <p>Vera look</p>
-                      </div>
-    </div>
-
-      </div>
-      
 </body>
 </html>

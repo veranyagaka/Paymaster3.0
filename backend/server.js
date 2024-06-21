@@ -10,7 +10,6 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 
-app.use(bodyParser.urlencoded({ extended: true })); 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../frontend/views'));
 
@@ -18,17 +17,22 @@ app.set('views', path.join(__dirname, '../frontend/views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(session({
-  secret: 'your_secret_key',
+  secret: 'your_secret_key_here',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false,
+  cookie: { secure: false, maxAge: 1000 * 60 * 60 } // Expires in 1 hour
 }));
-app.use(flash());
+app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.json());
+
+/*app.use(flash());
 
 app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   res.locals.success = req.flash('success');
   next();
 });
+*/
 function displayFullDate() {
   const today = new Date();
   const day = today.getDate();
@@ -81,7 +85,15 @@ app.post('/login', async (req, res) => {
       }
             console.log('Stored Password:', result[0].password);
             //maybe jwt functionality?
-            res.redirect('/profile');
+            req.session.EmployeeID = result[0].EmployeeID;
+            req.session.save((err) => {
+              if (err) {
+                console.error(err);
+              } else {
+                console.log('Session saved:', req.session.EmployeeID);
+                res.redirect('employee-profile');
+              }
+            });
           } catch (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal server error' });
@@ -174,15 +186,28 @@ app.post('/admin-login', async (req, res) => {
 const adminRouter =require('./routes/admin')
 app.use('/admin', adminRouter)
 
-app.get('/profile', async (req, res) => {
+app.get('/employee-profile', async (req, res) => {
+  console.log('Session check employeeID:', req.session.EmployeeID);
+  if (!req.session.EmployeeID) {
+    return res.status(401).redirect('/login'); // Redirect to login if no session
+  }
   try {
       const [rows] = await database.query('SELECT * FROM employee_profile WHERE employeeID = ?', [req.params.id]);
       const employee = rows[0];
-      res.render('profile', { employee: employee });
+      res.render('employee-profile', { employee: employee });
   } catch (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');
   }
+});
+app.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Internal Server Error');
+    }
+    res.redirect('/login');
+  });
 });
 const payRouter =require('./routes/payslip')
 app.use('/pay', payRouter)

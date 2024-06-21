@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Profile</title>
+</head>
+<body>
+    <% if (employee) { %>
+        <p>Employee ID: <%= employee.employeeID %></p>
+        <p>Name: <%= employee.name %></p>
+        <% } else { %>
+        <p>Error: Profile information unavailable.</p>
+      <% } %>
+    <a href="/logout">Logout</a>
+
+    </body>
+</html>
