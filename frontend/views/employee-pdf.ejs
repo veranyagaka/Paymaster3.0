@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Salary Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2, h6, p {
+            margin: 0 0 10px 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #f7f7f7;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 20px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Employee Salary Report</h1>
+        <div class="card">
+            <div class="card-header">
+                <h2><%= salaryComponents.firstName %> <%= salaryComponents.lastName %></h2>
+                <h6><%= salaryComponents.email %></h6>
+                <p><%= salaryComponents.employeeID %> | <%= salaryComponents.department %></p>
+            </div>
+            <div class="card-body">
+                <p><strong>Base Salary:</strong> $<%= salaryComponents.baseSalary.toFixed(2) %></p>
+                <p><strong>Bonus:</strong> $<%= salaryComponents.bonus.toFixed(2) %></p>
+                <p><strong>Gross Income:</strong> $<%= salaryComponents.grossIncome.toFixed(2) %></p>
+                <p><strong>Allowances:</strong> $<%= salaryComponents.allowances.toFixed(2) %></p>
+                <p><strong>Total Deductions:</strong> $<%= salaryComponents.totalDeductions.toFixed(2) %></p>
+                <p><strong>Taxable Income:</strong> $<%= salaryComponents.taxableIncome.toFixed(2) %></p>
+                <p><strong>Tax:</strong> $<%= salaryComponents.tax.toFixed(2) %></p>
+                <p><strong>Final Salary:</strong> $<%= salaryComponents.finalSalary.toFixed(2) %></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

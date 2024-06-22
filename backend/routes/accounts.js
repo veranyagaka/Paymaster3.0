@@ -1,7 +1,9 @@
 const express =require('express');
 const router =express.Router();
 const path = require('path');
+const pdf = require('html-pdf'); 
 const database = require('../database.js')
+const fs = require('fs');
 
 router.get('/leave_application', (req, res) => {
     res.render('leave_application'); 
@@ -44,4 +46,118 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
       res.status(500).send('Internal Server Error');
     } 
   });
+  const employees = [
+    {
+        id: 1,
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'john.doe@example.com',
+        employeeID: '1',
+        department: 'Engineering',
+        bio: 'Software Engineer with 5 years of experience.',
+        baseSalary: 60000,
+        bonusPercentage: 10,
+        socialSecurityDeduction: 3000,
+        healthcareDeduction: 2000,
+        taxPercentage: 20,
+        housingAllowance: 5000,
+        transportAllowance: 2000
+    },
+    {
+        id: 2,
+        first_name: 'Jane',
+        last_name: 'Smith',
+        email: 'jane.smith@example.com',
+        employeeID: '2',
+        department: 'Marketing',
+        bio: 'Marketing Specialist with 3 years of experience.',
+        baseSalary: 55000,
+        bonusPercentage: 12,
+        socialSecurityDeduction: 2800,
+        healthcareDeduction: 1800,
+        taxPercentage: 18,
+        housingAllowance: 4000,
+        transportAllowance: 1500
+    }
+    // Add more employees as needed
+];
+router.get('/employee/salary/:id', (req, res) => {
+  const employeeId = parseInt(req.params.id, 10);
+  console.log(employeeId);
+
+  const employee = employees.find(emp => emp.id === employeeId);
+
+  if (!employee) {
+      return res.status(404).send('Employee not found');
+  }
+
+  const salaryComponents = calculateFinalSalary(employee);
+  res.render('salary', { salaryComponents,employee });
+});
+// Route to generate PDF
+router.get('/employee/salary/:id/download', (req, res) => {
+  const employeeId = parseInt(req.params.id, 10);
+  console.log(employeeId);
+  const employee = employees.find(emp => emp.id === employeeId);
+
+  if (!employee) {
+      return res.status(404).send('Employee not found');
+  }
+
+  const salaryComponents = calculateFinalSalary(employee);
+
+  res.render('employee-pdf', { salaryComponents }, (err, html) => {
+      if (err) {
+          return res.status(500).send('Error generating PDF');
+      }
+
+      const options = { format: 'Letter' };
+
+      pdf.create(html, options).toFile('./employee-report.pdf', (err, result) => {
+          if (err) {
+              return res.status(500).send('Error generating PDF');
+          }
+
+          res.download(result.filename, 'employee-report.pdf', (err) => {
+              if (err) {
+                  return res.status(500).send('Error downloading PDF');
+              }
+
+              // Delete the file after download
+              fs.unlink(result.filename, (err) => {
+                  if (err) {
+                      console.error('Error deleting PDF file:', err);
+                  }
+              });
+          });
+      });
+  });
+});
+function calculateFinalSalary(employee) {
+    const baseSalary = employee.baseSalary;
+    const bonus = (baseSalary * employee.bonusPercentage) / 100;
+    const grossIncome = baseSalary + bonus;
+    const totalDeductions = employee.socialSecurityDeduction + employee.healthcareDeduction;
+    const taxableIncome = grossIncome - totalDeductions;
+    const tax = (taxableIncome * employee.taxPercentage) / 100;
+    const allowances = employee.housingAllowance + employee.transportAllowance;
+    const finalSalary = grossIncome + allowances - totalDeductions - tax;
+
+    return {
+        firstName: employee.first_name,
+        lastName: employee.last_name,
+        email: employee.email,
+        employeeID: employee.employeeID,
+        department: employee.department,
+        bio: employee.bio,
+        baseSalary,
+        bonus,
+        grossIncome,
+        allowances,
+        totalDeductions,
+        taxableIncome,
+        tax,
+        finalSalary
+    };
+}
 module.exports= router
