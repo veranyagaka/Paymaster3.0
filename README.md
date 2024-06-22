@@ -8,6 +8,8 @@
 - [ ] Redirection to all the pages
 - [ ] Ensure the restricted entry method
 - [ ] Deployment && docker
+- [ ] Database syncing
+- [ ] DB Deployment
 
 
 
@@ -24,8 +26,6 @@ The Reporting and Analytics Module will provide comprehensive reporting and anal
  
 3.6.4 Payroll Data Management Module
 This module will handle the core functionality of managing payroll data within the system. It will include features for adding, updating, and deleting employee payroll records, as well as functionalities for managing salary structures, tax information, and other relevant payroll data. The module will ensure accurate and timely processing of payroll information while maintaining compliance with regulatory requirements.
-
-
 
 3.6.5 Attendance Tracking Module
 The Attendance Tracking Module will facilitate the monitoring and management of employee attendance records. It will include features for recording clock-in and clock-out times and tracking leave requests and approvals. The module will ensure accurate attendance tracking, streamline leave management processes including sabbaticals and vacation. Furthermore, this module will also track the overtime hours done by employees and lastly generate attendance reports.
