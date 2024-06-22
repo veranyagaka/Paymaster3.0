@@ -1,0 +1,50 @@
+/* styles.css */
+
+/* Chart container styles */
+.chart-container {
+    width: 50%; /* adjust the width to your liking */
+    margin: 20px auto; /* center the chart */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Chart title styles */
+  .chart-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  /* Chart legend styles */
+  .chart-legend {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  /* Chart axis styles */
+  .chart-axis {
+    font-size: 12px;
+    color: #666;
+  }
+  
+  /* Chart data point styles */
+  .chart-data-point {
+    font-size: 12px;
+    color: #333;
+  }
+  
+  /* Customize the chart colors */
+  .chart-pie {
+    background-color: #f9f9f9;
+  }
+  
+  .chart-bar {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .chart-bar:hover {
+    background-color: #f0f0f0;
+  }

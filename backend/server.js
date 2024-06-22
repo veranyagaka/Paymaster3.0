@@ -6,10 +6,16 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2');
 const path = require('path');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
+const corsOptions = {
+  origin: ['https://your-frontend-app.com', 'http://localhost:2000'],
+  optionsSuccessStatus: 200
+};
 
+app.use(cors(corsOptions));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../frontend/views'));
 
@@ -17,7 +23,7 @@ app.set('views', path.join(__dirname, '../frontend/views'));
 app.use(express.static('frontend'));
 app.use(express.static(path.join(__dirname, '../frontend/')));
 app.use(express.json());
-app.use(express.static('public', { 
+app.use(express.static('frontend', { 
   setHeaders: (res, path) => {
       if (path.endsWith('.js')) {
           res.setHeader('Content-Type', 'text/javascript');
@@ -233,6 +239,7 @@ app.use('/pay', payRouter)
 const accountsRouter =require('./routes/accounts')
 app.use('/accounts', accountsRouter)
 const sendEmail = require('./routes/sendEmail'); 
+/*
 sendEmail()
     .then(() => {
         console.log('Email sent successfully');
@@ -242,3 +249,6 @@ sendEmail()
         console.error('Failed to send email:', err);
         // Handle error condition
     });
+    */
+const reportsRouter =require('./routes/reports')
+app.use('/re', reportsRouter)

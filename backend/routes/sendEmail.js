@@ -16,7 +16,7 @@ async function sendEmail() {
         throw new Error('Failed to send email');
     }
 }
-sgMail
+/*sgMail
     .send(msg)
     .then(() => {
         console.log('Email sent successfully');
@@ -26,4 +26,5 @@ sgMail
         console.error('Failed to send email:', err);
         // Handle error condition
     });
+    */
 module.exports = sendEmail;
