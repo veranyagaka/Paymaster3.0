@@ -10,6 +10,7 @@
 - [ ] Deployment && docker
 - [ ] Database syncing
 - [ ] DB Deployment
+- [ ] Importing Attendance and Exporting
 
 
 
