@@ -4,6 +4,10 @@
 - [ ] Use Bootstrap for the css
 - [ ] All the 5 modules
 - [ ] Working of all the modules
+- [ ] Fix the mime type and the working of the javascript files!!
+- [ ] Redirection to all the pages
+- [ ] Ensure the restricted entry method
+- [ ] Deployment && docker
 
 
 
