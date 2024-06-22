@@ -12,10 +12,39 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const corsOptions = {
   origin: ['https://your-frontend-app.com', 'http://localhost:2000'],
-  optionsSuccessStatus: 200
-};
+  optionsSuccessStatus: 200,
+  allowedHeaders: ['Content-Type', 'Authorization']
 
+};
+const connectToDatabase = require('./db');
+app.get('/test', async (req, res) => {
+  try {
+    const connection = await connectToDatabase();
+    const [rows] = await connection.query('SELECT 1');
+    res.send('Database connection successful!');
+  } catch (err) {
+    res.status(500).send('Database connection failed');
+  }
+});
+app.get('/employees', async (req, res) => {
+  try {
+    const connection = await connectToDatabase();      
+      const [rows] = await connection.query('SELECT * FROM employee_profile');
+      res.send(rows);
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  }
+});
 app.use(cors(corsOptions));
+//enables cors
+app.use(cors({
+  'allowedHeaders': ['sessionId', 'Content-Type'],
+  'exposedHeaders': ['sessionId'],
+  'origin': '*',
+  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  'preflightContinue': false
+}));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../frontend/views'));
 
