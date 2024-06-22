@@ -26,27 +26,71 @@
           <p>Remember me</p>
         </label>
       </div>
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="error-message" id="errorMessage"><%= error %></div>
+      <% } %>
       <button type="submit">Log In</button>
       <div class="register">
-          <a href="reset_password" class="forgot-link">Forgot Username / Password?</a>
+          <a href="#" class="forgot-link"  onclick="showPopup()" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Forgot Username / Password?</a>
           <p>Don't have an account? <a href="register">Sign Up</a></p>
           <a class="btn" href="admin-login" style="color: rgb(12, 82, 82);">Login Here For Administrators</a>
 
 	</div>
     </form>
   </div>
-  <script>
-    function handleSubmit(event) {
-      event.preventDefault();
-      const formData = {
-        employeeID: event.target.employeeID.value,
-        email: event.target.email.value,
-        password: event.target.password.value,
-      };
-      console.log('Form submitted:', formData);
-      // Add your form submission logic here
-    }
-  </script>
+    <!-- Pop-up form for resetting password -->
+    <div class="popup-overlay" id="popupOverlay"></div>
+    <div class="popup-form" id="popupForm">
+      <span class="close-btn" onclick="hidePopup()">x</span>
+      <h3>Reset Password</h3>
+      <form id="resetPasswordForm" method="post" action="">
+        <div class="input-field">
+          <input type="email" id="resetEmail" name="resetEmail" required>
+          <label>Enter your email</label>
+        </div>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  
+    <!-- Success message -->
+    <div class="success-message" id="successMessage">Reset password request sent successfully. Check your email.</div>
+  
+    <script>
+      function showPopup() {
+        document.getElementById('popupOverlay').style.display = 'block';
+        document.getElementById('popupForm').style.display = 'block';
+      }
+  
+      function hidePopup() {
+        document.getElementById('popupOverlay').style.display = 'none';
+        document.getElementById('popupForm').style.display = 'none';
+      }
+  
+      document.getElementById('resetPasswordForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Handle form submission here, e.g., make an AJAX request to send the reset email
+        console.log('Reset password email:', document.getElementById('resetEmail').value);
+  
+        // Display success message
+        document.getElementById('successMessage').style.display = 'block';
+  
+        // Hide success message after 5 seconds
+        setTimeout(function() {
+          document.getElementById('successMessage').style.display = 'none';
+          hidePopup();
+        }, 5000);
+      });
+          // Show error message if it exists
+    document.addEventListener('DOMContentLoaded', function() {
+      const errorMessage = document.getElementById('errorMessage');
+      if (errorMessage) {
+        errorMessage.style.display = 'block';
+        setTimeout(() => {
+          errorMessage.style.display = 'none';
+        }, 5000);
+      }
+    });
+    </script>
 </body>
 </html>
   

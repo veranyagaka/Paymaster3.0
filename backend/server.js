@@ -121,13 +121,13 @@ app.post('/login', async (req, res) => {
       );
       console.log('Queried user:', result);
       if (!result.length) {
-        return res.status(401).json({ error: 'Invalid employeeID2 or password' });
+        return res.render('login', { error: 'Incorrect Employee ID or Password.' });
       }
   
       const validPassword = await bcrypt.compare(password, result[0].password);
   
       if (!validPassword) {
-        return res.status(401).json({ error: 'Invalid employeeID or password' });
+        return res.render('login', { error: 'Incorrect Employee ID or Password.' });
       }
             console.log('Stored Password:', result[0].password);
             //maybe jwt functionality?

@@ -34,6 +34,7 @@ body::before {
   border: 1px solid rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  align-items: center;
 }
 
 form {
@@ -138,4 +139,103 @@ button:hover {
 .spaced-elements a, .spaced-elements p {
   margin-bottom: 20px;
   display: block; 
+}/* Style the popup overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: none; /* Initially hidden */
+  z-index: 99; /* Ensure it's above other elements */
+}
+
+/* Style the popup form */
+.popup-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the form horizontally and vertically */
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  display: none; /* Initially hidden */
+  z-index: 100; /* Ensure it's above the overlay */
+  max-width: 400px; /* Set a maximum width for responsiveness */
+}
+
+/* Style the close button */
+.close-btn {
+  float: right; /* Position close button in top right corner */
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #ccc; /* Light gray color */
+  transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.close-btn:hover {
+  color: #000; /* Dark gray color on hover */
+}
+
+/* Style the form elements */
+.popup-form h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.input-field {
+  margin-bottom: 15px;
+}
+
+.input-field label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#resetEmail {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.popup-form button {
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.popup-form button:hover {
+  background-color: #4CAF50; /* Green color on hover */
+}
+@media only screen and (max-width: 768px) {
+  .wrapper {
+    padding: 20px; /* Adjust padding for smaller screens */
+  }
+  .input-field {
+    margin: 10px 0; /* Adjust margin for smaller screens */
+  }
+}
+.success-message, .error-message {
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  z-index: 1001;
+}
+.success-message {
+  background-color: green;
+  color: white;
+}
+.error-message {
+  background-color: red;
+  color: white;
 }

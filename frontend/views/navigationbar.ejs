@@ -14,14 +14,15 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
         .nav-bar {
-            position: relative; /* Ensure relative positioning */
-            z-index: 1000;
+            position: relative;
+            z-index: 1001;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
             background-color: #242424;
             border-bottom: 1px solid #333;
+            
         }
         .logo {
             display: flex;
@@ -151,13 +152,72 @@
                 margin-left: 10px;
             }
         }
+
+        .sidebar {
+            margin-top: 65px;
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Initially hidden off-screen */
+            height: 100%;
+            width: 250px;
+            background-color: #343a40;
+            transition: left 0.3s ease;
+            padding-top: 15px;
+            z-index: 1000;
+        }
+        .sidebar .nav-link {
+            color: #fff;
+            padding: 15px 20px;
+            font-size: 18px;
+        }
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #495057;
+        }
+        .sidebar-active {
+            left: 0; /* Show sidebar by moving it to the left edge */
+        }
+        .submenu {
+            display: none;
+            background-color: #343a40;
+        }
+        .submenu .nav-link {
+            padding-left: 40px;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+        .submenu .nav-link:hover {
+            background-color: #495057;
+        }
+        .active-submenu {
+            display: block;
+        }
+        .sidebar-heading {
+        padding: 1rem;
+        font-size: 1rem;
+        color: #fff;
+        letter-spacing: 2px;
+        font-weight: 500;
+    }
+    .fa-caret-down {
+  transition: transform 0.3s ease-in-out;
+}
+
+.fa-caret-up {
+  transform: rotate(180deg);
+}
     </style>
+</head>
+<body>
     <div class="nav-bar">
         <div class="logo">
             <img src="/favicon.ico" alt="Paymaster Logo">
-            <span>Paymaster</span>
+            <div class="sidebar-heading">Paymaster</div>
         </div>
-        <div class="menu-icon icon" data-tooltip="Menu" id="menu-toggle">
+        <div class="menu-icon icon" id="menu-toggle">
             <i class="fas fa-bars"></i>
             <span class="tooltip">Menu</span>
         </div>
@@ -191,88 +251,68 @@
             </div>
         </div>
     </div>
-<!-- Include necessary CSS styles specific to sidebar -->
-<style>
-    .sidebar {
-        position: fixed;
-        top: 90px; /* Adjust as needed */
-        left: 0;
-        height: calc(100% - 90px); /* Adjust as needed */
-        width: 250px;
-        background-color: #343a40;
-        transition: left 0.3s ease; 
-        padding-top: 15px;
-    }
-    .sidebar .nav-link {
-        color: #fff;
-        padding: 10px 15px;
-        font-size: 16px;
-    }
-    .sidebar .nav-link i {
-        margin-right: 10px;
-    }
-    .sidebar .nav-link:hover {
-        background-color: #495057;
-    }
-    .sidebar-active {
-        left: 0; /* Show sidebar by moving it to the left edge */
-}
-    .submenu {
-        display: none;
-        background-color: #343a40;
-    }
-    .submenu .nav-link {
-        padding-left: 50px;
-        font-size: 14px;
-    }
-    .submenu .nav-link:hover {
-        background-color: #495057;
-    }
-    .active-submenu {
-        display: block;
-    }
-</style>
 
-<!-- Sidebar HTML -->
-<div class="sidebar">
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-user"></i> Profile
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-cog"></i> Settings
-            </a>
-            <ul class="submenu">
-                <li class="nav-item"><a class="nav-link" href="#">Change Password</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Change Profile Pic</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Preferences - Dark Mode</a></li>
-            </ul>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-lock"></i> Privacy
-            </a>
-            <ul class="submenu">
-                <li class="nav-item"><a class="nav-link" href="#">Privacy Settings</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Data Access</a></li>
-            </ul>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-history"></i> Activity
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </li>
-    </ul>
-</div>
+    <div class="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-cog"></i> Settings
+                    <i class="fas fa-caret-down"></i>
 
-<!-- JavaScript to toggle submenu -->
-<script type='text/javascript' src="/sidebar.js"></script>
-</head>
+                </a>
+                <ul class="submenu">
+                    <li class="nav-item"><a class="nav-link" href="#">Change Password</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Change Profile Pic</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Preferences - Dark Mode</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-lock"></i> Privacy
+                    <i class="fas fa-caret-down"></i>
+
+                </a>
+                <ul class="submenu">
+                    <li class="nav-item"><a class="nav-link" href="#">Privacy Settings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Data Access</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-history"></i> Activity
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+  // Toggle submenu on click
+  $('.nav-item.has-submenu').click(function() {
+    $(this).find('.submenu').slideToggle(300);
+    $(this).find('.fas.fa-caret-down').toggleClass('fa-caret-up');
+  });
+});
+        $(document).ready(function() {
+            $('#menu-toggle').click(function() {
+                $('.sidebar').toggleClass('sidebar-active');
+            });
+
+            $('.nav-link').click(function(e) {
+                e.preventDefault();
+                $(this).siblings('.submenu').toggleClass('active-submenu');
+            });
+        });
+    </script>
+</body>
+</html>
