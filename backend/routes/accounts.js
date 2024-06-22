@@ -160,4 +160,17 @@ function calculateFinalSalary(employee) {
         finalSalary
     };
 }
+router.get('/reset_password', (req, res) => {
+    const token = req.query.token;
+    if (verifyResetToken(token)) {
+      res.render('reset_password', { token });
+    } else {
+      res.status(400).send('Invalid or expired token');
+    }
+  });
+function verifyResetToken(token) {
+    // You should implement your own logic to verify the reset token
+    return true; // Assume the token is valid for demonstration purposes
+  }
+  
 module.exports= router
