@@ -9,8 +9,9 @@
 - [ ] Ensure the restricted entry method
 - [ ] Deployment && docker
 - [ ] Database syncing
-- [ ] DB Deployment
+- [x] DB Deployment
 - [ ] Importing Attendance and Exporting
+- [ ] FINALLY REVIEW EVERYTHING FROM ZE BEGINNING
 
 
 
