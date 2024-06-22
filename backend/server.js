@@ -232,3 +232,13 @@ const payRouter =require('./routes/payslip')
 app.use('/pay', payRouter)
 const accountsRouter =require('./routes/accounts')
 app.use('/accounts', accountsRouter)
+const sendEmail = require('./routes/sendEmail'); 
+sendEmail()
+    .then(() => {
+        console.log('Email sent successfully');
+        // Handle any further logic after email is sent
+    })
+    .catch(err => {
+        console.error('Failed to send email:', err);
+        // Handle error condition
+    });
