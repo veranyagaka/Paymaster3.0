@@ -3,7 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leave Application</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Font Awesome CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- jQuery and Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <%- include('navigationbar') %>
+        <title>Leave Application</title>
+
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700&display=swap");
 
@@ -15,17 +26,18 @@
         }
 
         body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            width: 100%;
-            padding: 0 10px;
             background-color: #f0f0f0; /* Fallback color */
         }
-
+        .emp-profile {
+            padding: 3%;
+            margin-top: 3%;
+            margin-bottom: 3%;
+            border-radius: 0.5rem;
+            background: #fff;
+        }
         .wrapper {
-            width: 400px;
+            width: 100%;
+            max-width: 400px;
             border-radius: 8px;
             padding: 30px;
             text-align: center;
@@ -34,6 +46,7 @@
             -webkit-backdrop-filter: blur(8px);
             background-color: rgba(255, 255, 255, 0.15);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
         }
 
         form {
@@ -113,6 +126,10 @@
     </style>
 </head>
 <body>
+<div class="container">
+
+<div class="emp-profile">
+
     <div class="wrapper">
         <h1>Leave Application Form</h1>
         <form action="/accounts/apply_leave" method="POST">
@@ -142,5 +159,9 @@
             </div>
         </form>
     </div>
+</div>
+</div>
+<%- include('footer') %>
+
 </body>
 </html>
