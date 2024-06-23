@@ -29,13 +29,15 @@ router.post('/apply_leave', async (req, res) => {
 });
 
 router.post('/employees/edit/:employeeId', async (req, res) => {
+    //const employeeId = req.session.EmployeeID;
     const employeeId = req.params.employeeId;
-  
-    const { first_name, job_title, department } = req.body; // Destructure data from request body
+
+    console.log('Editing info from employee no: ', employeeId)
+    const { firstName, bio, lastName, email } = req.body; // Destructure data from request body
   
     try {
       // Update employee data in the database
-      await database.query('UPDATE employee_profile SET first_name = ?, job_title = ?, department = ? WHERE employeeID = ?', [first_name, job_title, department, employeeId]);
+      await database.query('UPDATE employee_profile SET first_name = ?, bio = ?,last_name = ?, email = ? WHERE employeeID = ?', [firstName, bio, lastName, email],employeeId);
   
       // Handle successful update (e.g., redirect to employee list, display success message)
       res.redirect('/employee-profile'); // Replace as needed
@@ -46,7 +48,7 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
       res.status(500).send('Internal Server Error');
     } 
   });
-  const employees = [
+const employees = [
     {
         id: 1,
         first_name: 'John',
@@ -183,5 +185,11 @@ function verifyResetToken(token) {
     // You should implement your own logic to verify the reset token
     return true; // Assume the token is valid for demonstration purposes
   }
-  
+router.get('/employee-attendance', (req, res) => {
+    const employee = [{id: 1}];
+    const record = [{id: 1}];
+    const attendance = [{id: 1}];
+
+    res.render('employee-attendance',{employee,record,attendance}); 
+});
 module.exports= router

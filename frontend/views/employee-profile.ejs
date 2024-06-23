@@ -47,15 +47,22 @@
             right: 0;
             top: 0;
         }
-        .profile-head h5 {
-            color: #333;
+        .profile-head {
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            margin-bottom: 20px;
         }
-        .profile-head h6 {
-            color: #0062cc;
+        .profile-head h5, .profile-head h6, .profile-head p {
+            padding-bottom: 20px;
+            margin: 5px 0;
         }
-        .profile-head p {
-            margin-top: 10px;
-            font-size: 12px;
+        .profile-label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .profile-value {
             color: #6c757d;
         }
         .profile-edit-btn {
@@ -87,12 +94,13 @@
                     </div>
                     <div class="col-md-8">
                         <div class="profile-head">
-                            <h5><%= employee.first_name %></h5>
-                            <h5><%= employee.last_name %></h5>
-                            <h6><%= employee.email %></h6>
-                            <p><%= employee.employeeID %></p>
-                            <h5><%= employee.department %></h5>
-                            <h5><%= employee.bio %></h5>
+                            <h5>Employee ID: <%= employee.employeeID %></h5>
+
+                            <h5>First Name: <%= employee.first_name %></h5>
+                            <h5>Last Name:<%= employee.last_name %></h5>
+                            <h5>Email: <%= employee.email %></h5>
+                            <h5>Department: <%= employee.department %></h5>
+                            <h5>Bio: <%= employee.bio %></h5>
 
                         </div>
                     </div>
@@ -100,13 +108,11 @@
                         <p>Error: Profile information unavailable.</p>
                       <% } %>  
                 </div>
-                <form action="/accounts/employees/edit/<%= employee.employeeID %>" method="POST"  class="d-inline">
                     <div class="row">
                         <div class="col-md-12 text-md-right">
                             <button class="btn btn-primary profile-edit-btn" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
                         </div>
                     </div>
-                </form>
             </div>
         </div>
     </div>
@@ -124,31 +130,33 @@
                     <form action="/accounts/employees/edit/<%= employee.employeeID %>" method="POST">
                         <div class="form-group">
                             <label for="firstName">First Name</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="Enter first name">
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name">
                         </div>
                         <div class="form-group">
                             <label for="lastName">Last Name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="Enter last name">
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter last name">
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter email">
+                            <input type="email" class="form-control" id="email" name="email"placeholder="Enter email">
                         </div>
-                        <!-- Add more form fields as needed -->
+                        <div class="form-group">
+                            <label for="bio">Bio</label>
+                            <input type="bio" class="form-control" id="bio" name="bio"placeholder="Enter bio">
+                        </div>     
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>               
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
+
             </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-
-    <!-- JavaScript to toggle submenu -->
-    <script src =sidebar.js></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 <%- include('footer') %>
 

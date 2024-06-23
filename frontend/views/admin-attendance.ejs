@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Attendance</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .attendance-table th, .attendance-table td {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="mb-4">Employee Attendance Tracking</h2>
+
+        <!-- Attendance Records -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Attendance Records
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered attendance-table">
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Month</th>
+                            <th>Days Present</th>
+                            <th>Days Absent</th>
+                            <th>Overtime Hours</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop through attendance records -->
+                        <% attendanceRecords.forEach(record => { %>
+                            <tr>
+                                <td><%= record.employeeID %></td>
+                                <td><%= record.month %></td>
+                                <td><%= record.daysPresent %></td>
+                                <td><%= record.daysAbsent %></td>
+                                <td><%= record.overtimeHours %></td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editAttendanceModal" data-id="<%= record.employeeID %>" data-month="<%= record.month %>">Edit</button>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Leave Requests -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Leave Requests
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Leave Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop through leave requests -->
+                        <% leaveRequests.forEach(request => { %>
+                            <tr>
+                                <td><%= request.employeeID %></td>
+                                <td><%= request.leaveType %></td>
+                                <td><%= request.startDate %></td>
+                                <td><%= request.endDate %></td>
+                                <td><%= request.status %></td>
+                                <td>
+                                    <button class="btn btn-success btn-sm" onclick="approveLeave('<%= request.id %>')">Approve</button>
+                                    <button class="btn btn-danger btn-sm" onclick="rejectLeave('<%= request.id %>')">Reject</button>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Generate Attendance Report -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Generate Attendance Report
+            </div>
+            <div class="card-body">
+                <form action="/generateAttendanceReport" method="POST">
+                    <div class="form-group">
+                        <label for="reportMonth">Select Month</label>
+                        <input type="month" class="form-control" id="reportMonth" name="reportMonth" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Attendance Modal -->
+    <div class="modal fade" id="editAttendanceModal" tabindex="-1" role="dialog" aria-labelledby="editAttendanceModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAttendanceModalLabel">Edit Attendance</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/editAttendance" method="POST">
+                        <input type="hidden" id="editEmployeeID" name="employeeID">
+                        <input type="hidden" id="editMonth" name="month">
+                        <div class="form-group">
+                            <label for="editDaysPresent">Days Present</label>
+                            <input type="number" class="form-control" id="editDaysPresent" name="daysPresent" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editDaysAbsent">Days Absent</label>
+                            <input type="number" class="form-control" id="editDaysAbsent" name="daysAbsent" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editOvertimeHours">Overtime Hours</label>
+                            <input type="number" class="form-control" id="editOvertimeHours" name="overtimeHours" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $('#editAttendanceModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var employeeID = button.data('id');
+            var month = button.data('month');
+
+            var modal = $(this);
+            modal.find('#editEmployeeID').val(employeeID);
+            modal.find('#editMonth').val(month);
+        });
+
+        function approveLeave(leaveID) {
+            // Implement approve leave logic
+            console.log('Approve leave:', leaveID);
+        }
+
+        function rejectLeave(leaveID) {
+            // Implement reject leave logic
+            console.log('Reject leave:', leaveID);
+        }
+    </script>
+</body>
+</html>

@@ -123,4 +123,35 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
       res.redirect('/admin-login');
     });
   });
+
+// Dummy data for demonstration purposes
+const attendanceRecords = [
+  { employeeID: 'E001', month: '2023-06', daysPresent: 20, daysAbsent: 2, overtimeHours: 10 },
+  { employeeID: 'E002', month: '2023-06', daysPresent: 18, daysAbsent: 4, overtimeHours: 5 }
+];
+
+const leaveRequests = [
+  { id: 'L001', employeeID: 'E001', leaveType: 'Vacation', startDate: '2023-07-01', endDate: '2023-07-10', status: 'Pending' },
+  { id: 'L002', employeeID: 'E002', leaveType: 'Sick Leave', startDate: '2023-07-05', endDate: '2023-07-07', status: 'Pending' }
+];
+
+// Route to render the employee attendance page
+router.get('/employee-attendance', (req, res) => {
+  res.render('admin-attendance', { attendanceRecords, leaveRequests });
+});
+
+// Route to handle editing attendance
+router.post('/editAttendance', (req, res) => {
+  const { employeeID, month, daysPresent, daysAbsent, overtimeHours } = req.body;
+
+  // Find the attendance record and update it
+  const record = attendanceRecords.find(rec => rec.employeeID === employeeID && rec.month === month);
+  if (record) {
+      record.daysPresent = parseInt(daysPresent);
+      record.daysAbsent = parseInt(daysAbsent);
+      record.overtimeHours = parseInt(overtimeHours);
+  }
+
+  res.redirect('/admin-attendance');
+});
 module.exports= router
