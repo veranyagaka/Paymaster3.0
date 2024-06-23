@@ -60,6 +60,7 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
         socialSecurityDeduction: 3000,
         healthcareDeduction: 2000,
         taxPercentage: 20,
+        totalHoursWorked: 200,
         housingAllowance: 5000,
         transportAllowance: 2000
     },
@@ -75,6 +76,7 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
         bonusPercentage: 12,
         socialSecurityDeduction: 2800,
         healthcareDeduction: 1800,
+        totalHoursWorked: 180,
         taxPercentage: 18,
         housingAllowance: 4000,
         transportAllowance: 1500
@@ -91,7 +93,7 @@ router.get('/employee/salary/:id', (req, res) => {
       return res.status(404).send('Employee not found');
   }
 
-  const salaryComponents = calculateFinalSalary(employee);
+  const salaryComponents = calculateFinalSalary(employee, 'June');
   res.render('salary', { salaryComponents,employee });
 });
 // Route to generate PDF
@@ -104,11 +106,13 @@ router.get('/employee/salary/:id/download', (req, res) => {
       return res.status(404).send('Employee not found');
   }
 
-  const salaryComponents = calculateFinalSalary(employee);
+  const salaryComponents = calculateFinalSalary(employee, 'June');
 
   res.render('employee-pdf', { salaryComponents }, (err, html) => {
       if (err) {
+          console.log(err);
           return res.status(500).send('Error generating PDF');
+          console.log(err);
       }
 
       const options = { format: 'Letter' };
@@ -133,7 +137,7 @@ router.get('/employee/salary/:id/download', (req, res) => {
       });
   });
 });
-function calculateFinalSalary(employee) {
+function calculateFinalSalary(employee, month) {
     const baseSalary = employee.baseSalary;
     const bonus = (baseSalary * employee.bonusPercentage) / 100;
     const grossIncome = baseSalary + bonus;
@@ -141,7 +145,11 @@ function calculateFinalSalary(employee) {
     const taxableIncome = grossIncome - totalDeductions;
     const tax = (taxableIncome * employee.taxPercentage) / 100;
     const allowances = employee.housingAllowance + employee.transportAllowance;
-    const finalSalary = grossIncome + allowances - totalDeductions - tax;
+    const regularHours = 160; // 40 hours * 4 weeks
+    const overtimeHours = employee.totalHoursWorked > regularHours ? employee.totalHoursWorked - regularHours : 0;
+    const overtimePay = overtimeHours * (employee.baseSalary / regularHours * 1.5);
+    const finalSalary = grossIncome + allowances - totalDeductions - tax + overtimePay;
+
 
     return {
         firstName: employee.first_name,
@@ -154,10 +162,13 @@ function calculateFinalSalary(employee) {
         bonus,
         grossIncome,
         allowances,
+        overtimeHours,
+        overtimePay,
         totalDeductions,
         taxableIncome,
         tax,
-        finalSalary
+        finalSalary,
+        month
     };
 }
 router.get('/reset_password', (req, res) => {

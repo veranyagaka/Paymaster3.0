@@ -6,25 +6,32 @@
     <title>Employee Salary Details</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <%- include('navigationbar') %>
+
 </head>
 <body>
     <div class="container">
         <h1 class="my-4">Employee Salary Details</h1>
-        <div class="card">
+        <div class="card ">
             <div class="card-header">
                 <h2><%= salaryComponents.firstName %> <%= salaryComponents.lastName %></h2>
-                <h6><%= salaryComponents.email %></h6>
+                <h6><%= salaryComponents.email %></h6>                 <h6 class="float-right">Month: <%= salaryComponents.month %></h6>
+
                 <p><strong>Employee Number: </strong><%= salaryComponents.employeeID %> | <%= salaryComponents.department %></p>
             </div>
             <div class="card-body">
-                <p><strong>Base Salary:</strong> $<%= salaryComponents.baseSalary.toFixed(2) %></p>
-                <p><strong>Bonus:</strong> $<%= salaryComponents.bonus.toFixed(2) %></p>
-                <p><strong>Gross Income:</strong> $<%= salaryComponents.grossIncome.toFixed(2) %></p>
-                <p><strong>Allowances:</strong> $<%= salaryComponents.allowances.toFixed(2) %></p>
-                <p><strong>Total Deductions:</strong> $<%= salaryComponents.totalDeductions.toFixed(2) %></p>
-                <p><strong>Taxable Income:</strong> $<%= salaryComponents.taxableIncome.toFixed(2) %></p>
-                <p><strong>Tax:</strong> $<%= salaryComponents.tax.toFixed(2) %></p>
-                <p><strong>Final Salary:</strong> $<%= salaryComponents.finalSalary.toFixed(2) %></p>
+                <p><strong>Base Salary:</strong> Ksh. <%= salaryComponents.baseSalary.toFixed(2) %></p>
+                <p><strong>Bonus:</strong> Ksh. <%= salaryComponents.bonus.toFixed(2) %></p>
+                <p><strong>Gross Income:</strong> Ksh. <%= salaryComponents.grossIncome.toFixed(2) %></p>
+                <p><strong>Allowances:</strong> Ksh. <%= salaryComponents.allowances.toFixed(2) %></p>
+                <p><strong>Total Deductions:</strong> Ksh. <%= salaryComponents.totalDeductions.toFixed(2) %></p>
+                <p><strong>Taxable Income:</strong> Ksh. <%= salaryComponents.taxableIncome.toFixed(2) %></p>
+                <p><strong>Tax:</strong> Ksh. <%= salaryComponents.tax.toFixed(2) %></p>
+                <p><strong>OverTime Hours:</strong> <%= salaryComponents.overtimeHours.toFixed(2) %> Hours </p>
+
+                <p><strong>OverTime Income:</strong> Ksh. <%= salaryComponents.overtimePay.toFixed(2) %></p>
+
+                <p><strong>Final Salary:</strong> Ksh. <%= salaryComponents.finalSalary.toFixed(2) %></p>
                 <a href="/accounts/employee/salary/<%= salaryComponents.employeeID %>/download" class="btn btn-primary mt-3">Download PDF</a>
 
             </div>

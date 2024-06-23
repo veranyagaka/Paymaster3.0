@@ -4,9 +4,12 @@ const database = require('../database.js')
 
 router.get('/reports', async (req, res) => {
   try {
-    const [femaleEmployees] = await database.query('SELECT COUNT(*) as count FROM employee_test WHERE gender = "Female"');
-    const [maleEmployees] = await database.query('SELECT COUNT(*) as count FROM employee_test WHERE gender = "Male"');
+    const [femaleEmployees] = await database.query('SELECT COUNT(*) as count FROM employee_test WHERE gender = "F"');
+    console.log('Female Employees:', femaleEmployees); 
+    const [maleEmployees] = await database.query('SELECT COUNT(*) as count FROM employee_test WHERE gender = "M"');
     const [availableEmployees] = await database.query('SELECT COUNT(*) as count FROM employee_test WHERE availability = "Available"');
+    console.log('Available Employees:', availableEmployees); 
+
     const [onLeaveEmployees] = await database.query('SELECT COUNT(*) as count FROM employee_test WHERE availability = "On Leave"');
 
     res.render('reports', {
@@ -20,5 +23,4 @@ router.get('/reports', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
 module.exports = router;

@@ -6,6 +6,8 @@
 </head>
 <body>
   <h1>Reports</h1>
+  <h1>femaleRatio</h1>
+
   <div class="chart-container">
     <h2>Gender Ratio</h2>
     <canvas id="gender-chart" width="400" height="200"></canvas>
@@ -19,9 +21,12 @@
     <canvas id="department-chart" width="400" height="200"></canvas>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <script>
+    var femaleRati = femaleRatio
+    console.log('Female Ratio:', femaleRati);
+  </script>
 <script>
-  // Define your data variables
+// Define your data variables 
 const femaleRatio = 40; // Example value, replace with actual data
 const maleRatio = 60;   // Example value, replace with actual data
 const availableCount = 80;   // Example value, replace with actual data
@@ -115,6 +120,7 @@ new Chart(ctxDepartment, {
     }
   }
 });
+
 </script>
 
 </body>

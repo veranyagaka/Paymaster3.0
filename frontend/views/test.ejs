@@ -6,7 +6,7 @@
     <title>Employee Salary Payslip</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Helvetica, Arial, sans-serif;
             margin: 20px;
             background-color: #fff;
         }
@@ -27,9 +27,12 @@
             border-bottom: 1px solid #ddd;
             padding-bottom: 10px;
             margin-bottom: 10px;
+            background-color: #4CAF50;
         }
         .header img {
-            height: 50px;
+            height: 80px; /* Adjust height as needed */
+            width: auto; /* Maintain aspect ratio */
+            margin-left: 20px; /* Add space between logo and text */
         }
         .header div {
             text-align: right;
@@ -45,6 +48,12 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            border: black;
+        }
+        thead{
+            background-color: #4CAF50;
+            color: #fff;
+            align-items: center;
         }
         table, th, td {
             border: 1px solid #ddd;
@@ -63,31 +72,42 @@
         .signature {
             display: flex;
             justify-content: space-between;
-            margin-top: 40px;
+            margin-top: 10px;
         }
+        .netpay{
+            background-color: #4CAF50;
+            color: #fff;
+
+        }.line {
+    width: 1px;
+    height: 100%;  background-color: #ddd;
+    border-left: 1px solid #ddd;
+  }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <img src="#" alt="Company Logo">
+            <img src="/favicon.ico" alt="Paymaster Logo">
             <div>
                 <h1>SALARY SLIP</h1>
+                <div class="line"></div>
+
                 <p>CONFIDENTIAL</p>
             </div>
             <div>
-                <p><strong>Month:</strong> <%= salaryComponents.month %></p>
+                <p><strong>Month:</strong> Replace with Month Value</p> 
             </div>
         </div>
         <div class="main-content">
             <div>
-                <p><strong>Name:</strong> <%= salaryComponents.firstName %> <%= salaryComponents.lastName %></p>
-                <p><strong>Employee ID:</strong> <%= salaryComponents.employeeID %></p>
-                <p><strong>Title:</strong> <%= salaryComponents.title %></p>
+                <p><strong>Name:</strong> Replace with First Name Replace with Last Name</p>
+                <p><strong>Employee ID:</strong> Replace with Employee ID</p>
+                <p><strong>Title:</strong> Replace with Title</p>
             </div>
             <div>
-                <p><strong>Directorate:</strong> <%= salaryComponents.directorate %></p>
-                <p><strong>Department:</strong> <%= salaryComponents.department %></p>
+                <p><strong>Directorate:</strong> Replace with Directorate</p>
+                <p><strong>Department:</strong> Replace with Department</p>
             </div>
         </div>
         <table>
@@ -101,59 +121,59 @@
             <tbody>
                 <tr>
                     <td>Basic Salary</td>
-                    <td>$<%= salaryComponents.baseSalary.toFixed(2) %></td>
+                    <td>$ Replace with Basic Salary</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Meal Allowance</td>
-                    <td>$<%= salaryComponents.allowances.toFixed(2) %></td>
+                    <td>$ Replace with Meal Allowance</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Transportation Allowance</td>
-                    <td>$<%= salaryComponents.allowances.toFixed(2) %></td>
+                    <td>$ Replace with Transportation Allowance</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Medical Allowance</td>
-                    <td>$<%= salaryComponents.allowances.toFixed(2) %></td>
+                    <td>$ Replace with Medical Allowance</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Retirement Insurance</td>
                     <td></td>
-                    <td>$<%= salaryComponents.allowances.toFixed(2) %></td>
+                    <td>$ Replace with Retirement Insurance</td>
                 </tr>
                 <tr>
                     <td>Tax</td>
                     <td></td>
-                    <td>$<%= salaryComponents.tax.toFixed(2) %></td>
+                    <td>$ Replace with Tax</td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <th>Total</th>
-                    <th>$<%= salaryComponents.taxableIncome.toFixed(2) %></th>
-                    <th>$<%= salaryComponents.totalDeductions.toFixed(2) %></th>
+                    <th>$ Replace with Total Income</th>
+                    <th>$ Replace with Total Deductions</th>
                 </tr>
             </tfoot>
         </table>
         <div class="summary">
-            <p><strong>NET PAY:</strong> $<%= salaryComponents.finalSalary.toFixed(2) %></p>
-            <p><strong>In Words:</strong> <%= salaryComponents.finalSalary %></p>
-        </div>
-        <div class="signature">
-            <div>
-                <p>Payment Date: <%= salaryComponents.paymentDate %></p>
-                <p>Bank Name: <%= salaryComponents.bankName %></p>
-                <p>Bank Account Name: <%= salaryComponents.bankAccountName %></p>
-                <p>Bank Account #: <%= salaryComponents.bankAccountNumber %></p>
+            <p class="netpay"><strong>NET PAY:</strong> </p>
+                <p>$ Replace with Net Pay</p>
+            <p><strong>In Words:</strong> Five thousand</p>
+                <div class="signature">
+                    <div>
+                        <p>Payment Date: Replace with Payment Date (e.g., 2024-06-23)</p>
+                        <p>Bank Name: Replace with Bank Name</p>
+                        <p>Bank Account Name: Replace with Bank Account Name</p>
+                        <p>Bank Account #: Replace with Bank Account Number</p>
+                    </div>
+                    <div>
+                        <p>_______________________</p>
+                        <p>Authorized Signature</p>
+                    </div>
+                </div>
             </div>
-            <div>
-                <p>_______________________</p>
-                <p>Authorized Signature</p>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
