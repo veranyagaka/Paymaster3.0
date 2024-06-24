@@ -37,7 +37,7 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
   
     try {
       // Update employee data in the database
-      await database.query('UPDATE employee_profile SET first_name = ?, bio = ?,last_name = ?, email = ? WHERE employeeID = ?', [firstName, bio, lastName, email],employeeId);
+      await database.query('UPDATE employee_profile SET first_name = ?, bio = ?,last_name = ?, email = ? WHERE employeeID = ?', [firstName, bio, lastName, email,employeeId]);
   
       // Handle successful update (e.g., redirect to employee list, display success message)
       res.redirect('/employee-profile'); // Replace as needed
