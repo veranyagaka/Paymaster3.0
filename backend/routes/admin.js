@@ -37,6 +37,48 @@ router.get('/leave-requests', async(req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+router.post('/approve-leave/:requestId', async (req, res) => {
+  const requestId = req.params.requestId;
+  console.log('Approving leave request no:',requestId);
+
+  try {
+      const [result] = await database.query(
+          'UPDATE leave_requests SET status = ? WHERE request_id = ?',
+          ['Approved', requestId]
+      );
+console.log(result)
+      if (result.affectedRows === 1) {
+          res.status(200).json({ message: 'Leave request approved successfully.' });
+      } else {
+          res.status(404).json({ message: 'Leave request not found.' });
+      }
+  } catch (error) {
+      console.error('Error updating leave request status:', error);
+      res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
+router.post('/reject-leave/:requestId', async (req, res) => {
+  const requestId = req.params.requestId;
+  console.log('Rejecting leave request no:',requestId);
+
+  try {
+      const [result] = await database.query(
+          'UPDATE leave_requests SET status = ? WHERE request_id = ?',
+          ['Denied', requestId]
+      );
+console.log(result)
+      if (result.affectedRows === 1) {
+          res.status(200).json({ message: 'Leave request rejected.' });
+      } else {
+          res.status(404).json({ message: 'Leave request not found.' });
+      }
+  } catch (error) {
+      console.error('Error updating leave request status:', error);
+      res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
 router.post('/employees/add', async (req, res) => {
   const { first_name, last_name, email } = req.body; // Destructure data from request body
 
@@ -130,14 +172,24 @@ const attendanceRecords = [
   { employeeID: 'E002', month: '2023-06', daysPresent: 18, daysAbsent: 4, overtimeHours: 5 }
 ];
 
-const leaveRequests = [
+const leave_Requests = [
   { id: 'L001', employeeID: 'E001', leaveType: 'Vacation', startDate: '2023-07-01', endDate: '2023-07-10', status: 'Pending' },
   { id: 'L002', employeeID: 'E002', leaveType: 'Sick Leave', startDate: '2023-07-05', endDate: '2023-07-07', status: 'Pending' }
 ];
 
 // Route to render the employee attendance page
-router.get('/employee-attendance', (req, res) => {
-  res.render('admin-attendance', { attendanceRecords, leaveRequests });
+router.get('/employee-attendance', async(req, res) => {
+  try {
+    // Retrieve employees from the database
+    const [leaveRequests] = await database.query('SELECT * FROM leave_requests');
+
+    res.render('admin-attendance', { attendanceRecords, leaveRequests });
+    //res.render('leave-requests', { leave_requests: leave_requests });
+} catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+}  
+//IMPORTANT COMMENTres.render('admin-attendance', { attendanceRecords, leaveRequests });
 });
 
 // Route to handle editing attendance

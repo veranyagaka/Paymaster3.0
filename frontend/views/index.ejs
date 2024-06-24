@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulting Website</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #eaf2f8;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: transparent !important;
+        }
+
+        .nav-link {
+            color: #2c3e50 !important;
+        }
+
+        .btn-outline-dark {
+            color: #2c3e50;
+            border-color: #2c3e50;
+        }
+
+        .btn-outline-dark:hover {
+            background-color: #2c3e50;
+            color: #ffffff;
+        }
+
+        .hero-section {
+            padding-top: 100px;
+        }
+
+        .hero-section h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            color: #2c3e50;
+        }
+
+        .services-section {
+            padding: 100px 0;
+        }
+
+        .services-section h6 {
+            color: #8395a7;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .services-section h2 {
+            color: #2c3e50;
+            margin-top: 10px;
+        }
+
+        .services-section p {
+            color: #2c3e50;
+            margin-top: 20px;
+        }
+
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .interested-section {
+            padding: 50px 0;
+        }
+
+        .interested-section h2 {
+            color: #2c3e50;
+        }
+
+        .interested-section p {
+            color: #2c3e50;
+        }
+
+        .form-section {
+            background-color: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .form-section input {
+            margin-bottom: 10px;
+        }
+
+        .form-section h3 {
+            color: #2c3e50;
+            margin-top: 20px;
+        }
+
+        .form-section p {
+            color: #2c3e50;
+            margin-top: 10px;
+        }
+
+        .form-section .service-item {
+            margin-bottom: 20px;
+        }
+
+        .form-section .service-item h4 {
+            color: #2c3e50;
+        }
+
+        .form-section .service-item p {
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="circle-logo.png" width="30" height="30" alt="Logo">
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Process</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Team</a>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-outline-dark">Request a Call Back</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container text-center hero-section">
+        <h1 class="display-4">Success starts with hardworking consultants</h1>
+        <p class="lead">Morbi leo tortor, fermentum sed orci vitae, tempor auctor turpis. Fusce bibendum accumsan fringilla. Nulla aliquam luctus sem, at posuere nibh lobortis et. Ut ac mollis risus, eu congue libero. Nulla vestibulum ultricies tortor at ultrices.</p>
+    </div>
+
+    <div class="container services-section">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h6 class="text-uppercase">Toolkit</h6>
+                <h2>Our Services</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer est tellus, pulvinar ac iaculis vel, varius eu arcu. Integer id lectus posuere nisi dignissim gravida at ac justo. Ut nec dui rutrum, cursus mauris sed integer eu vel.</p>
+            </div>
+            <div class="col-md-6">
+                <img src="services-image.png" alt="Our Services" class="img-fluid">
+            </div>
+        </div>
+    </div>
+
+    <div class="container interested-section">
+        <div class="text-center">
+            <h2>Interested In Our Services?</h2>
+            <p>Use the form headline and this subheader to describe the purpose of your form.</p>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-section">
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="firstName" placeholder="First Name">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="email" placeholder="Email">
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <div class="service-item">
+                    <h4>E-Commerce</h4>
+                    <p>Maecenas varius nunc a odio ultrices, non consectetur nunc scelerisque. Mauris nec condimentum est, id eleifend orci.</p>
+                </div>
+                <div class="service-item">
+                    <h4>Email Systems</h4>
+                    <p>Maecenas varius nunc a odio ultrices, non consectetur nunc scelerisque. Mauris nec condimentum est, id eleifend orci.</p>
+                </div>
+                <div class="service-item">
+                    <h4>Video Production</h4>
+                    <p>Maecenas varius nunc a odio ultrices, non consectetur nunc scelerisque. Mauris nec condimentum est, id eleifend orci.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container text-center">
+        <div class="row">
+            <div class="col">
+                <img src="social-beer.png" alt="Social Beer" class="img-fluid">
+            </div>
+            <div class="col">
+                <img src="cloudforce.png" alt="Cloudforce" class="img-fluid">
+            </div>
+            <div class="col">
+                <img src="simplefolk.png" alt="Simplefolk" class="img-fluid">
+            </div>
+            <div class="col">
+                <img src="calmseat.png" alt="Calmseat" class="img-fluid">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -90,7 +90,9 @@ app.get('/', (req, res) => {
 app.get('/nav', (req, res) => {
   res.render('navigationbar', {displayFullDate});
 });
-
+app.get('/css', (req, res) => {
+  res.render('index');
+});
 app.listen(port, () => {
     console.log(`PayMaster app listening at http://localhost:${port}`);
 });
