@@ -288,7 +288,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/logout">
+                <a class="nav-link" href="/logout" target="_blank" >
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </li>
@@ -309,9 +309,15 @@
             });
 
             $('.nav-link').click(function(e) {
+                if ($(this).siblings('.submenu').length > 0) {
+
                 e.preventDefault();
                 $(this).siblings('.submenu').toggleClass('active-submenu');
-            });
+                $(this).find('.fas.fa-caret-down, .fas.fa-caret-up').toggleClass('fa-caret-down fa-caret-up');
+
+            }
+        });
+
         });
     </script>
 </body>
