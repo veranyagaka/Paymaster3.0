@@ -5,20 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulting Website</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css"/>
+
     <style>
         body {
             background-color: #eaf2f8;
             font-family: Arial, sans-serif;
         }
-
-        .navbar {
-            background-color: transparent !important;
-        }
-
-        .nav-link {
-            color: #2c3e50 !important;
-        }
-
+        ul{
+        list-style: none;
+    }
         .btn-outline-dark {
             color: #2c3e50;
             border-color: #2c3e50;
@@ -110,45 +106,266 @@
         .form-section .service-item p {
             color: #2c3e50;
         }
+        /* Meow*/
+
+    .navbar {
+        background-color: #222;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo img {
+        height: 2rem;
+        margin-right: 0.5rem;
+    }
+    .nav-links {
+        display: flex;
+        gap: 1.5rem;
+    }
+    .nav-links a:hover{
+        background-color: #555;
+    }
+
+    .nav-links a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .dropdown {
+        position: relative;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #333;
+        min-width: 120px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: #fff;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #555;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .button {
+        background-color: #673ab7;
+        color: #fff;
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .button:hover {
+        background-color: #5e35b1;
+    }
+    .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+    .search-icon {
+        margin-right: 1.5rem;
+    }
+    section{
+        background-color: #030303;
+        color: #f0f8ff;
+
+    }
+    #hearder {
+    background-color: #f8f9fa;
+    height: 100vh;
+    color: #682626;
+    text-align: center;
+    position: relative;
+}
+
+.hearder-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.hearder-text h1 {
+    font-size: 3rem;
+}
+
+.hearder-text p {
+    font-size: 1.5rem;
+}
+
+/* About Section Styles */
+#about {
+    padding: 50px 0;
+    background-color: #FFC0CB
+}
+
+.about-col-1 {
+    float: left;
+    width: 50%;
+}
+
+.about-col-2 {
+    float: left;
+    width: 50%;
+}
+
+.sub-title {
+    font-size: 2rem;
+    color: #333;
+}
+
+.tab-titles {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.tab-links {
+    cursor: pointer;
+    padding: 10px 20px;
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.active-link {
+    background: #333;
+    color: #fff;
+}
+
+.tab-contents {
+    display: none;
+}
+
+.active-tab {
+    display: block;
+}
+
+/* Services Section Styles */
+#services {
+    background: #5f8bb6;
+    padding: 50px 0;
+}
+
+.services-list {
+    display: flex;
+    justify-content: space-around;
+}
+
+.services-list div {
+    background: #fff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer; /* Add cursor pointer to indicate clickable */
+    transition: background-color 0.3s, color 0.3s; 
+}
+.services-list div.active {
+    background: #6ab7ff;
+    color: white;
+}
+.services-list img {
+    width: 50px;
+    margin-bottom: 20px;
+}
+
     </style>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">
-            <img src="circle-logo.png" width="30" height="30" alt="Logo">
-        </a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Process</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Clients</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Team</a>
-                </li>
-                <li class="nav-item">
-                    <button class="btn btn-outline-dark">Request a Call Back</button>
-                </li>
-            </ul>
+<body onload="loader()">
+    <div id="Loading"></div>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="/favicon.ico" alt="PayMaster Logo">
+            <span>PayMaster</span>
+        </div>
+    
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a href="#">Why PayMaster</a>
+                <ul class="dropdown-content">
+                    <li><a href="#">Dropdown Link 1</a></li>
+                    <li><a href="#">Dropdown Link 2</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#about">About</a>
+            </li>
+            <li class="dropdown">
+                <a href="#services">Services</a>
+                <ul class="dropdown-content">
+                    <li><a href="#">Dropdown Link 1</a></li>
+                    <li><a href="#">Dropdown Link 2</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#pricing">Pricing</a>
+                <ul class="dropdown-content">
+                    <li><a href="#">Dropdown Link 1</a></li>
+                    <li><a href="#">Dropdown Link 2</a></li>
+                    <li><a href="#">Dropdown Link 3</a></li>
+                </ul>
+            </li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    
+        <div class="actions">
+            <i class="search-icon fas fa-search"></i>
+            <a href="/login" class="button">Log In</a>
+            <a href="/register" class="button">Sign Up</a>
         </div>
     </nav>
+<div id="hearder" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
 
     <div class="container text-center hero-section">
-        <h1 class="display-4">Success starts with hardworking consultants</h1>
-        <p class="lead">Morbi leo tortor, fermentum sed orci vitae, tempor auctor turpis. Fusce bibendum accumsan fringilla. Nulla aliquam luctus sem, at posuere nibh lobortis et. Ut ac mollis risus, eu congue libero. Nulla vestibulum ultricies tortor at ultrices.</p>
+    <h1 class="display-4">Welcome to PayMaster</h1>
+    <p class="lead">PayMaster is a web-based payroll management system for the Ministry of Education. It helps manage payroll, employee records, and more.</p>
+    <h2>Please log in to access the system</h2>
+    <a class="btn" href="login">Log In</a>
+	</div>
+<section>
+    <div class="container text-center hero-section">
+        <h1 class="display-4">Empower Your Education System</h1> <p class="lead">Introducing PayMaster, a secure web platform designed to streamline payroll, manage employee records, and enhance efficiency for the Ministry of Education.</p>
+        <h2>Get Started Today!</h2>
+        <a class="btn btn-primary" href="register">Sign Up</a>
     </div>
-
+</section> 
     <div class="container services-section">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h6 class="text-uppercase">Toolkit</h6>
                 <h2>Our Services</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer est tellus, pulvinar ac iaculis vel, varius eu arcu. Integer id lectus posuere nisi dignissim gravida at ac justo. Ut nec dui rutrum, cursus mauris sed integer eu vel.</p>
+      <p>Our dedicated customer support team is available 24/7 to assist you with any inquiries or issues you may have.</p>
             </div>
             <div class="col-md-6">
                 <img src="services-image.png" alt="Our Services" class="img-fluid">
@@ -156,10 +373,10 @@
         </div>
     </div>
 
-    <div class="container interested-section">
+    <div class="container interested-section" id="contact" data-aos="fade-up" data-aos-anchor-placement="center-bottom">
         <div class="text-center">
             <h2>Interested In Our Services?</h2>
-            <p>Use the form headline and this subheader to describe the purpose of your form.</p>
+            <h3>Contact Us Today!</h3>
         </div>
         <div class="row">
             <div class="col-md-6 form-section">
@@ -175,7 +392,7 @@
                     </div>
                 </form>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" >
                 <div class="service-item">
                     <h4>E-Commerce</h4>
                     <p>Maecenas varius nunc a odio ultrices, non consectetur nunc scelerisque. Mauris nec condimentum est, id eleifend orci.</p>
@@ -191,26 +408,16 @@
             </div>
         </div>
     </div>
-
-    <div class="container text-center">
-        <div class="row">
-            <div class="col">
-                <img src="social-beer.png" alt="Social Beer" class="img-fluid">
-            </div>
-            <div class="col">
-                <img src="cloudforce.png" alt="Cloudforce" class="img-fluid">
-            </div>
-            <div class="col">
-                <img src="simplefolk.png" alt="Simplefolk" class="img-fluid">
-            </div>
-            <div class="col">
-                <img src="calmseat.png" alt="Calmseat" class="img-fluid">
-            </div>
-        </div>
-    </div>
-
+</div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css"/>
+        <script>
+            var preloader = document.getElementById("Loading");
+            function loader(){
+              preloader.style.display = 'none';
+            }
+          </script>
 </body>
 </html>
