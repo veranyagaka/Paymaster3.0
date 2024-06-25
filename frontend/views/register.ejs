@@ -34,7 +34,6 @@
     <div class="success-message" id="successMessage">Registration was successfully. Check your email for verification.</div>
 <script>
         document.getElementById('registerForm').addEventListener('submit', function(event) {
-        event.preventDefault();
         // Handle form submission here, e.g., make an AJAX request to send the reset email
         console.log('Registration email:', document.getElementById('email').value);
   
@@ -44,7 +43,6 @@
         // Hide success message after 5 seconds
         setTimeout(function() {
           document.getElementById('successMessage').style.display = 'none';
-          hidePopup();
         }, 5000);
       });
 </script>

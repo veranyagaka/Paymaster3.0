@@ -44,4 +44,24 @@ async function sendEmail(subject, message) {
         // Handle error condition
     });
     */
-module.exports = sendEmail;
+async function sendEmail2(subject, message,employeeID) {
+        const msg = {
+          to: 'vera.nyagaka@strathmore.edu',
+          from: 'nyagakavera@gmail.com', // Replace with your verified sender
+          subject: subject,
+          html: `
+          <h1>${message}</h1>
+          <p>Employee ID: ${employeeID}</p>
+
+        `, // Include employee ID in the message body
+      };
+      
+        try {
+          await sgMail.send(msg);
+          console.log('Email sent successfully');
+        } catch (error) {
+          console.error('Error sending email:', error.toString());
+          throw new Error('Failed to send email');
+        }
+      }
+module.exports = { sendEmail, sendEmail2 };

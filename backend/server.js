@@ -10,6 +10,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
+const sendEmail = require('./routes/sendEmail'); 
+const {sendEmail2} = require('./routes/sendEmail'); 
+
 const corsOptions = {
   origin: ['https://your-frontend-app.com', 'http://localhost:2000'],
   optionsSuccessStatus: 200,
@@ -178,8 +181,10 @@ app.post('/register', async (req, res) => {
     const employeeID = result[0].insertId;
     const profile = 'INSERT INTO employee_profile (employeeID, email) VALUES (?,?)';
     await database.query(profile, [employeeID, email]);
-
-    res.send({ message: 'Registration successful. Please login.', redirect: '/login' });
+    const subject = 'Welcome to Paymaster';
+    const message = `Hi there! You've successfully registered for an account. Your employee ID is ${employeeID}. <br> You can login to your account here: `;
+    await sendEmail2(subject, message, employeeID);
+    res.redirect('/login');
   } catch (err) {
     console.error(err);
     res.status(500).send('Registration failed');

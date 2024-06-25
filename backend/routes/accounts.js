@@ -206,7 +206,7 @@ router.get('/employee-attendance', async(req, res) => {
     const employeeId = req.session.EmployeeID;
     console.log('Attendance for employee no: ', employeeId)
     try{
-    const [attendanceRecords] = await database.query('SELECT * FROM attendance_records');
+    const [attendanceRecords] = await database.query('SELECT * FROM attendance_records where employee_Id=?',[employeeId]);
     res.render('employee-attendance',{attendanceRecords: attendanceRecords }); 
 
     /*const [{employee} ]= await database.query('SELECT * FROM employee_profile where employeeID=?', [employeeId]);
