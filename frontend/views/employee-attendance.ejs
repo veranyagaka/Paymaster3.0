@@ -5,13 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Attendance</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .required::after {
+  content: "*";  /* Add asterisk content */
+  color: red;     /* Optional: Set color for the asterisk */
+  font-weight: bold; /* Optional: Make the asterisk bold */
+  margin-left: 5px;  /* Optional: Adjust spacing between asterisk and label */
+}
+    </style>
 </head>
 <body>
     <%- include('navigationbar') %>
 
     <div class="container mt-4">
-        <h2 class="mb-4">Attendance for <%= employee.first_name %></h2>
-        <% if (attendance.length > 0) { %>
+        <h2 class="mb-4">Attendance for MISSING</h2>
+        <% if (attendanceRecords.length > 0) { %>
 
         <table class="table table-bordered">
             <thead>
@@ -23,7 +31,7 @@
                 </tr>
             </thead>
             <tbody>
-                <% attendance.forEach(record => { %>
+                <% attendanceRecords.forEach(record => { %>
                     <tr>
                         <td><%= record.month %></td>
                         <td><%= record.daysPresent %></td>
@@ -38,8 +46,8 @@
                 No attendance records at the moment.
             </div>
         <% } %>        <h3 class="mt-4">Contact Admin</h3>
-        <form action="/contact-admin" method="POST">
-            <input type="hidden" name="employeeID" value="<%= employee.employeeID %>">
+        <form action="/accounts/contact-admin" method="POST">
+            <input type="hidden" name="employeeID" value="MISSING">
             <div class="form-group">
                 <label for="subject">Subject</label>
                 <input type="text" class="form-control" id="subject" name="subject" required>

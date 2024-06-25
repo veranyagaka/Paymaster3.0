@@ -206,7 +206,10 @@ router.get('/employee-attendance', async(req, res) => {
     const employeeId = req.session.EmployeeID;
     console.log('Attendance for employee no: ', employeeId)
     try{
-    const [{employee} ]= await database.query('SELECT * FROM employee_profile where employeeID=?', [employeeId]);
+    const [attendanceRecords] = await database.query('SELECT * FROM attendance_records');
+    res.render('employee-attendance',{attendanceRecords: attendanceRecords }); 
+
+    /*const [{employee} ]= await database.query('SELECT * FROM employee_profile where employeeID=?', [employeeId]);
     if (employee && employee.length > 0) {
         console.log('Employee First Name: ', employee[0].first_name);
       } else {
@@ -214,11 +217,29 @@ router.get('/employee-attendance', async(req, res) => {
       }
     const attendance = await database.query('SELECT * FROM attendance_records where employee_id=?', [employeeId]);
     console.log('Attendance Length ', attendance.length )
-
-    res.render('employee-attendance',{employee,attendance}); 
+*/
     }
     catch(err){
         console.error(err);
         res.status(500).send('Internal Server Error');    }
 });
+//email sending bruh
+const sendEmail = require('./sendEmail'); 
+
+router.post('/contact-admin', async (req, res) => {
+    try {
+      //const employeeID = req.body.employeeID; // Access employee ID from form data
+      const subject = req.body.subject;
+      const message = req.body.message;
+  
+      // Optional: Validate and sanitize form data (if needed)
+  
+      await sendEmail(subject, message); // Call your sendEmail function
+  
+      res.status(200).send('Email sent successfully!'); // Respond to the client
+    } catch (error) {
+      console.error('Error sending email:', error);
+      res.status(500).send('Failed to send email'); // Handle errors
+    }
+  });
 module.exports= router

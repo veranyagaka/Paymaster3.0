@@ -269,7 +269,7 @@ const payRouter =require('./routes/payslip')
 app.use('/pay', payRouter)
 const accountsRouter =require('./routes/accounts')
 app.use('/accounts', accountsRouter)
-const sendEmail = require('./routes/sendEmail'); 
+//const sendEmail = require('./routes/sendEmail'); 
 /*
 sendEmail()
     .then(() => {

@@ -7,6 +7,7 @@ const msg = {
     subject: 'Hello there hh',
     html: '<h1>We did it!</h1>',
 };
+/*
 async function sendEmail() {
     try {
         await sgMail.send(msg);
@@ -15,7 +16,23 @@ async function sendEmail() {
         console.error('Error sending email:', error.toString());
         throw new Error('Failed to send email');
     }
-}
+}*/
+async function sendEmail(subject, message) {
+    const msg = {
+      to: 'vera.nyagaka@strathmore.edu',
+      from: 'nyagakavera@gmail.com', // Replace with your verified sender
+      subject: subject,
+      html: message,
+    };
+  
+    try {
+      await sgMail.send(msg);
+      console.log('Email sent successfully');
+    } catch (error) {
+      console.error('Error sending email:', error.toString());
+      throw new Error('Failed to send email');
+    }
+  }
 /*sgMail
     .send(msg)
     .then(() => {
