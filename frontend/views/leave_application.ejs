@@ -159,6 +159,39 @@
             </div>
         </form>
     </div>
+
+        <!-- Leave Requests -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Leave Requests
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Leave Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop through leave requests -->
+                        <% leaveRequests.forEach(request => { %>
+                            <tr>
+                                <td><%= request.request_id %></td>
+                                <td><%= request.leave_type %></td>
+                                <td><%= request.start_date %></td>
+                                <td><%= request.end_date %></td>
+                                <td><%= request.status %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
 </div>
 </div>
 <%- include('footer') %>

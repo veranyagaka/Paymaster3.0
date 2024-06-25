@@ -209,6 +209,37 @@
 .fa-caret-up {
   transform: rotate(180deg);
 }
+body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .nav-bar.dark-mode {
+            background-color: #1f1f1f;
+            border-bottom-color: #444;
+        }
+        .search-bar.dark-mode {
+            background-color: #1f1f1f;
+            border-color: #555;
+        }
+        .search-bar input.dark-mode {
+            background-color: #1f1f1f;
+            color: #ffffff;
+        }
+        .icon.dark-mode {
+            background-color: #1f1f1f;
+        }
+        .tooltip.dark-mode {
+            background-color: #1f1f1f;
+        }
+        .sidebar.dark-mode {
+            background-color: #1f1f1f;
+        }
+        .sidebar .nav-link.dark-mode {
+            color: #ffffff;
+        }
+        .sidebar .nav-link.dark-mode:hover {
+            background-color: #2a2a2a;
+        }
     </style>
 </head>
 <body>
@@ -232,7 +263,7 @@
                 <i class="fas fa-hand-holding-usd"></i> Attendance
             </a><br/>
 
-            <a href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <a href="/logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
@@ -268,12 +299,21 @@
                 <ul class="submenu">
                     <li class="nav-item"><a class="nav-link" href="#">Change Password</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Change Profile Pic</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Preferences - Dark Mode</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"> 
+                    <i class="fas fa-moon"></i> Preferences
+                    <i class="fas fa-caret-down"></i>
+
+                </a>
+                <ul class="submenu">
+                    <li class="nav-item" id ="dark-mode-toggle"><a class="nav-link" href="#" ><i class="fas fa-sun"> </i>Dark Mode</a></li>
                 </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">
-                    <i class="fas fa-lock"></i> Privacy
+                    <i class="fas fa-lock"></i> Quick Links
                     <i class="fas fa-caret-down"></i>
 
                 </a>
@@ -317,8 +357,92 @@
 
             }
         });
-
+        $('.nav-link[href="#"]').click(function(e) {
+        e.preventDefault();
+        const linkText = $(this).text().trim();
+        if (linkText === 'Change Password') {
+            $('#changePasswordModal').modal('show');
+        } else if (linkText === 'Change Profile Pic') {
+            $('#changeProfilePicModal').modal('show');
+        }
+    });
         });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+
+        darkModeToggle.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+
+            // Toggle the icon between sun and moon
+            const icon = darkModeToggle.querySelector('i');
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+
+            // Toggle classes for other elements
+            document.querySelectorAll('.nav-bar, .search-bar, .search-bar input, .icon, .tooltip, .sidebar, .sidebar .nav-link').forEach(function(element) {
+                element.classList.toggle('dark-mode');
+            });
+        });
+    });
     </script>
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" class="form-control" id="currentPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" class="form-control" id="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Change Profile Pic Modal -->
+<div class="modal fade" id="changeProfilePicModal" tabindex="-1" aria-labelledby="changeProfilePicModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changeProfilePicModalLabel">Change Profile Picture</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="changeProfilePicForm">
+                    <div class="form-group">
+                        <label for="profilePic">Upload New Profile Picture</label>
+                        <input type="file" class="form-control-file" id="profilePic" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Change Profile Pic</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

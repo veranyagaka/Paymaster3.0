@@ -5,13 +5,21 @@ const pdf = require('html-pdf');
 const database = require('../database.js')
 const fs = require('fs');
 
-router.get('/leave_application', (req, res) => {
+router.get('/leave_application', async (req, res) => {
     if (!req.session.EmployeeID) {
         return res.status(401).redirect('/login'); // Redirect to login if no session
       }
     const employeeId = req.session.EmployeeID;
-
     console.log('Leave Application employee no: ', employeeId)
+
+    try {
+        // Retrieve employees from the database
+        const [leave_requests] = await database.query('SELECT * FROM leave_requests where employee_id=?', [employeeId]);
+        res.render('leave_application', { leaveRequests: leave_requests });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
     res.render('leave_application'); 
 });
 
@@ -191,11 +199,26 @@ function verifyResetToken(token) {
     // You should implement your own logic to verify the reset token
     return true; // Assume the token is valid for demonstration purposes
   }
-router.get('/employee-attendance', (req, res) => {
-    const employee = [{id: 1}];
-    const record = [{id: 1}];
-    const attendance = [{id: 1}];
+router.get('/employee-attendance', async(req, res) => {
+    if (!req.session.EmployeeID) {
+        return res.status(401).redirect('/login'); // Redirect to login if no session
+      }
+    const employeeId = req.session.EmployeeID;
+    console.log('Attendance for employee no: ', employeeId)
+    try{
+    const [{employee} ]= await database.query('SELECT * FROM employee_profile where employeeID=?', [employeeId]);
+    if (employee && employee.length > 0) {
+        console.log('Employee First Name: ', employee[0].first_name);
+      } else {
+        console.log('No employee found with ID:', employeeId);
+      }
+    const attendance = await database.query('SELECT * FROM attendance_records where employee_id=?', [employeeId]);
+    console.log('Attendance Length ', attendance.length )
 
-    res.render('employee-attendance',{employee,record,attendance}); 
+    res.render('employee-attendance',{employee,attendance}); 
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).send('Internal Server Error');    }
 });
 module.exports= router
