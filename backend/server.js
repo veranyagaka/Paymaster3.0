@@ -184,23 +184,14 @@ app.post('/register', async (req, res) => {
     const subject = 'Welcome to Paymaster';
     const message = `Hi there! You've successfully registered for an account. Your employee ID is ${employeeID}. <br> You can login to your account here: `;
     await sendEmail2(subject, message, employeeID);
-    res.redirect('/login');
+    setTimeout(() => {
+      res.redirect('/login');
+    }, 3000); 
   } catch (err) {
     console.error(err);
     res.status(500).send('Registration failed');
   }
   //
-});
-app.get('/profile2', (req, res) => {
-  const employee = {
-    name: 'John Doe',
-    position: 'Software Engineer',
-    department: 'Development',
-    email: 'john.doe@example.com',
-    phone: '123-456-7890',
-    about: 'John is a dedicated software engineer with 5 years of experience in web development.'
-  };
-  res.render('profile', { employee });
 });
 
 //admin page

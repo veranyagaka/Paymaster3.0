@@ -5,6 +5,29 @@ const pdf = require('html-pdf');
 const database = require('../database.js')
 const fs = require('fs');
 
+router.get('/finance', (req,res )=>{
+  res.render('finance');
+});
+router.post('/employees/payment-details/:employeeId', (req, res) => {
+  const employeeID = req.session.EmployeeID;
+  const bankName = req.body.bankName;
+  const bankAccountName = req.body.bankAccountName;
+  const bankAccountNumber = req.body.bankAccountNumber;
+
+  // Prepare SQL query
+  const sql = `INSERT INTO paymentdetails (employeeID, bankName, bankAccountName, bankAccountNumber) VALUES (?, ?, ?, ?)`;
+
+  // Execute query with prepared statement to prevent SQL injection vulnerabilities
+  database.query(sql, [employeeID, bankName, bankAccountName, bankAccountNumber], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.send('Error inserting data');
+    } else {
+      res.send('Payment details saved successfully!');
+    }
+  });
+});
+
 router.get('/leave_application', async (req, res) => {
     if (!req.session.EmployeeID) {
         return res.status(401).redirect('/login'); // Redirect to login if no session
@@ -242,4 +265,5 @@ router.post('/contact-admin', async (req, res) => {
       res.status(500).send('Failed to send email'); // Handle errors
     }
   });
+
 module.exports= router

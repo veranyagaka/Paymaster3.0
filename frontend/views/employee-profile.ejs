@@ -113,6 +113,11 @@
                             <button class="btn btn-primary profile-edit-btn" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12 text-md-center">
+                            <button class="btn btn-primary payment-details-btn" data-toggle="modal" data-target="#editPaymentModal">Set Payment Method</button>
+                        </div>
+                    </div>
             </div>
         </div>
     </div>
@@ -154,6 +159,40 @@
             </div>
         </div>
     </div>
+    <!-- Payment Details Modal -->
+<div class="modal fade" id="editPaymentModal" tabindex="-1" role="dialog" aria-labelledby="editPaymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPaymentModalLabel">Edit Payment Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/accounts/employees/payment-details/<%= employee.employeeID %>" method="POST">
+                    <div class="form-group">
+                        <label for="bankName">Bank Name</label>
+                        <input type="text" class="form-control" id="bankName" name="bankName" placeholder="Enter bank name">
+                    </div>
+                    <div class="form-group">
+                        <label for="bankAccountName">Bank Account Name</label>
+                        <input type="text" class="form-control" id="bankAccountName" name="bankAccountName" placeholder="Enter bank account name">
+                    </div>
+                    <div class="form-group">
+                        <label for="bankAccountNumber">Bank Account Number</label>
+                        <input type="text" class="form-control" id="bankAccountNumber" name="bankAccountNumber" placeholder="Enter bank account number">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
