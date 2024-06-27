@@ -14,19 +14,21 @@
     </style>
 </head>
 <body>
+    <%- include('admin-sidebar') %>
+
     <div class="container mt-4">
         <h2 class="mb-4">Employee Attendance Tracking</h2>
-
+        <div class="row">
+            <div class="col text-left">
+                <button class="btn btn-info mb-3" id="import-attendance-btn">Import Attendance</button>
+            </div>
+        </div>
         <!-- Attendance Records -->
         <div class="card mb-4">
             <div class="card-header">
                 Attendance Records
             </div>
-            <div class="row">
-                <div class="col text-left">
-                    <button class="btn btn-info mb-3" id="import-attendance-btn">Import Attendance</button>
-                </div>
-            </div>
+
             <div class="card-body">
                 <table class="table table-bordered attendance-table">
                     <thead>

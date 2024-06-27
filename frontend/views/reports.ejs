@@ -5,7 +5,9 @@
   <link rel="stylesheet" type="text/css" href="/css/reports.css">
 </head>
 <body>
-  <h1>Reports</h1>
+  <%- include('admin-sidebar') %>
+
+  <h1 class="text-center">Reports</h1>
   <div class="chart-container">
     <h2>Gender Ratio</h2>
     <canvas id="gender-chart" width="400" height="200"></canvas>
@@ -120,6 +122,7 @@ new Chart(ctxDepartment, {
 });
 
 </script>
+<%- include('footer') %>
 
 </body>
 </html>

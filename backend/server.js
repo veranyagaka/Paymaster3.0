@@ -108,7 +108,7 @@ app.get('/login', (req, res) => {
   res.render('login');
 });
 app.get('/side', (req, res) => {
-  res.render('test');
+  res.render('admin-sidebar');
 });
 app.get('/register', (req, res) => {
   res.render('register');
