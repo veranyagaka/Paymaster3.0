@@ -1,10 +1,12 @@
 # CS_Project1
 # Paymaster -Payroll Management System
 - [x] Better css for all the pages
-- [ ] Use Bootstrap for the css
-- [ ] All the 5 modules- Finish attendance module tmr
+- [x] Use Bootstrap for the css
+- [x] All the 5 modules- Finish attendance module tmr
 - [ ] Working of all the modules
 - [x] Fix the mime type and the working of the javascript files!!
+- [ ] Change password
+- [ ] Change profile pic
 - [ ] Redirection to all the pages
 - [ ] Ensure the restricted entry method
 - [ ] Deployment && docker
