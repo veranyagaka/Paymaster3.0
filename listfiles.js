@@ -28,3 +28,4 @@ function getAllFiles(dirPath, arrayOfFiles = []) {
 const directoryPath = path.join(__dirname);
 const filesList = getAllFiles(directoryPath);
 console.log(filesList);
+

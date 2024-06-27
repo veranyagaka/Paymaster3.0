@@ -4,9 +4,51 @@ const path = require('path');
 const pdf = require('html-pdf'); 
 const database = require('../database.js')
 const fs = require('fs');
+function calculateNetPay({ firstName, lastName, email, employeeID, department, bio, baseSalary, allowances }) {
+  // Perform salary calculations here
+  const finalSalary = baseSalary + allowances;
 
-router.get('/finance', (req,res )=>{
-  res.render('finance');
+  return {
+    firstName,
+    lastName,
+    email,
+    employeeID,
+    department,
+    bio,
+    baseSalary,
+    allowances,
+    finalSalary
+  };
+}
+
+router.get('/finance', async(req,res )=>{
+  if (!req.session.EmployeeID) {
+    return res.status(401).redirect('/login'); // Redirect to login if no session
+  }
+  const employeeID = req.session.EmployeeID;
+  const [employee] = await database.query('SELECT * FROM employee_profile where employeeID =?',[employeeID])
+  console.log(employee)
+
+  if (!employee) {
+    // Employee not found with this ID
+    return res.status(404).render('error', { message: 'Employee not found!' });
+  }
+    // Ensure proper mapping of employee data
+    const employeeData = {
+      firstName: employee.first_name || '',
+      lastName: employee.last_name || '',
+      email: employee.email || '',
+      employeeID: req.session.EmployeeID || 0,
+      department: employee.department || '',
+      bio: employee.bio || '',
+      baseSalary: parseFloat(employee.baseSalary) || 0,
+      allowances: parseFloat(employee.allowance) || 0
+    };
+    console.log(employeeData);
+
+    const salaryComponents = calculateNetPay(employeeData);
+    console.log(salaryComponents);
+  res.render('finance', {salaryComponents: salaryComponents});
 });
 router.post('/employees/payment-details/:employeeId', (req, res) => {
   const employeeID = req.session.EmployeeID;
@@ -75,7 +117,8 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
     try {
       // Update employee data in the database
       await database.query('UPDATE employee_profile SET first_name = ?, bio = ?,last_name = ?, email = ? WHERE employeeID = ?', [firstName, bio, lastName, email,employeeId]);
-  
+      await database.query('UPDATE Employee SET FirstName = ?,LastName = ?, email = ? WHERE EmployeeID = ?', [firstName,lastName, email,employeeId]);
+
       // Handle successful update (e.g., redirect to employee list, display success message)
       res.redirect('/employee-profile'); // Replace as needed
   

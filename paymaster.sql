@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 19, 2024 at 10:46 AM
+-- Generation Time: Jun 27, 2024 at 11:59 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `bevv9lcxzjw1b3cabwrt`
+-- Database: `paymaster`
 --
 
 -- --------------------------------------------------------
@@ -49,10 +49,26 @@ INSERT INTO `admin` (`username`, `email`, `password`) VALUES
 CREATE TABLE `attendance_records` (
   `record_id` int(11) NOT NULL,
   `employee_id` int(11) NOT NULL,
-  `week_start` date NOT NULL,
-  `hours_worked` decimal(5,2) NOT NULL,
+  `month` varchar(7) NOT NULL,
+  `daysPresent` int(5) NOT NULL,
+  `daysAbsent` int(5) NOT NULL,
   `overtime_hours` decimal(5,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `attendance_records`
+--
+
+INSERT INTO `attendance_records` (`record_id`, `employee_id`, `month`, `daysPresent`, `daysAbsent`, `overtime_hours`) VALUES
+(1, 100, '2023-06', 20, 5, 10.00),
+(2, 101, '2023-06', 18, 7, 8.00),
+(3, 102, '2023-06', 22, 3, 12.00),
+(4, 100, '2023-07', 19, 6, 5.00),
+(5, 101, '2023-07', 21, 4, 7.00),
+(6, 102, '2023-07', 20, 5, 9.00),
+(7, 100, '2023-08', 23, 2, 11.00),
+(8, 101, '2023-08', 20, 5, 10.00),
+(9, 102, '2023-08', 18, 7, 6.00);
 
 -- --------------------------------------------------------
 
@@ -90,7 +106,15 @@ INSERT INTO `Employee` (`EmployeeID`, `FirstName`, `LastName`, `email`, `passwor
 (3, 'Aisha', 'Abdalla', '', ''),
 (4, 'David', 'Ochieng', '', ''),
 (5, 'Unknown', 'Unknown', 'nyagakavera@gmail.com', '$2b$10$esR.dCPUEDKEv1Oux2XLgOT2motkXBNVuUBGk.vU7o5jCrooXcDtW'),
-(6, 'gs', 'gg', 'gs', '123');
+(6, 'gs', 'gg', 'gs', '123'),
+(7, 'Unknown', 'Unknown', 'hey@gmail.com', '$2b$10$ergWPl9qKOs/x0KzhkD4l..zKhG6TnDazIFgAYGKaZMIlB9ueR8nW'),
+(8, 'Unknown', 'Unknown', 'fr@gmail.com', '$2b$10$rUwESQSRgkqbvFHA2eTwQOqcXR4HtNqWMOxfaBAcB32zdJwowXd2q'),
+(9, 'Unknown', 'Unknown', 'noway@gmail.com', '$2b$10$lgI/oB.9.EzGzfKhkJrqjeIglyY6lQUdBWFWlZcE/B7P0u4i/m0za'),
+(10, 'Unknown', 'Unknown', 'way@gmail.com', '$2b$10$ujLpYH9ptWETtTo5qRK0n.aGHzFKIxdopg3o/LDr7hbxyoyPtECF6'),
+(11, 'Unknown', 'Unknown', 'wiay@gmail.com', '$2b$10$/tAP3oqq/R5y48KIYPCBs.oAUYp8d/DTQsc39bPUKregIs3tyZn.C'),
+(100, 'Unknown', 'Unknown', 'qwe@gmail.com', '$2b$10$hXUMhwzGorOj.75RRh.qDOBCFentY2Eyp8g/oER8klatv/D5FybY6'),
+(101, 'Unknown', 'Unknown', 'works@gmail.com', '$2b$10$BpgCJMAOQ3wXgodGYS1T..6y8gf.LqPftouhA2.5yU2Hp.rudt.1e'),
+(102, 'Unknown', 'Unknown', 'wo@gmail.com', '$2b$10$Ur86iQFp/oKSKH4MfCHbUeu2ewIiDw/Zv5OaJ8z2yBqdwQFqSMtZC');
 
 -- --------------------------------------------------------
 
@@ -106,16 +130,52 @@ CREATE TABLE `employee_profile` (
   `department` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `bio` text DEFAULT NULL,
-  `profile_picture` varchar(255) DEFAULT NULL
+  `profile_picture` varchar(255) DEFAULT NULL,
+  `baseSalary` decimal(10,2) NOT NULL DEFAULT 60000.00,
+  `allowance` decimal(10,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `employee_profile`
 --
 
-INSERT INTO `employee_profile` (`employeeID`, `first_name`, `last_name`, `job_title`, `department`, `email`, `bio`, `profile_picture`) VALUES
-(3, 'ffa', 'Abdalla', 'gs', 'gg', 'aisha.abdalla@example.com', 'Aisha is an experienced project manager who excels in leading cross-functional teams.', 'profile-picture-aisha.jpg'),
-(4, 'David', 'Ochieng', 'Software Engineer', 'IT Department', 'david.ochieng@example.com', 'David is a skilled software engineer with over 5 years of experience.', 'profile-picture-david.jpg');
+INSERT INTO `employee_profile` (`employeeID`, `first_name`, `last_name`, `job_title`, `department`, `email`, `bio`, `profile_picture`, `baseSalary`, `allowance`) VALUES
+(3, NULL, 'Abdalla', NULL, NULL, 'aisha.abdalla@example.com', 'Aisha is an experienced project manager who excels in leading cross-functional teams.', 'profile-picture-aisha.jpg', 60000.00, 0.00),
+(4, NULL, 'Ochieng', NULL, NULL, 'david.ochieng@example.com', 'David is a skilled software engineer with over 5 years of experience.', 'profile-picture-david.jpg', 60000.00, 0.00),
+(11, 'Test', 'Test', '', 'Arkham', 'test@gmail.com', 'I am test', NULL, 60000.00, 0.00),
+(100, NULL, NULL, NULL, NULL, 'qwe@gmail.com', NULL, NULL, 60000.00, 0.00),
+(101, NULL, NULL, NULL, NULL, 'works@gmail.com', NULL, NULL, 60000.00, 0.00),
+(102, NULL, NULL, NULL, NULL, 'wo@gmail.com', NULL, NULL, 60000.00, 0.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employee_test`
+--
+
+CREATE TABLE `employee_test` (
+  `id` int(11) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `gender` char(1) DEFAULT NULL CHECK (`gender` in ('M','F')),
+  `availability` enum('Available','On Leave') DEFAULT 'Available'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `employee_test`
+--
+
+INSERT INTO `employee_test` (`id`, `first_name`, `last_name`, `gender`, `availability`) VALUES
+(1, 'Alice', 'Smith', 'F', 'Available'),
+(2, 'Bob', 'Johnson', 'M', 'Available'),
+(3, 'Charlie', 'Brown', 'M', 'On Leave'),
+(4, 'Diana', 'Williams', 'F', 'Available'),
+(5, 'Emily', 'Jones', 'F', 'Available'),
+(6, 'Frank', 'Davis', 'M', 'On Leave'),
+(7, 'Grace', 'Miller', 'F', 'Available'),
+(8, 'Harry', 'Garcia', 'M', 'Available'),
+(9, 'Isabella', 'Wilson', 'F', 'On Leave'),
+(10, 'Jack', 'Clark', 'M', 'Available');
 
 -- --------------------------------------------------------
 
@@ -183,6 +243,45 @@ CREATE TABLE `leave_requests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `leave_requests`
+--
+
+INSERT INTO `leave_requests` (`request_id`, `employee_id`, `leave_type`, `start_date`, `end_date`, `status`) VALUES
+(1, 11, 'Vacation', '2024-06-25', '2024-06-27', 'Approved'),
+(2, 11, 'Vacation', '2024-07-03', '2024-07-06', 'Denied');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `paymentdetails`
+--
+
+CREATE TABLE `paymentdetails` (
+  `employeeID` int(11) NOT NULL,
+  `bankName` varchar(255) NOT NULL,
+  `bankAccountName` varchar(255) NOT NULL,
+  `bankAccountNumber` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payroll_history`
+--
+
+CREATE TABLE `payroll_history` (
+  `record_id` int(11) NOT NULL,
+  `employeeID` int(11) DEFAULT NULL,
+  `pay_period_start` date DEFAULT NULL,
+  `pay_period_end` date DEFAULT NULL,
+  `baseSalary` decimal(10,2) DEFAULT NULL,
+  `allowances` decimal(10,2) DEFAULT NULL,
+  `deductions` decimal(10,2) DEFAULT NULL,
+  `finalSalary` decimal(10,2) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
 -- Indexes for dumped tables
 --
 
@@ -213,6 +312,12 @@ ALTER TABLE `employee_profile`
   ADD PRIMARY KEY (`employeeID`);
 
 --
+-- Indexes for table `employee_test`
+--
+ALTER TABLE `employee_test`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `kenyan_salary_structure`
 --
 ALTER TABLE `kenyan_salary_structure`
@@ -233,6 +338,19 @@ ALTER TABLE `leave_requests`
   ADD KEY `employee_id` (`employee_id`);
 
 --
+-- Indexes for table `paymentdetails`
+--
+ALTER TABLE `paymentdetails`
+  ADD PRIMARY KEY (`employeeID`);
+
+--
+-- Indexes for table `payroll_history`
+--
+ALTER TABLE `payroll_history`
+  ADD PRIMARY KEY (`record_id`),
+  ADD KEY `employeeID` (`employeeID`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -240,7 +358,7 @@ ALTER TABLE `leave_requests`
 -- AUTO_INCREMENT for table `attendance_records`
 --
 ALTER TABLE `attendance_records`
-  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `attendance_reports`
@@ -252,13 +370,13 @@ ALTER TABLE `attendance_reports`
 -- AUTO_INCREMENT for table `Employee`
 --
 ALTER TABLE `Employee`
-  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
--- AUTO_INCREMENT for table `employee_profile`
+-- AUTO_INCREMENT for table `employee_test`
 --
-ALTER TABLE `employee_profile`
-  MODIFY `employeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+ALTER TABLE `employee_test`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `kenyan_salary_structure`
@@ -276,7 +394,13 @@ ALTER TABLE `kenyan_tax_brackets`
 -- AUTO_INCREMENT for table `leave_requests`
 --
 ALTER TABLE `leave_requests`
-  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `payroll_history`
+--
+ALTER TABLE `payroll_history`
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -305,6 +429,18 @@ ALTER TABLE `employee_profile`
 --
 ALTER TABLE `leave_requests`
   ADD CONSTRAINT `leave_requests_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `Employee` (`EmployeeID`);
+
+--
+-- Constraints for table `paymentdetails`
+--
+ALTER TABLE `paymentdetails`
+  ADD CONSTRAINT `paymentdetails_ibfk_1` FOREIGN KEY (`employeeID`) REFERENCES `Employee` (`EmployeeID`);
+
+--
+-- Constraints for table `payroll_history`
+--
+ALTER TABLE `payroll_history`
+  ADD CONSTRAINT `payroll_history_ibfk_1` FOREIGN KEY (`employeeID`) REFERENCES `Employee` (`EmployeeID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -141,11 +141,11 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
   router.post('/edit:employeeId', async (req, res) => {
     const employeeId = req.params.employeeId;
 
-    const { first_name, job_title, department } = req.body; // Destructure data from request body
+    const { first_name,baseSalary,allowance, job_title, department } = req.body; // Destructure data from request body
   
     try {
       // Update employee data in the database
-      await database.query('UPDATE employee_profile SET first_name = ?, job_title = ?, department = ? WHERE employeeID = ?', [first_name, job_title, department, employeeId]);
+      await database.query('UPDATE employee_profile SET first_name = ?, baseSalary = ? ,job_title = ?,allowance = ?, department = ? WHERE employeeID = ?', [first_name, baseSalary,job_title, allowance,department, employeeId]);
   
       // Handle successful update (e.g., redirect to employee list, display success message)
       res.redirect('/admin'); // Replace as needed
