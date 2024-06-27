@@ -27,7 +27,7 @@ router.get('/finance', async(req,res )=>{
   }
   const employeeID = req.session.EmployeeID;
   const [employee] = await database.query('SELECT * FROM employee_profile where employeeID =?',[employeeID])
-  console.log(employee)
+  console.log(employee);
 
   if (!employee) {
     // Employee not found with this ID
@@ -35,14 +35,14 @@ router.get('/finance', async(req,res )=>{
   }
     // Ensure proper mapping of employee data
     const employeeData = {
-      firstName: employee.first_name || '',
-      lastName: employee.last_name || '',
-      email: employee.email || '',
+      firstName: employee[0].first_name || '',
+      lastName: employee[0].last_name || '',
+      email: employee[0].email || '',
       employeeID: req.session.EmployeeID || 0,
-      department: employee.department || '',
-      bio: employee.bio || '',
-      baseSalary: parseFloat(employee.baseSalary) || 0,
-      allowances: parseFloat(employee.allowance) || 0
+      department: employee[0].department || '',
+      bio: employee[0].bio || '',
+      baseSalary: parseFloat(employee[0].baseSalary) || 0,
+      allowances: parseFloat(employee[0].allowance) || 0
     };
     console.log(employeeData);
 
@@ -179,11 +179,11 @@ router.get('/employee/salary/:id', (req, res) => {
   res.render('salary', { salaryComponents,employee });
 });
 // Route to generate PDF
-router.get('/employee/salary/:id/download', (req, res) => {
+router.get('/employee/salary/:id/download', async(req, res) => {
   const employeeId = parseInt(req.params.id, 10);
   console.log(employeeId);
-  const employee = employees.find(emp => emp.id === employeeId);
-
+  const [employee] = await database.query('SELECT * FROM employee_profile where employeeID =?',[employeeId])
+console.log('Employee: ,' ,employee)
   if (!employee) {
       return res.status(404).send('Employee not found');
   }
