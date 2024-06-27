@@ -30,36 +30,63 @@
             </div>
 
             <div class="card-body">
-                <table class="table table-bordered attendance-table">
-                    <thead>
-                        <tr>
-                            <th>Employee ID</th>
-                            <th>Month</th>
-                            <th>Days Present</th>
-                            <th>Days Absent</th>
-                            <th>Overtime Hours</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Loop through attendance records -->
-                        <% attendanceRecords.forEach(record => { %>
+                <% if (attendanceRecords.length > 0) { %>
+                    <table class="table table-bordered">
+                        <thead>
                             <tr>
-                                <td><%= record.employeeID %></td>
-                                <td><%= record.month %></td>
-                                <td><%= record.daysPresent %></td>
-                                <td><%= record.daysAbsent %></td>
-                                <td><%= record.overtimeHours %></td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editAttendanceModal" data-id="<%= record.employeeID %>" data-month="<%= record.month %>">Edit</button>
-                                </td>
+                                <th>Record ID</th>
+                                <th>Employee ID</th>
+                                <th>Month</th>
+                                <th>Days Present</th>
+                                <th>Days Absent</th>
+                                <th>Overtime Hours</th>
+                                <th>Action</th>
+
                             </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <% attendanceRecords.forEach(record => { %>
+                                <tr>
+                                    <td><%= record.record_id %></td>
+                                    <td><%= record.employee_id %></td>
+                                    <td><%= record.month %></td>
+                                    <td><%= record.daysPresent %></td>
+                                    <td><%= record.daysAbsent %></td>
+                                    <td><%= record.overtime_hours %></td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editAttendanceModal" data-id="<%= record.employeeID %>" data-month="<%= record.month %>">Edit</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                    <!-- Pagination Controls -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <% if (currentPage > 1) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage - 1 %>">Previous</a>
+                    </li>
+                <% } %>
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage + 1 %>">Next</a>
+                    </li>
+                <% } %>
+            </ul>
+        </nav>
+                <% } else { %>
+                    <div class="alert alert-info" role="alert">
+                        No attendance records at the moment.
+                    </div>
+                <% } %>
             </div>
         </div>
-
         <!-- Leave Requests -->
         <div class="card mb-4">
             <div class="card-header">

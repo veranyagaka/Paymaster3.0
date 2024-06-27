@@ -8,15 +8,33 @@ router.get('/', (req, res) => {
 });
 
 router.get('/employees', async (req, res) => {
-    try {
-        // Retrieve employees from the database
-        const [rows] = await database.query('SELECT * FROM employee_profile');
-        res.render('admin.ejs', { employees: rows });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-    }
-  });
+  try {
+    // Set the number of records per page
+    const limit = 5;
+    // Get the current page from the query parameters (default to 1 if not specified)
+    const page = parseInt(req.query.page) || 1;
+    // Calculate the offset
+    const offset = (page - 1) * limit;
+
+    // Fetch the total number of employee records
+    const [[{ totalRecords }]] = await database.query('SELECT COUNT(*) as totalRecords FROM employee_profile');
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(totalRecords / limit);
+
+    // Fetch the employee records for the current page
+    const [rows] = await database.query('SELECT * FROM employee_profile LIMIT ? OFFSET ?', [limit, offset]);
+
+    res.render('admin.ejs', { 
+      employees: rows, 
+      currentPage: page, 
+      totalPages 
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 router.get('/attendance-records', async(req, res) => {
     try {
         // Retrieve employees from the database
@@ -167,7 +185,7 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
   });
 
 // Dummy data for demonstration purposes
-const attendanceRecords = [
+/*const attendanceRecords = [
   { employeeID: 'E001', month: '2023-06', daysPresent: 20, daysAbsent: 2, overtimeHours: 10 },
   { employeeID: 'E002', month: '2023-06', daysPresent: 18, daysAbsent: 4, overtimeHours: 5 }
 ];
@@ -176,21 +194,40 @@ const leave_Requests = [
   { id: 'L001', employeeID: 'E001', leaveType: 'Vacation', startDate: '2023-07-01', endDate: '2023-07-10', status: 'Pending' },
   { id: 'L002', employeeID: 'E002', leaveType: 'Sick Leave', startDate: '2023-07-05', endDate: '2023-07-07', status: 'Pending' }
 ];
-
+*/
 // Route to render the employee attendance page
-router.get('/employee-attendance', async(req, res) => {
+router.get('/employee-attendance', async (req, res) => {
   try {
-    // Retrieve employees from the database
+    // Set the number of records per page
+    const limit = 5;
+    // Get the current page from the query parameters (default to 1 if not specified)
+    const page = parseInt(req.query.page) || 1;
+    // Calculate the offset
+    const offset = (page - 1) * limit;
+
+    // Fetch the total number of attendance records
+    const [[{ totalRecords }]] = await database.query('SELECT COUNT(*) as totalRecords FROM attendance_records');
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(totalRecords / limit);
+
+    // Fetch the attendance records for the current page
+    const [attendanceRecords] = await database.query('SELECT * FROM attendance_records LIMIT ? OFFSET ?', [limit, offset]);
     const [leaveRequests] = await database.query('SELECT * FROM leave_requests');
 
-    res.render('admin-attendance', { attendanceRecords, leaveRequests });
-    //res.render('leave-requests', { leave_requests: leave_requests });
-} catch (err) {
+    console.log(attendanceRecords);
+
+    res.render('admin-attendance', { 
+      attendanceRecords, 
+      leaveRequests, 
+      currentPage: page, 
+      totalPages 
+    });
+  } catch (err) {
     console.error(err);
     res.status(500).send('Internal Server Error');
-}  
-//IMPORTANT COMMENTres.render('admin-attendance', { attendanceRecords, leaveRequests });
+  }
 });
+
 
 // Route to handle editing attendance
 router.post('/editAttendance', (req, res) => {
