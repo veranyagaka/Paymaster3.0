@@ -1,9 +1,80 @@
 const express =require('express');
 const router =express.Router();
 const path = require('path');
+const multer = require('multer');
 const pdf = require('html-pdf'); 
 const database = require('../database.js')
 const fs = require('fs');
+// Set up multer for file upload
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/profile_pics');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${req.session.employeeID}-${Date.now()}${path.extname(file.originalname)}`);
+  }
+});
+
+const upload = multer({ storage });
+
+// Change profile picture route for employees
+router.post('/changeProfilePic', upload.single('profilePic'), async (req, res) => {
+  
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+
+  const employeeId = req.session.employeeID;
+  const profilePicPath = `/uploads/profile_pics/${req.file.filename}`;
+
+  try {
+    // Update the employee's profile picture path in the database
+    await database.query('UPDATE employee_profile SET profile_picture = ? WHERE employeeID = ?', [profilePicPath, employeeId]);
+    res.redirect('/profile'); // Redirect to the employee's profile page after successful update
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+router.post('/changePassword', async (req, res) => {
+  const { currentPassword, newPassword, confirmPassword } = req.body;
+  const employeeId = req.session.employeeID; // Assuming the employee is logged in and their ID is stored in the session
+
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    return res.status(400).send('All fields are required.');
+  }
+
+  if (newPassword !== confirmPassword) {
+    return res.status(400).send('New passwords do not match.');
+  }
+
+  try {
+    // Fetch the current employee from the database
+    const [employee] = await database.query('SELECT * FROM Employee WHERE EmployeeID = ?', [employeeId]);
+
+    if (!employee) {
+      return res.status(404).send('Employee not found.');
+    }
+
+    // Check if the current password is correct
+    const isMatch = await bcrypt.compare(currentPassword, employee.password);
+
+    if (!isMatch) {
+      return res.status(400).send('Current password is incorrect.');
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the password in the database
+    await database.query('UPDATE employees SET password = ? WHERE id = ?', [hashedPassword, employeeId]);
+
+    res.send('Password changed successfully.');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
 router.get('/payslip', async(req, res) => {
   if (!req.session.EmployeeID) {
     return res.status(401).redirect('/login'); // Redirect to login if no session
