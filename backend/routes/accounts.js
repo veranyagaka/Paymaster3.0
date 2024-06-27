@@ -4,6 +4,20 @@ const path = require('path');
 const pdf = require('html-pdf'); 
 const database = require('../database.js')
 const fs = require('fs');
+router.get('/payslip', async(req, res) => {
+  if (!req.session.EmployeeID) {
+    return res.status(401).redirect('/login'); // Redirect to login if no session
+  }
+  const employeeID = req.session.EmployeeID;
+  
+  try {
+    const [payrollData] = await database.query('SELECT * FROM payroll_history where employeeID = ? ',[employeeID]);
+    res.render('payroll-history', { payrollData: payrollData });
+} catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+}
+});
 function calculateNetPay({ firstName, lastName, email, employeeID, department, bio, baseSalary, allowances }) {
   // Perform salary calculations here
   const finalSalary = baseSalary + allowances;

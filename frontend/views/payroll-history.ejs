@@ -1,0 +1,49 @@
+<!-- views/payslip.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payslip for </title>
+    <style>
+        /* Add your CSS styling here */
+    </style>
+</head>
+<body>
+    <%- include('navigationbar') %>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Payroll History</h1>
+        <% if (payrollData.length > 0) { %>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>Month</th>
+                <th>Base Salary</th>
+                <th>Allowances</th>
+                <th>Final Salary</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% payrollData.forEach(record => { %>
+                <tr>
+                  <td><%= record.employee_id %></td>
+                  <td><%= record.month %></td>
+                  <td>$<%= record.base_salary.toFixed(2) %></td>
+                  <td>$<%= record.allowances.toFixed(2) %></td>
+                  <td>$<%= record.final_salary.toFixed(2) %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <div class="alert alert-info text-center" role="alert">
+            No payroll data at the moment.
+          </div>
+        <% } %>
+      </div>
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+    </html>

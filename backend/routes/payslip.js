@@ -22,7 +22,7 @@ const payrollData = {
 };
 
 router.get('/payslip/:month/:year', (req, res) => {
-    res.render('payslip', payrollData);
+    res.render('payroll-history', payrollData);
 });
 
 router.get('/download-payslip/:month/:year', (req, res) => {
