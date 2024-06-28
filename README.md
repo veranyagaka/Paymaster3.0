@@ -1,4 +1,6 @@
-# CS_Project1
+Salary calculation module
+Payroll history module
+Check if attensance moduleis actually working
 # Paymaster -Payroll Management System
 - [x] Better css for all the pages
 - [x] Use Bootstrap for the css
