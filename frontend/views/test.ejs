@@ -7,39 +7,38 @@
     <style>
         body {
             font-family: Helvetica, Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
             background-color: #fff;
         }
         .container {
+            width: 100%;
             max-width: 800px;
             margin: auto;
             padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid #000;
+            box-sizing: border-box;
         }
-        h1 {
-            text-align: center;
-        }
-        .header, .footer {
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #ddd;
             padding-bottom: 10px;
-            margin-bottom: 10px;
-            background-color: #4CAF50;
+            border-bottom: 1px solid #000;
         }
         .header img {
-            height: 80px; /* Adjust height as needed */
-            width: auto; /* Maintain aspect ratio */
-            margin-left: 20px; /* Add space between logo and text */
+            height: 50px;
         }
-        .header div {
+        .header .title {
+            text-align: center;
+        }
+        .header .confidential {
             text-align: right;
         }
         .main-content {
             display: flex;
             justify-content: space-between;
+            margin-top: 20px;
         }
         .main-content div {
             width: 48%;
@@ -48,66 +47,66 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            border: black;
-        }
-        thead{
-            background-color: #4CAF50;
-            color: #fff;
-            align-items: center;
         }
         table, th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #000;
         }
         th, td {
             padding: 8px;
             text-align: left;
         }
+        thead {
+            background-color: #4CAF50;
+            color: #fff;
+        }
         .summary {
-            text-align: right;
             margin-top: 20px;
         }
+        .summary .netpay {
+            text-align: right;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px;
+            font-size: 1.2em;
+        }
         .summary p {
-            font-weight: bold;
+            text-align: right;
+            margin: 0;
         }
         .signature {
             display: flex;
             justify-content: space-between;
-            margin-top: 10px;
+            margin-top: 20px;
         }
-        .netpay{
-            background-color: #4CAF50;
-            color: #fff;
-
-        }.line {
-    width: 1px;
-    height: 100%;  background-color: #ddd;
-    border-left: 1px solid #ddd;
-  }
+        .signature div {
+            width: 48%;
+        }
+        .signature .auth-sign {
+            text-align: right;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <img src="/favicon.ico" alt="Paymaster Logo">
-            <div>
+            <img src="/favicon.ico" alt="Company Logo">
+            <div class="title">
                 <h1>SALARY SLIP</h1>
-                <div class="line"></div>
-
-                <p>CONFIDENTIAL</p>
+                <p>January 2018</p>
             </div>
-            <div>
-                <p><strong>Month:</strong> Replace with Month Value</p> 
+            <div class="confidential">
+                <p>CONFIDENTIAL</p>
             </div>
         </div>
         <div class="main-content">
             <div>
-                <p><strong>Name:</strong> Replace with First Name Replace with Last Name</p>
-                <p><strong>Employee ID:</strong> Replace with Employee ID</p>
-                <p><strong>Title:</strong> Replace with Title</p>
+                <p><strong>Name:</strong> Wayne Doorprize</p>
+                <p><strong>Employee ID:</strong> -</p>
+                <p><strong>Title:</strong> Cleaning Service Staff</p>
             </div>
             <div>
-                <p><strong>Directorate:</strong> Replace with Directorate</p>
-                <p><strong>Department:</strong> Replace with Department</p>
+                <p><strong>Directorate:</strong> Operation</p>
+                <p><strong>Department:</strong> General Affairs</p>
             </div>
         </div>
         <table>
@@ -121,59 +120,59 @@
             <tbody>
                 <tr>
                     <td>Basic Salary</td>
-                    <td>$ Replace with Basic Salary</td>
+                    <td>$2000.00</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Meal Allowance</td>
-                    <td>$ Replace with Meal Allowance</td>
+                    <td>$300.00</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Transportation Allowance</td>
-                    <td>$ Replace with Transportation Allowance</td>
+                    <td>$300.00</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Medical Allowance</td>
-                    <td>$ Replace with Medical Allowance</td>
+                    <td>$300.00</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Retirement Insurance</td>
                     <td></td>
-                    <td>$ Replace with Retirement Insurance</td>
+                    <td>$25.00</td>
                 </tr>
                 <tr>
                     <td>Tax</td>
                     <td></td>
-                    <td>$ Replace with Tax</td>
+                    <td>$25.00</td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <th>Total</th>
-                    <th>$ Replace with Total Income</th>
-                    <th>$ Replace with Total Deductions</th>
+                    <th>$2900.00</th>
+                    <th>$50.00</th>
                 </tr>
             </tfoot>
         </table>
         <div class="summary">
-            <p class="netpay"><strong>NET PAY:</strong> </p>
-                <p>$ Replace with Net Pay</p>
-            <p><strong>In Words:</strong> Five thousand</p>
-                <div class="signature">
-                    <div>
-                        <p>Payment Date: Replace with Payment Date (e.g., 2024-06-23)</p>
-                        <p>Bank Name: Replace with Bank Name</p>
-                        <p>Bank Account Name: Replace with Bank Account Name</p>
-                        <p>Bank Account #: Replace with Bank Account Number</p>
-                    </div>
-                    <div>
-                        <p>_______________________</p>
-                        <p>Authorized Signature</p>
-                    </div>
+            <p><strong>NET PAY:</strong> $2850.00</p>
+            <p>Two Thousand Eight Hundred Fifty Dollars</p>
+            <div class="signature">
+                <div>
+                    <p>Payment Date: January 28, 2018</p>
+                    <p>Bank Name: Bank of America</p>
+                    <p>Bank Account Name: Wayne Doorprize</p>
+                    <p>Bank Account #: 1234567890</p>
+                </div>
+                <div class="auth-sign">
+                    <p>_______________________</p>
+                    <p>Authorized Signature</p>
                 </div>
             </div>
+        </div>
+    </div>
 </body>
 </html>

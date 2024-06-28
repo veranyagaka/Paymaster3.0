@@ -5,10 +5,12 @@ const multer = require('multer');
 const pdf = require('html-pdf'); 
 const database = require('../database.js')
 const fs = require('fs');
+const bcrypt = require('bcrypt');
+
 // Set up multer for file upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/profile_pics');
+    cb(null, 'backend/uploads/profile_pics');
   },
   filename: (req, file, cb) => {
     cb(null, `${req.session.employeeID}-${Date.now()}${path.extname(file.originalname)}`);
@@ -24,13 +26,13 @@ router.post('/changeProfilePic', upload.single('profilePic'), async (req, res) =
     return res.status(400).send('No file uploaded.');
   }
 
-  const employeeId = req.session.employeeID;
+  const employeeId = req.session.EmployeeID;
   const profilePicPath = `/uploads/profile_pics/${req.file.filename}`;
 
   try {
     // Update the employee's profile picture path in the database
     await database.query('UPDATE employee_profile SET profile_picture = ? WHERE employeeID = ?', [profilePicPath, employeeId]);
-    res.redirect('/profile'); // Redirect to the employee's profile page after successful update
+    res.redirect('/employee-profile'); // Redirect to the employee's profile page after successful update
   } catch (err) {
     console.error(err);
     res.status(500).send('Internal Server Error');
@@ -38,8 +40,8 @@ router.post('/changeProfilePic', upload.single('profilePic'), async (req, res) =
 });
 router.post('/changePassword', async (req, res) => {
   const { currentPassword, newPassword, confirmPassword } = req.body;
-  const employeeId = req.session.employeeID; // Assuming the employee is logged in and their ID is stored in the session
-
+  const employeeId = req.session.EmployeeID; // Assuming the employee is logged in and their ID is stored in the session
+  console.log('Employee checkpint no: ',employeeId );
   if (!currentPassword || !newPassword || !confirmPassword) {
     return res.status(400).send('All fields are required.');
   }
@@ -50,8 +52,9 @@ router.post('/changePassword', async (req, res) => {
 
   try {
     // Fetch the current employee from the database
-    const [employee] = await database.query('SELECT * FROM Employee WHERE EmployeeID = ?', [employeeId]);
-
+    const [rows] = await database.query('SELECT * FROM Employee WHERE EmployeeID = ?', [employeeId]);
+    const employee = rows[0];
+    console.log(employee);
     if (!employee) {
       return res.status(404).send('Employee not found.');
     }
@@ -67,9 +70,11 @@ router.post('/changePassword', async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     // Update the password in the database
-    await database.query('UPDATE employees SET password = ? WHERE id = ?', [hashedPassword, employeeId]);
+    await database.query('UPDATE Employee SET password = ? WHERE EmployeeID = ?', [hashedPassword, employeeId]);
 
-    res.send('Password changed successfully.');
+    setTimeout(() => {
+      res.redirect('/login');
+    }, 3000); 
   } catch (err) {
     console.error(err);
     res.status(500).send('Internal Server Error');
@@ -275,7 +280,7 @@ console.log('Employee: ,' ,employee)
 
   const salaryComponents = calculateFinalSalary(employee, 'June');
 
-  res.render('employee-pdf', { salaryComponents }, (err, html) => {
+  res.render('test', { salaryComponents }, (err, html) => {
       if (err) {
           console.log(err);
           return res.status(500).send('Error generating PDF');
