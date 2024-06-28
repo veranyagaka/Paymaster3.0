@@ -2,7 +2,85 @@ const express =require('express');
 const router =express.Router();
 const path = require('path');
 const database = require('../database.js')
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+const csv = require('csv-parser'); // For CSV files
+const xlsx = require('xlsx'); // For Excel files
+const multer = require('multer');
 
+// Multer setup
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+const upload = multer({ storage: storage });
+
+// Route to handle file upload and import attendance data
+router.post('/importAttendance', upload.single('attendanceFile'), async (req, res) => {
+  const filePath = req.file.path;
+  const fileExtension = path.extname(req.file.originalname).toLowerCase();
+
+  try {
+      if (fileExtension === '.csv') {
+          // Parse CSV file
+          const attendanceRecords = [];
+          fs.createReadStream(filePath)
+              .pipe(csv())
+              .on('data', (row) => {
+                  attendanceRecords.push(row);
+              })
+              .on('end', async () => {
+                  try {
+                      // Insert data into the attendance_records table
+                      for (const record of attendanceRecords) {
+                          const { employeeID, month, daysPresent, daysAbsent, overtimeHours } = record;
+                          await database.query(
+                              'INSERT INTO attendance_records (employeeID, month, daysPresent, daysAbsent, overtimeHours) VALUES (?, ?, ?, ?, ?)',
+                              [employeeID, month, daysPresent, daysAbsent, overtimeHours]
+                          );
+                      }
+                      res.status(200).send('Attendance records imported successfully');
+                  } catch (err) {
+                      console.error('Error inserting data into database:', err);
+                      res.status(500).send('Error importing attendance records');
+                  }
+              });
+      } else if (fileExtension === '.xlsx') {
+          // Parse Excel file
+          const workbook = xlsx.readFile(filePath);
+          const sheetName = workbook.SheetNames[0];
+          const sheet = workbook.Sheets[sheetName];
+          const attendanceRecords = xlsx.utils.sheet_to_json(sheet);
+
+          try {
+              // Insert data into the attendance_records table
+              for (const record of attendanceRecords) {
+                  const { employeeID, month, daysPresent, daysAbsent, overtimeHours } = record;
+                  await database.query(
+                      'INSERT INTO attendance_records (employeeID, month, daysPresent, daysAbsent, overtimeHours) VALUES (?, ?, ?, ?, ?)',
+                      [employeeID, month, daysPresent, daysAbsent, overtimeHours]
+                  );
+              }
+              res.status(200).send('Attendance records imported successfully');
+          } catch (err) {
+              console.error('Error inserting data into database:', err);
+              res.status(500).send('Error importing attendance records');
+          }
+      } else {
+          res.status(400).send('Unsupported file format');
+      }
+  } catch (err) {
+      console.error('Error processing file:', err);
+      res.status(500).send('Internal Server Error');
+  } finally {
+      // Remove the uploaded file after processing
+      fs.unlinkSync(filePath);
+  }
+});
 router.get('/', (req, res) => {
     res.render('admin-dashboard'); 
 });
@@ -243,4 +321,60 @@ router.post('/editAttendance', (req, res) => {
 
   res.redirect('/admin-attendance');
 });
+// Route to handle form submission and generate PDF report
+router.post('/generateAttendanceReport', (req, res) => {
+  const { reportMonth } = req.body;
+
+  // Generate PDF report
+  generatePDFReport(reportMonth, (pdfFilePath, error) => {
+      if (error) {
+          console.error('Error generating PDF:', error);
+          return res.status(500).send('Error generating PDF report');
+      }
+
+      // Send the generated PDF as a downloadable file
+      res.contentType('application/pdf');
+      res.download(pdfFilePath, `Attendance_Report_${reportMonth}.pdf`, (err) => {
+          if (err) {
+              console.error('Error downloading file:', err);
+              res.status(500).send('Error downloading file');
+          } else {
+              // Delete the generated PDF file after download
+              fs.unlinkSync(pdfFilePath, (unlinkErr) => {
+                  if (unlinkErr) {
+                      console.error('Error deleting PDF:', unlinkErr);
+                  }
+              });
+          }
+      });
+  });
+});
+
+// Function to generate PDF report
+async function generatePDFReport (reportMonth, callback) {
+  const pdfDoc = new PDFDocument();
+  const pdfFileName = `Attendance_Report_${reportMonth}.pdf`;
+  const pdfFilePath = path.join(__dirname, pdfFileName);
+  try {
+    // Query database for attendance records
+    const [rows, fields] = await database.execute('SELECT * FROM attendance_records WHERE month = ?', [reportMonth]);
+
+    // Generate PDF content
+    pdfDoc.pipe(fs.createWriteStream(pdfFilePath));
+    pdfDoc.font('Helvetica-Bold').fontSize(20).text(`Attendance Report for ${reportMonth}`, { align: 'center' });
+
+    // Add attendance records to PDF
+    rows.forEach((row) => {
+        pdfDoc.text(`Employee ID: ${row.employee_id}, Date: ${row.date}, Hours Worked: ${row.hours_worked}`);
+    });
+
+    pdfDoc.end();
+
+    callback(pdfFilePath, null);
+} catch (error) {
+    console.error('Error generating PDF:', error);
+    callback(null, error);
+}
+}
+
 module.exports= router
