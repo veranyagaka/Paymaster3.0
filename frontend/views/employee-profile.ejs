@@ -80,6 +80,98 @@
     </style>
 </head>
 <body>
+    <div id="profile-completion-modal">
+        <div class="modal-content">
+          <h2>Profile Incomplete</h2>
+          <div class="progress-bar">
+            <div class="progress-value" style="width: 92%;"></div>
+            <div class="progress-text">92%</div>
+          </div>
+          <p>Complete your profile.</p>
+          <p>(Note that your education background and work experience count in the percentage calculation)</p>
+          <button id="skip-button">Skip Now</button>
+          <button id="complete-button">Complete Profile</button>
+        </div>
+      </div>
+<style>
+    #profile-completion-modal {
+  display: none;
+  position: fixed; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 100; 
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 30%; 
+  text-align: center;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.progress-value {
+  background-color: #4CAF50; 
+  height: 100%;
+  border-radius: 10px; 
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 16px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+</style>    
+<script>
+    // script.js
+// Function to display the profile completion modal
+function showProfileCompletionModal() {
+  document.getElementById("profile-completion-modal").style.display = "block";
+}
+
+// Function to hide the profile completion modal
+function hideProfileCompletionModal() {
+  document.getElementById("profile-completion-modal").style.display = "none";
+}
+
+// Add event listeners to buttons
+document.getElementById("skip-button").addEventListener("click", hideProfileCompletionModal);
+document.getElementById("complete-button").addEventListener("click", hideProfileCompletionModal);
+
+// Call showProfileCompletionModal() to display the modal on page load
+showProfileCompletionModal();
+</script>
     <!-- Main Content -->
     <div class="container">
         <div class="profile-content">

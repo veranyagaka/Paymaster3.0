@@ -74,6 +74,18 @@
                     <p><strong>Retirement Insurance Deduction:</strong> Ksh. <%= salaryComponents.retirementInsuranceAmount.toFixed(2) %></p>
                     <p><strong>Net Salary:</strong> Ksh. <%= salaryComponents.netSalary.toFixed(2) %></p>
                 </div>
+                <div class="signature">
+                  <div>
+                      <p>Payment Date: <%= paymentDate %></p>
+                      <p>Bank Name: <%= salaryComponents.bankName %></p>
+                      <p>Bank Account Name: <%= salaryComponents.bankAccountName %></p>
+                      <p>Bank Account #: <%= salaryComponents.bankAccountNumber %></p>
+                  </div>
+                  <div>
+                      <p>_______________________</p>
+                      <p>Authorized Signature</p>
+                  </div>
+              </div>
                 <button class="btn btn-primary btn-print" onclick="window.print()">Print Payslip</button>
             </div>
         </div>

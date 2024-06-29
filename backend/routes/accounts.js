@@ -94,7 +94,7 @@ router.get('/payslip', async(req, res) => {
     res.status(500).send('Internal Server Error');
 }
 });
-function calculateNetPay({ firstName, lastName, email, employeeID, department, bio, baseSalary, allowances, bonus, overtimeHours, hourlyRate }) {
+function calculateNetPay({ firstName, lastName, email, employeeID, department, bio, baseSalary, allowances, bonus, overtimeHours, hourlyRate,bankName, bankAccountName,   bankAccountNumber }) {
   // Assume tax rate and retirement insurance rate are constants for simplicity
   const taxRate = 0.2; // 20% tax rate
   const retirementInsuranceRate = 0.1; // 10% retirement insurance rate
@@ -131,7 +131,10 @@ function calculateNetPay({ firstName, lastName, email, employeeID, department, b
     overtimePay: overtimeHours ? overtimeHours * hourlyRate : 0,
     taxAmount,
     retirementInsuranceAmount,
-    netSalary
+    netSalary,
+    bankName,
+    bankAccountName,
+    bankAccountNumber
   };
 }
 
@@ -143,6 +146,7 @@ router.get('/finance', async(req,res )=>{
   const employeeID = req.session.EmployeeID;
   const [employee] = await database.query('SELECT * FROM employee_profile where employeeID =?',[employeeID])
   console.log(employee);
+  const [paymentdetails] = await database.query('SELECT * FROM paymentdetails where employeeID =?',[employeeID])
 
   if (!employee) {
     // Employee not found with this ID
@@ -160,7 +164,10 @@ router.get('/finance', async(req,res )=>{
       allowances: parseFloat(employee[0].allowance) || 0,
       bonus: parseFloat(employee[0].bonus) || 0,
       overtimeHours: parseFloat(employee[0].overtimeHours) || 0,
-      hourlyRate: parseFloat(employee[0].hourlyRate) || 0
+      hourlyRate: parseFloat(employee[0].hourlyRate) || 0,
+      bankName: paymentdetails[0].bankName || '',
+    bankAccountName: paymentdetails[0].bankAccountName || '',
+    bankAccountNumber: paymentdetails[0].bankName || ''
     };
     console.log(employeeData);
 
@@ -322,7 +329,9 @@ router.get('/employee/salary/:id/download', async(req, res) => {
   const employeeId = parseInt(req.params.id, 10);
   console.log(employeeId);
   const [employee] = await database.query('SELECT * FROM employee_profile where employeeID =?',[employeeId])
-console.log('Employee: ,' ,employee)
+  const [paymentdetails] = await database.query('SELECT * FROM paymentdetails where employeeID =?',[employeeId])
+
+  console.log('Employee: ,' ,employee)
   if (!employee) {
       return res.status(404).send('Employee not found');
   }
@@ -338,12 +347,16 @@ console.log('Employee: ,' ,employee)
     allowances: parseFloat(employee[0].allowance) || 0,
     bonus: parseFloat(employee[0].bonus) || 0,
     overtimeHours: parseFloat(employee[0].overtimeHours) || 0,
-    hourlyRate: parseFloat(employee[0].hourlyRate) || 0
+    hourlyRate: parseFloat(employee[0].hourlyRate) || 0,
+    bankName: paymentdetails[0].bankName || '',
+    bankAccountName: paymentdetails[0].bankAccountName || '',
+    bankAccountNumber: paymentdetails[0].bankName || ''
+    
   };
   console.log(employeeData);
 
   const salaryComponents = calculateNetPay(employeeData);
-  res.render('payslip', { salaryComponents }, (err, html) => {
+  res.render('payslip', { salaryComponents, paymentDate: new Date().toLocaleDateString('en-US')  }, (err, html) => {
       if (err) {
           console.log(err);
           return res.status(500).send('Error generating PDF');

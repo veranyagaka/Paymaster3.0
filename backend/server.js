@@ -88,7 +88,7 @@ function displayFullDate() {
   return fullDate;
 }
 app.get('/', (req, res) => {
-  res.render('land', {displayFullDate});
+  res.render('land');
 });
 app.get('/nav', (req, res) => {
   res.render('navigationbar', {displayFullDate});
