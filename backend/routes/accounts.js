@@ -140,25 +140,46 @@ router.get('/finance', async(req,res )=>{
     console.log(salaryComponents);
   res.render('finance', {salaryComponents: salaryComponents});
 });
-router.post('/employees/payment-details/:employeeId', (req, res) => {
+router.post('/employees/payment-details/:employeeId', async (req, res) => {
   const employeeID = req.session.EmployeeID;
-  const bankName = req.body.bankName;
-  const bankAccountName = req.body.bankAccountName;
-  const bankAccountNumber = req.body.bankAccountNumber;
+  const { bankName, bankAccountName, bankAccountNumber } = req.body;
 
   // Prepare SQL query
   const sql = `INSERT INTO paymentdetails (employeeID, bankName, bankAccountName, bankAccountNumber) VALUES (?, ?, ?, ?)`;
 
-  // Execute query with prepared statement to prevent SQL injection vulnerabilities
-  database.query(sql, [employeeID, bankName, bankAccountName, bankAccountNumber], (error, results) => {
-    if (error) {
-      console.error(error);
-      res.send('Error inserting data');
-    } else {
-      res.send('Payment details saved successfully!');
-    }
-  });
+  try {
+    // Execute query with prepared statement to prevent SQL injection vulnerabilities
+    await database.query(sql, [employeeID, bankName, bankAccountName, bankAccountNumber]);
+    // Redirect to profile page after 3 seconds
+    setTimeout(() => {
+      res.redirect('/employee-profile');
+    }, 3000);
+  } catch (error) {
+    console.error(error);
+    res.send('Error inserting data');
+  }
 });
+
+router.post('/employees/edit-payment-details/:employeeId', async (req, res) => {
+  const employeeID = req.session.EmployeeID;
+  const { bankName, bankAccountName, bankAccountNumber } = req.body;
+
+  // Prepare SQL query
+  const sql = `UPDATE paymentdetails SET bankName = ?, bankAccountName = ?, bankAccountNumber = ? WHERE employeeID = ?`;
+
+  try {
+    // Execute query with prepared statement to prevent SQL injection vulnerabilities
+    await database.query(sql, [bankName, bankAccountName, bankAccountNumber, employeeID]);
+    // Redirect to profile page after 3 seconds
+    setTimeout(() => {
+      res.redirect('/employee-profile');
+    }, 3000);
+  } catch (error) {
+    console.error(error);
+    res.send('Error updating data');
+  }
+});
+
 
 router.get('/leave_application', async (req, res) => {
     if (!req.session.EmployeeID) {

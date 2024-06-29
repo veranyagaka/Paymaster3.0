@@ -4,8 +4,8 @@ const path = require('path');
 const database = require('../database.js')
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
-const csv = require('csv-parser'); // For CSV files
-const xlsx = require('xlsx'); // For Excel files
+//const csv = require('csv-parser'); // For CSV files
+//const xlsx = require('xlsx'); // For Excel files
 const multer = require('multer');
 
 // Multer setup

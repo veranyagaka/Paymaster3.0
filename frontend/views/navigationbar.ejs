@@ -299,8 +299,17 @@ body.dark-mode {
                 <ul class="submenu">
                     <li class="nav-item"><a class="nav-link" href="#">Change Password</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Change Profile Pic</a></li>
+
                 </ul>
             </li>
+            <a class="nav-link" data-toggle="collapse" href="#paymentsSubmenu" role="button" aria-expanded="false" aria-controls="paymentsSubmenu">
+                <i class="fas fa-money-bill"></i> Payments
+                <i class="fas fa-caret-down ml-auto"></i>
+            </a>
+            <div class="collapse submenu" id="paymentsSubmenu">
+                <a class="nav-link" href="/accounts/payslip">View Payment History</a>
+                <a class="nav-link" data-toggle="modal" data-target="#editPaymentModal">Edit Payment Method</a>
+            </div>
             <li class="nav-item">
                 <a class="nav-link" href="#"> 
                     <i class="fas fa-moon"></i> Preferences
@@ -336,6 +345,10 @@ body.dark-mode {
     </div>
 
     <script>
+        $('a[data-target="#editPaymentModal"]').click(function(event) {
+                event.preventDefault(); // Prevent the default link behavior
+                $('#editPaymentModal').modal('show'); // Show the modal
+            });
         $(document).ready(function() {
   // Toggle submenu on click
   $('.nav-item.has-submenu').click(function() {
@@ -423,6 +436,41 @@ body.dark-mode {
         </div>
     </div>
 </div>
+
+    <!-- Payment Details Modal -->
+    <div class="modal fade" id="editPaymentModal" tabindex="-1" role="dialog" aria-labelledby="editPaymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPaymentModalLabel">Edit Payment Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/accounts/employees/edit-payment-details/<%= employee.employeeID %>" method="POST">
+                        <div class="form-group">
+                            <label for="bankName">Bank Name</label>
+                            <input type="text" class="form-control" id="bankName" name="bankName" placeholder="Enter bank name">
+                        </div>
+                        <div class="form-group">
+                            <label for="bankAccountName">Bank Account Name</label>
+                            <input type="text" class="form-control" id="bankAccountName" name="bankAccountName" placeholder="Enter bank account name">
+                        </div>
+                        <div class="form-group">
+                            <label for="bankAccountNumber">Bank Account Number</label>
+                            <input type="text" class="form-control" id="bankAccountNumber" name="bankAccountNumber" placeholder="Enter bank account number">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <!-- Change Profile Pic Modal -->
 <div class="modal fade" id="changeProfilePicModal" tabindex="-1" aria-labelledby="changeProfilePicModalLabel" aria-hidden="true">
     <div class="modal-dialog">
