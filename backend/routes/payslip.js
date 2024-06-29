@@ -4,24 +4,25 @@ const path = require('path');
 
 const ejs = require('ejs');
 const pdf = require('html-pdf'); 
-const payrollData = {
-    month: 'June',
-    year: '2024',
-    employeeName: 'John Doe',
-    employeeId: '123456',
-    department: 'Engineering',
-    earnings: [
-        { description: 'Basic Salary', amount: '$4000' },
-        { description: 'House Rent Allowance', amount: '$1000' },
-    ],
-    deductions: [
-        { description: 'Tax', amount: '$500' },
-        { description: 'Insurance', amount: '$100' },
-    ],
-    netPay: '$4400'
-};
+
 
 router.get('/payslip/:month/:year', (req, res) => {
+    const payrollData = {
+        month: 'June',
+        year: '2024',
+        employeeName: 'John Doe',
+        employeeId: '123456',
+        department: 'Engineering',
+        earnings: [
+            { description: 'Basic Salary', amount: '$4000' },
+            { description: 'House Rent Allowance', amount: '$1000' },
+        ],
+        deductions: [
+            { description: 'Tax', amount: '$500' },
+            { description: 'Insurance', amount: '$100' },
+        ],
+        netPay: '$4400'
+    };
     res.render('payroll-history', payrollData);
 });
 

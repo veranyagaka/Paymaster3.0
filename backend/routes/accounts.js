@@ -94,9 +94,26 @@ router.get('/payslip', async(req, res) => {
     res.status(500).send('Internal Server Error');
 }
 });
-function calculateNetPay({ firstName, lastName, email, employeeID, department, bio, baseSalary, allowances }) {
-  // Perform salary calculations here
-  const finalSalary = baseSalary + allowances;
+function calculateNetPay({ firstName, lastName, email, employeeID, department, bio, baseSalary, allowances, bonus, overtimeHours, hourlyRate }) {
+  // Assume tax rate and retirement insurance rate are constants for simplicity
+  const taxRate = 0.2; // 20% tax rate
+  const retirementInsuranceRate = 0.1; // 10% retirement insurance rate
+
+  // Calculate final salary before deductions
+  let finalSalaryBeforeDeductions = baseSalary + allowances;
+
+  // Calculate overtime pay
+  if (overtimeHours && hourlyRate) {
+    const overtimePay = overtimeHours * hourlyRate;
+    finalSalaryBeforeDeductions += overtimePay;
+  }
+
+  // Calculate deductions
+  const taxAmount = finalSalaryBeforeDeductions * taxRate;
+  const retirementInsuranceAmount = finalSalaryBeforeDeductions * retirementInsuranceRate;
+
+  // Calculate net salary
+  const netSalary = finalSalaryBeforeDeductions - taxAmount - retirementInsuranceAmount;
 
   return {
     firstName,
@@ -107,9 +124,17 @@ function calculateNetPay({ firstName, lastName, email, employeeID, department, b
     bio,
     baseSalary,
     allowances,
-    finalSalary
+    bonus,
+    overtimeHours,
+    hourlyRate,
+    finalSalaryBeforeDeductions,
+    overtimePay: overtimeHours ? overtimeHours * hourlyRate : 0,
+    taxAmount,
+    retirementInsuranceAmount,
+    netSalary
   };
 }
+
 
 router.get('/finance', async(req,res )=>{
   if (!req.session.EmployeeID) {
@@ -132,7 +157,10 @@ router.get('/finance', async(req,res )=>{
       department: employee[0].department || '',
       bio: employee[0].bio || '',
       baseSalary: parseFloat(employee[0].baseSalary) || 0,
-      allowances: parseFloat(employee[0].allowance) || 0
+      allowances: parseFloat(employee[0].allowance) || 0,
+      bonus: parseFloat(employee[0].bonus) || 0,
+      overtimeHours: parseFloat(employee[0].overtimeHours) || 0,
+      hourlyRate: parseFloat(employee[0].hourlyRate) || 0
     };
     console.log(employeeData);
 
@@ -140,7 +168,7 @@ router.get('/finance', async(req,res )=>{
     console.log(salaryComponents);
   res.render('finance', {salaryComponents: salaryComponents});
 });
-router.post('/employees/payment-details/:employeeId', async (req, res) => {
+router.post('/employees/payment-details/', async (req, res) => {
   const employeeID = req.session.EmployeeID;
   const { bankName, bankAccountName, bankAccountNumber } = req.body;
 
@@ -299,9 +327,23 @@ console.log('Employee: ,' ,employee)
       return res.status(404).send('Employee not found');
   }
 
-  const salaryComponents = calculateFinalSalary(employee, 'June');
+  const employeeData = {
+    firstName: employee[0].first_name || '',
+    lastName: employee[0].last_name || '',
+    email: employee[0].email || '',
+    employeeID: req.session.EmployeeID || 0,
+    department: employee[0].department || '',
+    bio: employee[0].bio || '',
+    baseSalary: parseFloat(employee[0].baseSalary) || 0,
+    allowances: parseFloat(employee[0].allowance) || 0,
+    bonus: parseFloat(employee[0].bonus) || 0,
+    overtimeHours: parseFloat(employee[0].overtimeHours) || 0,
+    hourlyRate: parseFloat(employee[0].hourlyRate) || 0
+  };
+  console.log(employeeData);
 
-  res.render('test', { salaryComponents }, (err, html) => {
+  const salaryComponents = calculateNetPay(employeeData);
+  res.render('payslip', { salaryComponents }, (err, html) => {
       if (err) {
           console.log(err);
           return res.status(500).send('Error generating PDF');

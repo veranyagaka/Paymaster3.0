@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Payslip</title>
+    <style>
+        body {
+            font-size: 14px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+        }
+        .card-body {
+            padding: 15px;
+        }
+        .payslip-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .payslip-details {
+            margin-bottom: 10px;
+        }
+        .btn-print {
+            margin-top: 20px;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .payslip, .payslip * {
+                visibility: visible;
+            }
+            .payslip {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container payslip">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="payslip-title">Employee Payslip</h2>
+            </div>
+            <div class="card-body">
+                <div class="payslip-details">
+                    <p><strong>Name:</strong> <%= salaryComponents.firstName %> <%= salaryComponents.lastName %></p>
+                    <p><strong>Email:</strong> <%= salaryComponents.email %></p>
+                    <p><strong>Employee ID:</strong> <%= salaryComponents.employeeID %></p>
+                    <p><strong>Department:</strong> <%= salaryComponents.department %></p>
+                    <p><strong>Base Salary:</strong> Ksh. <%= salaryComponents.baseSalary.toFixed(2) %></p>
+                    <p><strong>Allowances:</strong> Ksh. <%= salaryComponents.allowances.toFixed(2) %></p>
+                    <% if (salaryComponents.overtimeHours > 0) { %>
+                        <p><strong>Overtime Hours:</strong> <%= salaryComponents.overtimeHours %> hours</p>
+                        <p><strong>Overtime Pay:</strong> Ksh. <%= salaryComponents.overtimePay.toFixed(2) %></p>
+                    <% } %>
+                    <p><strong>Bonus:</strong> Ksh. <%= salaryComponents.bonus.toFixed(2) %></p>
+                    <p><strong>Final Salary (Before Deductions):</strong> Ksh. <%= salaryComponents.finalSalaryBeforeDeductions.toFixed(2) %></p>
+                    <p><strong>Tax Deduction:</strong> Ksh. <%= salaryComponents.taxAmount.toFixed(2) %></p>
+                    <p><strong>Retirement Insurance Deduction:</strong> Ksh. <%= salaryComponents.retirementInsuranceAmount.toFixed(2) %></p>
+                    <p><strong>Net Salary:</strong> Ksh. <%= salaryComponents.netSalary.toFixed(2) %></p>
+                </div>
+                <button class="btn btn-primary btn-print" onclick="window.print()">Print Payslip</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

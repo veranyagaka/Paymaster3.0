@@ -7,7 +7,6 @@
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <%- include('navigationbar') %>
-
 </head>
 <body>
     <div class="container">
@@ -32,46 +31,44 @@
                 <a class="nav-link" id="january-tab" data-toggle="tab" href="#january" role="tab" aria-controls="january" aria-selected="false">January</a>
             </li>
         </ul>
-    <div class="tab-content">
-        <div class="tab-pane fade show active" id="june" role="tabpanel" aria-labelledby="june-tab">
-                
-        <div class="card ">
-            <div class="card-header">
-                <h2><%= salaryComponents.firstName %> <%= salaryComponents.lastName %></h2>
-                <h6><%= salaryComponents.email %></h6>                 <h6 class="float-right">Month: <%= salaryComponents.month %></h6>
-
-                <p><strong>Employee Number: </strong><%= salaryComponents.employeeID %> | <%= salaryComponents.department %></p>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="june" role="tabpanel" aria-labelledby="june-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><%= salaryComponents.firstName %> <%= salaryComponents.lastName %></h2>
+                        <h6><%= salaryComponents.email %></h6>
+                        <p><strong>Employee Number:</strong> <%= salaryComponents.employeeID %> | <%= salaryComponents.department %></p>
+                    </div>
+                    <div class="card-body collapse show">
+                        <p><strong>Base Salary:</strong> Ksh. <%= salaryComponents.baseSalary.toFixed(2) %></p>
+                        <p><strong>Allowances:</strong> Ksh. <%= salaryComponents.allowances.toFixed(2) %></p>
+                        <p><strong>Overtime Hours:</strong> <%= salaryComponents.overtimeHours %> hours</p>
+                        <p><strong>Overtime Pay:</strong> Ksh. <%= salaryComponents.overtimePay.toFixed(2) %></p>
+                                                <p><strong>Bonus:</strong> Ksh. <%= salaryComponents.bonus.toFixed(2) %></p>
+                        <p><strong>Final Salary (Before Deductions):</strong> Ksh. <%= salaryComponents.finalSalaryBeforeDeductions.toFixed(2) %></p>
+                        <p><strong>Tax Deduction:</strong> Ksh. <%= salaryComponents.taxAmount.toFixed(2) %></p>
+                        <p><strong>Retirement Insurance Deduction:</strong> Ksh. <%= salaryComponents.retirementInsuranceAmount.toFixed(2) %></p>
+                        <p><strong>Net Salary:</strong> Ksh. <%= salaryComponents.netSalary.toFixed(2) %></p>
+                        <a href="/accounts/employee/salary/<%= salaryComponents.employeeID %>/download" class="btn btn-primary mt-3">Download Payslip</a>
+                    </div>
+                </div>
             </div>
-            <div>
-            <h6><strong>Final Salary:</strong> Ksh. <%= salaryComponents.finalSalary.toFixed(2) %>                     <i class="fas fa-caret-down clickable"></i>
-            </h6>
-        </div>
-
-            <div class="card-body collapse">
-                <p><strong>Base Salary:</strong> Ksh. <%= salaryComponents.baseSalary%></p>
-                <p><strong>Allowances:</strong> Ksh. <%= salaryComponents.allowances %></p>
-                <p><strong>Final Salary:</strong> Ksh. <%= salaryComponents.finalSalary%></p>
-                <a href="/accounts/employee/salary/<%= salaryComponents.employeeID %>/download" class="btn btn-primary mt-3">Download Payslip</a>
-
+            <div class="tab-pane fade" id="may" role="tabpanel" aria-labelledby="may-tab">
+                <p>Salary details for May will be displayed here.</p>
+            </div>
+            <div class="tab-pane fade" id="april" role="tabpanel" aria-labelledby="april-tab">
+                <p>Salary details for April will be displayed here.</p>
+            </div>
+            <div class="tab-pane fade" id="march" role="tabpanel" aria-labelledby="march-tab">
+                <p>Salary details for March will be displayed here.</p>
+            </div>
+            <div class="tab-pane fade" id="february" role="tabpanel" aria-labelledby="february-tab">
+                <p>Salary details for February will be displayed here.</p>
+            </div>
+            <div class="tab-pane fade" id="january" role="tabpanel" aria-labelledby="january-tab">
+                <p>Salary details for January will be displayed here.</p>
             </div>
         </div>
-    </div>
-    <div class="tab-pane fade" id="may" role="tabpanel" aria-labelledby="may-tab">
-        <p>Salary details for May will be displayed here.</p>
-    </div>
-    <div class="tab-pane fade" id="april" role="tabpanel" aria-labelledby="april-tab">
-        <p>Salary details for April will be displayed here.</p>
-    </div>
-    <div class="tab-pane fade" id="march" role="tabpanel" aria-labelledby="march-tab">
-        <p>Salary details for March will be displayed here.</p>
-    </div>
-    <div class="tab-pane fade" id="february" role="tabpanel" aria-labelledby="february-tab">
-        <p>Salary details for February will be displayed here.</p>
-    </div>
-    <div class="tab-pane fade" id="january" role="tabpanel" aria-labelledby="january-tab">
-        <p>Salary details for January will be displayed here.</p>
-    </div>
-    </div>
     </div>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

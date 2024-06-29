@@ -4,14 +4,14 @@ const path = require('path');
 const database = require('../database.js')
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
-//const csv = require('csv-parser'); // For CSV files
-//const xlsx = require('xlsx'); // For Excel files
+const csv = require('csv-parser'); // For CSV files
+const xlsx = require('xlsx'); // For Excel files
 const multer = require('multer');
 
 // Multer setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, 'uploads/');
+      cb(null, 'uploads/attendance');
   },
   filename: (req, file, cb) => {
       cb(null, `${Date.now()}-${file.originalname}`);
