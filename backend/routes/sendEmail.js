@@ -58,10 +58,28 @@ async function sendEmail2(subject, message,employeeID) {
       
         try {
           await sgMail.send(msg);
-          console.log('Email sent successfully');
+          console.log('Registration Email sent successfully');
         } catch (error) {
           console.error('Error sending email:', error.toString());
           throw new Error('Failed to send email');
         }
       }
-module.exports = { sendEmail, sendEmail2 };
+async function sendEmail3(subject, message) {
+        const msg = {
+          to: 'vera.nyagaka@strathmore.edu',
+          from: 'nyagakavera@gmail.com', // Replace with your verified sender
+          subject: subject,
+          html: `
+          <h1>${message}</h1>
+        `,
+      };
+      
+        try {
+          await sgMail.send(msg);
+          console.log('Login Email sent successfully');
+        } catch (error) {
+          console.error('Error sending email:', error.toString());
+          throw new Error('Failed to send email');
+        }
+      }
+module.exports = { sendEmail, sendEmail2, sendEmail3 };

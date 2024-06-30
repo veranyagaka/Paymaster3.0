@@ -8,6 +8,12 @@
 </head>
 <body>
   <div class="wrapper">
+    <% if (typeof success !== 'undefined' && success.length > 0) { %>
+      <p style="color: green;" id="successMessage"><%= success %></p>
+    <% } %>
+    <% if (typeof error !== 'undefined' && error.length > 0) { %>
+      <div class="error-message" id="errorMessage"><%= error %></div>
+    <% } %>
     <form action="/admin-login" method="POST">
       <h2>Administrator Login</h2>
       <h3>Welcome back</h3>
@@ -42,6 +48,23 @@
       console.log('Form submitted:', formData);
       // Add your form submission logic here
     }
+    document.addEventListener('DOMContentLoaded', function() {
+      const errorMessage = document.getElementById('errorMessage');
+      if (errorMessage) {
+        errorMessage.style.display = 'block';
+        setTimeout(() => {
+          errorMessage.style.display = 'none';
+        }, 5000);
+      }
+    const successMessage = document.getElementById('successMessage');
+      if (successMessage) {
+        successMessage.style.display = 'block';
+        setTimeout(() => {
+          successMessage.style.display = 'none';
+        }, 5000);
+      };
+    });
+
   </script>
 
 </body>

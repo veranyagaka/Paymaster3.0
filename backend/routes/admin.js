@@ -7,7 +7,32 @@ const fs = require('fs');
 const csv = require('csv-parser'); // For CSV files
 const xlsx = require('xlsx'); // For Excel files
 const multer = require('multer');
+// Route for payroll history with pagination
 
+router.get('/payrollhistory', async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  try {
+      const [results] = await database.query(
+          'SELECT * FROM payroll_history LIMIT ? OFFSET ?',
+          [limit, offset]
+      );
+      const [countResult] = await database.query('SELECT COUNT(*) AS count FROM payroll_history');
+      const totalRecords = countResult[0].count;
+      const totalPages = Math.ceil(totalRecords / limit);
+
+      if (results.length === 0) {
+          return res.render('admin-payrollhistory', { payrolls: [], message: 'No payroll records at the moment.', currentPage: page, totalPages: 0 });
+      }
+
+      res.render('admin-payrollhistory', { payrolls: results, message: '', currentPage: page, totalPages });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
 // Multer setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

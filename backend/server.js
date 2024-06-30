@@ -12,6 +12,8 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const sendEmail = require('./routes/sendEmail'); 
 const {sendEmail2} = require('./routes/sendEmail'); 
+const {sendEmail3} = require('./routes/sendEmail'); 
+
 
 const corsOptions = {
   origin: ['https://your-frontend-app.com', 'http://localhost:2000'],
@@ -71,14 +73,13 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(bodyParser.json());
 
-/*app.use(flash());
+app.use(flash());
 
 app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   res.locals.success = req.flash('success');
   next();
 });
-*/
 function displayFullDate() {
   const today = new Date();
   const day = today.getDate();
@@ -142,6 +143,9 @@ app.post('/login', async (req, res) => {
                 console.error(err);
               } else {
                 console.log('Session saved:', req.session.EmployeeID);
+                const subject = 'New login detected!';
+                const message = `Hi there! New sign in to your Strathmore University eLearning System account <br> If this was you, then you don't need to do anything. <br>If you don't recognise this activity, please change your password.`;
+                sendEmail3(subject, message);
                 res.redirect('employee-profile');
               }
             });
@@ -215,19 +219,18 @@ app.post('/admin-login', async (req, res) => {
     );
     console.log('Queried admin:', result);
     if (!result.length) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.render('admin-login', { error: 'Incorrect email or Password.' });;   
     }
 
     const validPassword = await bcrypt.compare(password, result[0].password);
 
     if (!validPassword) {
-      return res.status(401).json({ error: 'Invalid email or password' });
-    }
+      return res.render('admin-login', { error: 'Incorrect email or Password.' });;   
+   }
           req.session.adminId = result[0].id;  // Set admin ID in session
           console.log('Stored Password:', result[0].password);
-          //maybe jwt functionality?
-          res.redirect('/admin');
-        } catch (err) {
+          return res.redirect('/admin');
+     } catch (err) {
           console.error(err);
           res.status(500).json({ error: 'Internal server error' });
         }
@@ -236,6 +239,8 @@ const adminRouter =require('./routes/admin')
 app.use('/admin', adminRouter)
 
 app.get('/employee-profile', async (req, res) => {
+  req.flash('success', 'Login successful!');
+
   console.log('Session check employeeID:', req.session.EmployeeID);
   if (!req.session.EmployeeID) {
     return res.status(401).redirect('/login'); // Redirect to login if no session

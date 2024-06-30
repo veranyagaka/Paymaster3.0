@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll History</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <%- include('admin-sidebar') %>
+
+    <div class="container mt-5">
+        <h1>Payroll History</h1>
+        <% if (message) { %>
+            <div class="alert alert-info"><%= message %></div>
+        <% } %>
+        <% if (payrolls.length > 0) { %>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Employee ID</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% payrolls.forEach(payroll => { %>
+                        <tr>
+                            <td><%= payroll.id %></td>
+                            <td><%= payroll.employee_id %></td>
+                            <td><%= payroll.amount %></td>
+                            <td><%= payroll.date %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            <nav>
+                <ul class="pagination">
+                    <% if (currentPage > 1) { %>
+                        <li class="page-item"><a class="page-link" href="/payrollhistory?page=<%= currentPage - 1 %>">Previous</a></li>
+                    <% } %>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= currentPage === i ? 'active' : '' %>"><a class="page-link" href="/payrollhistory?page=<%= i %>"><%= i %></a></li>
+                    <% } %>
+                    <% if (currentPage < totalPages) { %>
+                        <li class="page-item"><a class="page-link" href="/payrollhistory?page=<%= currentPage + 1 %>">Next</a></li>
+                    <% } %>
+                </ul>
+            </nav>
+        <% } %>
+    </div>
+</body>
+</html>
