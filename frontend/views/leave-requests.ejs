@@ -8,11 +8,19 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-siEtznLwTpEVVAzERYvOHmCTbwzW2n5qwbvSC8U1n3lOMKdWEzqyqC8kpByT5T1p" crossorigin="anonymous">
     <%- include('admin-sidebar') %>
+</head>
+<body>
 
-    <div class="container">
-        <h1 class="my-4">Leave Requests</h1>
+<div class="container">
+    <h1 class="my-4 text-center">Leave Requests</h1>
 
-        <% if (leave_requests.length > 0) { %>
+    <% if (leave_requests.length > 0) { %>
+        <% let pendingRequests = leave_requests.filter(request => request.status === 'Pending'); %>
+        <% let acceptedRequests = leave_requests.filter(request => request.status === 'Approved'); %>
+        <% let rejectedRequests = leave_requests.filter(request => request.status === 'Denied'); %>
+        <h2>Pending Requests</h2>
+
+        <% if (pendingRequests.length > 0) { %>
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -25,13 +33,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% leave_requests.forEach(request => { %>
+                    <% pendingRequests.forEach(request => { %>
                         <tr>
                             <td><%= request.request_id %></td>
                             <td><%= request.employee_id %></td>
                             <td><%= request.leave_type %></td>
-                            <td><%= request.start_date %></td>
-                            <td><%= request.end_date %></td>
+                            <td><%= request.start_date.toLocaleDateString('en-US') %></td>
+                            <td><%= request.end_date.toLocaleDateString('en-US') %></td>
                             <td><%= request.status %></td>
                         </tr>
                     <% }); %>
@@ -39,15 +47,86 @@
             </table>
         <% } else { %>
             <div class="alert alert-info text-center" role="alert">
-                No leave requests at the moment.
+                No pending leave requests.
             </div>
         <% } %>
-    </div>
+        <h2>Accepted Requests</h2>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <% if (acceptedRequests.length > 0) { %>
+            <div class="my-4"></div>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Employee ID</th>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% acceptedRequests.forEach(request => { %>
+                        <tr>
+                            <td><%= request.request_id %></td>
+                            <td><%= request.employee_id %></td>
+                            <td><%= request.leave_type %></td>
+                            <td><%= request.start_date.toLocaleDateString('en-US') %></td>
+                            <td><%= request.end_date.toLocaleDateString('en-US') %></td>
+                            <td><%= request.status %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <div class="alert alert-info text-center" role="alert">
+                No accepted leave requests.
+            </div>
+        <% } %>
+        <h2>Rejected Requests</h2>
+
+        <% if (rejectedRequests.length > 0) { %>
+            <div class="my-4"></div>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Employee ID</th>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% rejectedRequests.forEach(request => { %>
+                        <tr>
+                            <td><%= request.request_id %></td>
+                            <td><%= request.employee_id %></td>
+                            <td><%= request.leave_type %></td>
+                            <td><%= request.start_date.toLocaleDateString('en-US') %></td>
+                            <td><%= request.end_date.toLocaleDateString('en-US') %></td>
+                            <td><%= request.status %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <div class="alert alert-info text-center" role="alert">
+                No rejected leave requests.
+            </div>
+        <% } %>
+
+    <% } else { %>
+        <div class="alert alert-info text-center" role="alert">
+            No leave requests at the moment.
+        </div>
+    <% } %>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <%- include('footer') %>
 
 </body>

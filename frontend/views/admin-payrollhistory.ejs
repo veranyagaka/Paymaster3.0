@@ -18,37 +18,56 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Record ID</th>
                         <th>Employee ID</th>
-                        <th>Amount</th>
-                        <th>Date</th>
+                        <th>Pay Period Start</th>
+                        <th>Pay Period End</th>
+                        <th>Base Salary</th>
+                        <th>Allowances</th>
+                        <th>Deductions</th>
+                        <th>Final Salary</th>
+                        <th>Created At</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% payrolls.forEach(payroll => { %>
                         <tr>
-                            <td><%= payroll.id %></td>
-                            <td><%= payroll.employee_id %></td>
-                            <td><%= payroll.amount %></td>
-                            <td><%= payroll.date %></td>
+                            <td><%= payroll.record_id %></td>
+                            <td><%= payroll.employeeID %></td>
+                            <td><%= payroll.pay_period_start.toLocaleDateString('en-US') %></td>
+                            <td><%= payroll.pay_period_end.toLocaleDateString('en-US') %></td>
+                            <td><%= payroll.baseSalary %></td>
+                            <td><%= payroll.allowances %></td>
+                            <td><%= payroll.deductions %></td>
+                            <td><%= payroll.finalSalary %></td>
+                            <td><%= payroll.created_at.toLocaleDateString('en-US') %></td>
                         </tr>
                     <% }) %>
                 </tbody>
             </table>
-            <nav>
-                <ul class="pagination">
-                    <% if (currentPage > 1) { %>
-                        <li class="page-item"><a class="page-link" href="/payrollhistory?page=<%= currentPage - 1 %>">Previous</a></li>
-                    <% } %>
-                    <% for (let i = 1; i <= totalPages; i++) { %>
-                        <li class="page-item <%= currentPage === i ? 'active' : '' %>"><a class="page-link" href="/payrollhistory?page=<%= i %>"><%= i %></a></li>
-                    <% } %>
-                    <% if (currentPage < totalPages) { %>
-                        <li class="page-item"><a class="page-link" href="/payrollhistory?page=<%= currentPage + 1 %>">Next</a></li>
-                    <% } %>
-                </ul>
-            </nav>
+        <% } else { %>
+            <p>No payroll records found.</p>
         <% } %>
+     <!-- Pagination Controls -->
+     <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <% if (currentPage > 1) { %>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<%= currentPage - 1 %>">Previous</a>
+                </li>
+            <% } %>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                    <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                </li>
+            <% } %>
+            <% if (currentPage < totalPages) { %>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<%= currentPage + 1 %>">Next</a>
+                </li>
+            <% } %>
+        </ul>
+    </nav>
     </div>
 </body>
 </html>

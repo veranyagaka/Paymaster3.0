@@ -181,7 +181,7 @@ showProfileCompletionModal();
 
                     <div class="col-md-4">
                         <div class="profile-img">
-                            <img src="../../backend/<%= employee.profile_picture ? employee.profile_picture : '/images/user.png' %>" alt="profile pic" class="img-fluid"/>
+                            <img src="<%= employee.profile_picture ? `../../backend/${employee.profile_picture}` : '/images/user.png' %>" alt="profile pic" class="img-fluid"/>
                         </div>
                     </div>
                     <div class="col-md-8">

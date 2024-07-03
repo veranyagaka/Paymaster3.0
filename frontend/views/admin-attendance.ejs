@@ -112,8 +112,8 @@
                                 <td><%= request.request_id %></td>
                                 <td><%= request.employee_id %></td>
                                 <td><%= request.leave_type %></td>
-                                <td><%= request.start_date %></td>
-                                <td><%= request.end_date %></td>
+                                <td><%= request.start_date.toLocaleDateString('en-US') %></td>
+                                <td><%= request.end_date.toLocaleDateString('en-US') %></td>
                                 <td><%= request.status %></td>
                                 <td>
                                     <button class="btn btn-success btn-sm" onclick="approveLeave('<%= request.request_id %>')">Approve</button>

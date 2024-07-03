@@ -17,21 +17,29 @@
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
+                <th>Record ID</th>
                 <th>Employee ID</th>
-                <th>Month</th>
+                <th>Pay Period Start</th>
+                <th>Pay Period End</th>
                 <th>Base Salary</th>
                 <th>Allowances</th>
+                <th>Deductions</th>
                 <th>Final Salary</th>
+                <th>Created At</th>
               </tr>
             </thead>
             <tbody>
               <% payrollData.forEach(record => { %>
                 <tr>
-                  <td><%= record.employee_id %></td>
-                  <td><%= record.month %></td>
-                  <td>$<%= record.base_salary.toFixed(2) %></td>
-                  <td>$<%= record.allowances.toFixed(2) %></td>
-                  <td>$<%= record.final_salary.toFixed(2) %></td>
+                  <td><%= record.record_id %></td>
+                  <td><%= record.employeeID %></td>
+                  <td><%= record.pay_period_start.toLocaleDateString('en-US') %></td>
+                  <td><%= record.pay_period_end.toLocaleDateString('en-US') %></td>
+                  <td>Ksh.<%= record.baseSalary %></td>
+                  <td>Ksh.<%= record.allowances %></td>
+                  <td>Ksh.<%= record.finalSalary%></td>
+                  <td><%= record.created_at.toLocaleDateString('en-US') %></td>
+
                 </tr>
               <% }); %>
             </tbody>

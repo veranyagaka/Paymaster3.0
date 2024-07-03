@@ -144,8 +144,8 @@ app.post('/login', async (req, res) => {
               } else {
                 console.log('Session saved:', req.session.EmployeeID);
                 const subject = 'New login detected!';
-                const message = `Hi there! New sign in to your Strathmore University eLearning System account <br> If this was you, then you don't need to do anything. <br>If you don't recognise this activity, please change your password.`;
-                sendEmail3(subject, message);
+                const message = `Hi there! New sign in to your PayMaster account <br> If this was you, then you don't need to do anything. <br>If you don't recognise this activity, please change your password.`;
+                //sendEmail3(subject, message);
                 res.redirect('employee-profile');
               }
             });
