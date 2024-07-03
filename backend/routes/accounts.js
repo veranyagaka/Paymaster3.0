@@ -96,12 +96,19 @@ router.get('/payslip', async(req, res) => {
 });
 function calculateNetPay({ firstName, lastName, email, employeeID, department, bio, baseSalary, allowances, bonus, overtimeHours, hourlyRate,bankName, bankAccountName,   bankAccountNumber }) {
   // Assume tax rate and retirement insurance rate are constants for simplicity
-  const taxRate = 0.2; // 20% tax rate
   const retirementInsuranceRate = 0.1; // 10% retirement insurance rate
 
   // Calculate final salary before deductions
   let finalSalaryBeforeDeductions = baseSalary + allowances;
-
+// Determine tax rate based on salary
+let taxRate;
+if (finalSalaryBeforeDeductions <= 24000.00) {
+  taxRate = 0.10;
+} else if (finalSalaryBeforeDeductions <= 32333.00) {
+  taxRate = 0.25;
+} else {
+  taxRate = 0.30;
+}
   // Calculate overtime pay
   if (overtimeHours && hourlyRate) {
     const overtimePay = overtimeHours * hourlyRate;

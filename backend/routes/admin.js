@@ -225,12 +225,29 @@ router.post('/employees/add', async (req, res) => {
 router.post('/employees/edit/:employeeId', async (req, res) => {
   const employeeId = req.params.employeeId;
 
-  const { first_name, job_title, department } = req.body; // Destructure data from request body
-
+  const { first_name,baseSalary,allowances, job_title, department } = req.body; // Destructure data from request body
   try {
-    // Update employee data in the database
-    await database.query('UPDATE employee_profile SET first_name = ?, job_title = ?, department = ? WHERE employeeID = ?', [first_name, job_title, department, employeeId]);
+    // Retrieve existing employee data from the database
+    const [employee] = await database.query('SELECT * FROM employee_profile WHERE employeeID = ?', [employeeId]);
 
+    if (!employee) {
+      return res.status(404).send('Employee not found');
+    }
+
+    // Update fields only if new values are provided
+    const updatedEmployee = {
+      first_name: first_name || employee.first_name,
+      baseSalary: baseSalary || employee.baseSalary,
+      allowances: allowances || employee.allowance,
+      job_title: job_title || employee.job_title,
+      department: department || employee.department,
+    };
+
+    // Update employee data in the database
+    await database.query(
+      'UPDATE employee_profile SET first_name = ?, baseSalary = ?, allowance = ?, job_title = ?, department = ? WHERE employeeID = ?',
+      [updatedEmployee.first_name, updatedEmployee.baseSalary, updatedEmployee.allowances, updatedEmployee.job_title, updatedEmployee.department, employeeId]
+    );
     // Handle successful update (e.g., redirect to employee list, display success message)
     res.redirect('/admin'); // Replace as needed
 
@@ -287,17 +304,6 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
     });
   });
 
-// Dummy data for demonstration purposes
-/*const attendanceRecords = [
-  { employeeID: 'E001', month: '2023-06', daysPresent: 20, daysAbsent: 2, overtimeHours: 10 },
-  { employeeID: 'E002', month: '2023-06', daysPresent: 18, daysAbsent: 4, overtimeHours: 5 }
-];
-
-const leave_Requests = [
-  { id: 'L001', employeeID: 'E001', leaveType: 'Vacation', startDate: '2023-07-01', endDate: '2023-07-10', status: 'Pending' },
-  { id: 'L002', employeeID: 'E002', leaveType: 'Sick Leave', startDate: '2023-07-05', endDate: '2023-07-07', status: 'Pending' }
-];
-*/
 // Route to render the employee attendance page
 router.get('/employee-attendance', async (req, res) => {
   try {
@@ -375,31 +381,98 @@ router.post('/generateAttendanceReport', (req, res) => {
   });
 });
 
-// Function to generate PDF report
-async function generatePDFReport (reportMonth, callback) {
+async function generatePDFReport(reportMonth, callback) {
   const pdfDoc = new PDFDocument();
   const pdfFileName = `Attendance_Report_${reportMonth}.pdf`;
   const pdfFilePath = path.join(__dirname, pdfFileName);
+
   try {
-    // Query database for attendance records
-    const [rows, fields] = await database.execute('SELECT * FROM attendance_records WHERE month = ?', [reportMonth]);
+    const [rows] = await database.execute('SELECT * FROM attendance_records WHERE month = ?', [reportMonth]);
 
     // Generate PDF content
-    pdfDoc.pipe(fs.createWriteStream(pdfFilePath));
+    const writeStream = fs.createWriteStream(pdfFilePath);
+    pdfDoc.pipe(writeStream);
+
     pdfDoc.font('Helvetica-Bold').fontSize(20).text(`Attendance Report for ${reportMonth}`, { align: 'center' });
+    pdfDoc.moveDown();
 
-    // Add attendance records to PDF
-    rows.forEach((row) => {
-        pdfDoc.text(`Employee ID: ${row.employee_id}, Date: ${row.date}, Hours Worked: ${row.hours_worked}`);
-    });
+    if (rows.length === 0) {
+      pdfDoc.font('Helvetica').fontSize(14).text('No attendance records for this month.', { align: 'center' });
+    } else {
+      const tableTop = 150;
+      const rowHeight = 30;
+      const col1 = 50;
+      const col2 = 150;
+      const col3 = 250;
+      const col4 = 350;
+      const col5 = 450;
 
+      // Draw table headers
+      pdfDoc.font('Helvetica-Bold').fontSize(12);
+      pdfDoc.text('Employee ID', col1, tableTop);
+      pdfDoc.text('Month', col2, tableTop);
+      pdfDoc.text('Days Present', col3, tableTop);
+      pdfDoc.text('Days Absent', col4, tableTop);
+      pdfDoc.text('Overtime Hours', col5, tableTop);
+
+      // Draw horizontal line under headers
+      pdfDoc.moveTo(col1, tableTop + 25).lineTo(col5 + 100, tableTop + 25).stroke();
+
+      // Draw table rows
+      pdfDoc.font('Helvetica').fontSize(12);
+      rows.forEach((row, i) => {
+        const yPos = tableTop + (i + 1) * rowHeight;
+
+        pdfDoc.text(`${row.employee_id}`, col1, yPos);
+        pdfDoc.text(`${row.month}`, col2, yPos);
+        pdfDoc.text(`${row.daysPresent}`, col3, yPos);
+        pdfDoc.text(`${row.daysAbsent}`, col4, yPos);
+        pdfDoc.text(`${row.overtime_hours}`, col5, yPos);
+
+        // Draw horizontal lines between rows
+        pdfDoc.moveTo(col1, yPos + rowHeight - 5).lineTo(col5 + 100, yPos + rowHeight - 5).stroke();
+      });
+    }
     pdfDoc.end();
 
-    callback(pdfFilePath, null);
-} catch (error) {
+    writeStream.on('finish', () => {
+      callback(pdfFilePath, null);
+    });
+
+    writeStream.on('error', (error) => {
+      console.error('Error writing PDF file:', error);
+      callback(null, error);
+    });
+
+  } catch (error) {
     console.error('Error generating PDF:', error);
     callback(null, error);
-}
+  }
 }
 
+router.get('/search', async (req, res) => {
+  const { name, employeeID } = req.query;
+
+  try {
+    let query = 'SELECT * FROM employee_profile WHERE 1=1';
+    const queryParams = [];
+
+    if (name) {
+      query += ' AND first_name LIKE ?';
+      queryParams.push(`%${name}%`);
+    }
+
+    if (employeeID) {
+      query += ' AND employeeID = ?';
+      queryParams.push(employeeID);
+    }
+
+    const [results] = await database.query(query, queryParams);
+
+    res.render('employee-search-results', { employees: results });
+  } catch (error) {
+    console.error('Error executing search:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 module.exports= router

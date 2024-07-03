@@ -34,7 +34,15 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Add Employee</button>
             </form>
-
+    <!-- Sorting options -->
+    <div class="mb-4">
+        <label for="sortOptions" class="form-label">Sort by:</label>
+        <select id="sortOptions" class="form-control">
+            <option value="department">Department</option>
+            <option value="availability">Availability</option>
+            <option value="gender">Gender</option>
+        </select>
+    </div>
             <!-- Table to display all employees -->
             <h2>All Employees</h2>
             <table class="table table-bordered">
@@ -143,6 +151,38 @@
     function confirmDelete(event) {
         if (!confirm('Are you sure you want to delete this employee?')) {
             event.preventDefault();
+        }
+    }
+
+    // Sorting function
+    document.getElementById('sortOptions').addEventListener('change', function() {
+        const table = document.getElementById('employeeTable');
+        const rows = Array.from(table.rows);
+        const option = this.value;
+
+        rows.sort((a, b) => {
+            const aText = a.querySelector(`td:nth-child(${getSortIndex(option)})`).textContent.trim();
+            const bText = b.querySelector(`td:nth-child(${getSortIndex(option)})`).textContent.trim();
+            return aText.localeCompare(bText);
+        });
+
+        while (table.firstChild) {
+            table.removeChild(table.firstChild);
+        }
+        
+        rows.forEach(row => table.appendChild(row));
+    });
+
+    function getSortIndex(option) {
+        switch (option) {
+            case 'department':
+                return 5; // Department column index
+            case 'availability':
+                return 8; // Availability column index
+            case 'gender':
+                return 9; // Gender column index
+            default:
+                return 0;
         }
     }
 </script>

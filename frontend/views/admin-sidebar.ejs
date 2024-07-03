@@ -170,8 +170,9 @@ margin-bottom: 0.5rem;
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
             <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
-            <form class="form-inline my-2 my-lg-0 ml-auto">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+            <form class="form-inline my-2 my-lg-0 ml-auto" id="search-form">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search by Name or ID..." aria-label="Search" id="search-query">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
             <div class="navbar-nav ml-auto">
                 <a class="nav-item nav-link" href="#">
@@ -195,6 +196,38 @@ margin-bottom: 0.5rem;
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
+    });
+</script>
+<script>
+    document.getElementById('search-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const query = document.getElementById('search-query').value;
+
+        // Make an API call to search for employees by name or ID
+        fetch(`/api/search-employees?q=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                // Display the search results (you can customize this part)
+                const resultsContainer = document.getElementById('search-results');
+                resultsContainer.innerHTML = '';
+                if (data.length > 0) {
+                    data.forEach(employee => {
+                        const employeeElement = document.createElement('div');
+                        employeeElement.classList.add('employee');
+                        employeeElement.innerHTML = `
+                            <p>ID: ${employee.id}</p>
+                            <p>Name: ${employee.name}</p>
+                            <p>Position: ${employee.position}</p>
+                        `;
+                        resultsContainer.appendChild(employeeElement);
+                    });
+                } else {
+                    resultsContainer.innerHTML = '<p>No employees found.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching employees:', error);
+            });
     });
 </script>
 
