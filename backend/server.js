@@ -14,7 +14,7 @@ const sendEmail = require('./routes/sendEmail');
 const {sendEmail2} = require('./routes/sendEmail'); 
 const {sendEmail3} = require('./routes/sendEmail'); 
 const connectToDatabase = require('./db');
-const database = await connectToDatabase();
+const database = connectToDatabase();
 
 // Local MySQL connection
 //const database = require('./database.js')
