@@ -5,7 +5,7 @@ console.log('Database host:', dbConfig.host);
 
 console.log('Database database:', dbConfig.database);
 
-async function database() {
+async function connectToDatabase() {
   try {
     const connection = await mysql.createConnection(dbConfig);
     console.log('Connected to the CLOUD MySQL database');
@@ -16,4 +16,4 @@ async function database() {
   }
 }
 
-module.exports = database;
+module.exports = connectToDatabase;
