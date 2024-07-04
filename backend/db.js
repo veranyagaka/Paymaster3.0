@@ -7,9 +7,9 @@ console.log('Database database:', dbConfig.database);
 
 async function connectToDatabase() {
   try {
-    const connection = await mysql.createConnection(dbConfig);
+    const database = await mysql.createConnection(dbConfig);
     console.log('Connected to the CLOUD MySQL database');
-    return connection;
+    return database;
   } catch (err) {
     console.error('Error connecting to CLOUD MySQL:', err);
     throw err;
