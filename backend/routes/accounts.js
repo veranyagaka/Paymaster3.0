@@ -6,6 +6,7 @@ const pdf = require('html-pdf');
 //const database = require('../database.js')
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+const database = require('../db.js');
 
 // Set up multer for file upload
 const storage = multer.diskStorage({
