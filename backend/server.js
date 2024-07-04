@@ -13,8 +13,8 @@ const flash = require('connect-flash');
 const sendEmail = require('./routes/sendEmail'); 
 const {sendEmail2} = require('./routes/sendEmail'); 
 const {sendEmail3} = require('./routes/sendEmail'); 
-const connectToDatabase = require('./db');
-const database = connectToDatabase();
+const database = require('./db.js');
+//const database = connectToDatabase;
 
 // Local MySQL connection
 //const database = require('./database.js')
@@ -82,19 +82,12 @@ app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   next();
 });
-function displayFullDate() {
-  const today = new Date();
-  const day = today.getDate();
-  const month = today.toLocaleString('default', { month: 'long' });
-  const year = today.getFullYear();
-  const fullDate = `${day} ${month} ${year}`;
-  return fullDate;
-}
+
 app.get('/', (req, res) => {
   res.render('land');
 });
 app.get('/nav', (req, res) => {
-  res.render('navigationbar', {displayFullDate});
+  res.render('navigationbar');
 });
 app.get('/css', (req, res) => {
   res.render('index');

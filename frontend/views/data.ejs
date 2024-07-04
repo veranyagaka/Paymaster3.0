@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll History</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <%- include('admin-sidebar') %>
+
+    <div class="container mt-5">
+        <h1>Payroll History</h1>
+        <% if (message) { %>
+            <div class="alert alert-info"><%= message %></div>
+        <% } %>
+        <% if (payrolls.length > 0) { %>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Record ID</th>
+                        <th>Employee ID</th>
+                        <th>Pay Period Start</th>
+                        <th>Pay Period End</th>
+                        <th>Base Salary</th>
+                        <th>Allowances</th>
+                        <th>Deductions</th>
+                        <th>Final Salary</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% payrolls.forEach(payroll => { %>
+                        <tr>
+                            <td><%= payroll.record_id %></td>
+                            <td><%= payroll.employeeID %></td>
+                            <td><%= payroll.pay_period_start.toLocaleDateString('en-US') %></td>
+                            <td><%= payroll.pay_period_end.toLocaleDateString('en-US') %></td>
+                            <td><%= payroll.baseSalary %></td>
+                            <td><%= payroll.allowances %></td>
+                            <td><%= payroll.deductions %></td>
+                            <td><%= payroll.finalSalary %></td>
+                            <td><%= payroll.created_at.toLocaleDateString('en-US') %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>No payroll records found.</p>
+        <% } %>
+    </div>
+</body>
+</html>

@@ -2,8 +2,8 @@ const express =require('express');
 const router =express.Router();
 const path = require('path');
 //const database = require('../database.js')
-const connectToDatabase = require('../db.js');
-const database = connectToDatabase();
+//const connectToDatabase = require('../db.js');
+const database = require('../db.js');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const csv = require('csv-parser'); // For CSV files
@@ -17,10 +17,10 @@ router.get('/payrollhistory', async (req, res) => {
   const offset = (page - 1) * limit;
 
   try {
-      const [results] = await database.query(
-          'SELECT * FROM payroll_history LIMIT ? OFFSET ?',
-          [limit, offset]
-      );
+    const [results] = await database.query(
+      'SELECT * FROM payroll_history LIMIT ? OFFSET ?',
+      [limit, offset]
+  );
       const [countResult] = await database.query('SELECT COUNT(*) AS count FROM payroll_history');
       const totalRecords = countResult[0].count;
       const totalPages = Math.ceil(totalRecords / limit);
@@ -35,6 +35,35 @@ router.get('/payrollhistory', async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
   }
 });
+router.get('/data', async (req, res) => {
+  try {
+      const [results] = await database.query(
+          'SELECT * FROM payroll_history'
+      );
+      console.log('Results type:', typeof results);
+
+      // Check if results is an array
+      if (Array.isArray(results)) {
+
+          console.log('Results:', results);
+          console.log('Results length:', results.length);
+
+          if (results.length === 0) {
+              return res.render('data', { payrolls: [], message: 'No payroll records at the moment.' });
+          }
+
+          res.render('data', { payrolls: results, message: '' });
+      } else {
+          console.log('Unexpected result format:', results);
+          res.status(500).json({ error: 'Unexpected result format' });
+      }
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 // Multer setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -111,7 +140,6 @@ router.post('/importAttendance', upload.single('attendanceFile'), async (req, re
 router.get('/', (req, res) => {
     res.render('admin-dashboard'); 
 });
-
 router.get('/employees', async (req, res) => {
   try {
     // Set the number of records per page
@@ -122,7 +150,11 @@ router.get('/employees', async (req, res) => {
     const offset = (page - 1) * limit;
 
     // Fetch the total number of employee records
-    const [[{ totalRecords }]] = await database.query('SELECT COUNT(*) as totalRecords FROM employee_profile');
+    const [countResult] = await database.query('SELECT COUNT(*) as totalRecords FROM employee_profile');
+    
+    // Extract totalRecords value or default to 0 if no records found
+    const totalRecords = countResult.length > 0 ? countResult[0].totalRecords : 0;
+    
     // Calculate the total number of pages
     const totalPages = Math.ceil(totalRecords / limit);
 
@@ -135,7 +167,7 @@ router.get('/employees', async (req, res) => {
       totalPages 
     });
   } catch (err) {
-    console.error(err);
+    console.error('Error fetching employees:', err);
     res.status(500).send('Internal Server Error');
   }
 });

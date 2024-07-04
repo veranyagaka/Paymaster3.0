@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 //const database = require('../database.js')
-const connectToDatabase = require('../db.js');
-const database = connectToDatabase();
+const database = require('../db.js');
+
 router.get('/reports', async (req, res) => {
   try {
     const [femaleEmployees] = await database.query('SELECT COUNT(*) as count FROM employee_test WHERE gender = "F"');
