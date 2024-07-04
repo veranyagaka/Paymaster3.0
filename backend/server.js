@@ -13,7 +13,10 @@ const flash = require('connect-flash');
 const sendEmail = require('./routes/sendEmail'); 
 const {sendEmail2} = require('./routes/sendEmail'); 
 const {sendEmail3} = require('./routes/sendEmail'); 
-
+const connectToDatabase = require('./db');
+// Local MySQL connection
+//const database = require('./database.js')
+const database = require('./db');
 
 const corsOptions = {
   origin: ['https://your-frontend-app.com', 'http://localhost:2000'],
@@ -21,7 +24,6 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization']
 
 };
-const connectToDatabase = require('./db');
 app.get('/test', async (req, res) => {
   try {
     const connection = await connectToDatabase();
@@ -114,8 +116,7 @@ app.get('/side', (req, res) => {
 app.get('/register', (req, res) => {
   res.render('register');
   });
-// MySQL connection
-const database = require('./database.js')
+
 
 // Login route
 app.post('/login', async (req, res) => {
@@ -251,7 +252,8 @@ app.get('/employee-profile', async (req, res) => {
       if (!employee) {
         return res.status(404).send('Employee profile not found');
       }
-      res.render('employee-profile', { employee: employee });
+      const showPaymentButton = false;
+      res.render('employee-profile', { employee: employee, showPaymentButton: showPaymentButton });
   } catch (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');

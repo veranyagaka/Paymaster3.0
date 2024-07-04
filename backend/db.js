@@ -1,11 +1,11 @@
 const mysql = require('mysql2/promise');
 const dbConfig = require('./config.js');
 console.log('dbConfig:', dbConfig);
-console.log('Database configuration:', dbConfig.host);
+console.log('Database host:', dbConfig.host);
 
-console.log('Database configuration:', dbConfig.database);
+console.log('Database database:', dbConfig.database);
 
-async function connectToDatabase() {
+async function database() {
   try {
     const connection = await mysql.createConnection(dbConfig);
     console.log('Connected to the CLOUD MySQL database');
@@ -16,4 +16,4 @@ async function connectToDatabase() {
   }
 }
 
-module.exports = connectToDatabase;
+module.exports = database;

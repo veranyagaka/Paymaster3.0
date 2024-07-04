@@ -3,9 +3,10 @@ const router =express.Router();
 const path = require('path');
 const multer = require('multer');
 const pdf = require('html-pdf'); 
-const database = require('../database.js')
+//const database = require('../database.js')
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+const database = require('../db.js')
 
 // Set up multer for file upload
 const storage = multer.diskStorage({
@@ -184,14 +185,14 @@ router.get('/finance', async(req,res )=>{
 });
 router.post('/employees/payment-details/', async (req, res) => {
   const employeeID = req.session.EmployeeID;
-  const { bankName, bankAccountName, bankAccountNumber } = req.body;
+  const { setbankName, setbankAccountName, setbankAccountNumber } = req.body;
 
   // Prepare SQL query
   const sql = `INSERT INTO paymentdetails (employeeID, bankName, bankAccountName, bankAccountNumber) VALUES (?, ?, ?, ?)`;
 
   try {
     // Execute query with prepared statement to prevent SQL injection vulnerabilities
-    await database.query(sql, [employeeID, bankName, bankAccountName, bankAccountNumber]);
+    await database.query(sql, [employeeID, setbankName, setbankAccountName, setbankAccountNumber]);
     // Redirect to profile page after 3 seconds
     setTimeout(() => {
       res.redirect('/employee-profile');

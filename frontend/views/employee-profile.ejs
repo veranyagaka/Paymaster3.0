@@ -207,15 +207,18 @@ showProfileCompletionModal();
                     </div>
                     <div class="row">
                         <div class="col-md-12 text-md-center">
-                            <button class="btn btn-primary payment-details-btn" data-toggle="modal" data-target="#editPaymentModal">Set Payment Method</button>
+                            <% if (showPaymentButton) { %>
+                                <button class="btn btn-primary payment-details-btn" data-toggle="modal" data-target="#editPaymentModal">Set Payment Method</button>
+                            <% } %>
                         </div>
                     </div>
+                    
             </div>
         </div>
     </div>
     <!-- Edit Profile Modal -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
@@ -265,15 +268,15 @@ showProfileCompletionModal();
                 <form action="/accounts/employees/payment-details/<%= employee.employeeID %>" method="POST">
                     <div class="form-group">
                         <label for="bankName">Bank Name</label>
-                        <input type="text" class="form-control" id="bankName" name="bankName" placeholder="Enter bank name">
+                        <input type="text" class="form-control" id="setbankName" name="bankName" placeholder="Enter bank name">
                     </div>
                     <div class="form-group">
                         <label for="bankAccountName">Bank Account Name</label>
-                        <input type="text" class="form-control" id="bankAccountName" name="bankAccountName" placeholder="Enter bank account name">
+                        <input type="text" class="form-control" id="setbankAccountName" name="bankAccountName" placeholder="Enter bank account name">
                     </div>
                     <div class="form-group">
                         <label for="bankAccountNumber">Bank Account Number</label>
-                        <input type="text" class="form-control" id="bankAccountNumber" name="bankAccountNumber" placeholder="Enter bank account number">
+                        <input type="text" class="form-control" id="setbankAccountNumber" name="bankAccountNumber" placeholder="Enter bank account number">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
