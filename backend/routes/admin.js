@@ -2,8 +2,8 @@ const express =require('express');
 const router =express.Router();
 const path = require('path');
 //const database = require('../database.js')
-const database = require('../db.js')
-
+const connectToDatabase = require('../db.js');
+const database = await connectToDatabase();
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const csv = require('csv-parser'); // For CSV files

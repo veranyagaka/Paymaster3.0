@@ -14,9 +14,10 @@ const sendEmail = require('./routes/sendEmail');
 const {sendEmail2} = require('./routes/sendEmail'); 
 const {sendEmail3} = require('./routes/sendEmail'); 
 const connectToDatabase = require('./db');
+const database = await connectToDatabase();
+
 // Local MySQL connection
 //const database = require('./database.js')
-const database = require('./db');
 
 const corsOptions = {
   origin: ['https://your-frontend-app.com', 'http://localhost:2000'],
@@ -26,7 +27,6 @@ const corsOptions = {
 };
 app.get('/test', async (req, res) => {
   try {
-    const connection = await connectToDatabase();
     const [rows] = await connection.query('SELECT 1');
     res.send('Database connection successful!');
   } catch (err) {
