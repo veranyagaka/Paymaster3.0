@@ -44,9 +44,9 @@ async function sendEmail(subject, message) {
         // Handle error condition
     });
     */
-async function sendEmail2(subject, message,employeeID) {
+async function sendEmail2(email, subject, message,employeeID) {
         const msg = {
-          to: 'vera.nyagaka@strathmore.edu',
+          to: email,
           from: 'nyagakavera@gmail.com', // Replace with your verified sender
           subject: subject,
           html: `

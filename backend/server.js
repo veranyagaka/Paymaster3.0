@@ -181,7 +181,7 @@ app.post('/register', async (req, res) => {
     await database.query(profile, [employeeID, email]);
     const subject = 'Welcome to Paymaster';
     const message = `Hi there! You've successfully registered for an account. Your employee ID is ${employeeID}. <br> You can login to your account here: `;
-    await sendEmail2(subject, message, employeeID);
+    await sendEmail2(email, subject, message, employeeID);
     setTimeout(() => {
       res.redirect('/login');
     }, 3000); 
