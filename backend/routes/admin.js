@@ -172,16 +172,6 @@ router.get('/employees', async (req, res) => {
   }
 });
 
-router.get('/attendance-records', async(req, res) => {
-    try {
-        // Retrieve employees from the database
-        const [attendanceRecords] = await database.query('SELECT * FROM attendance_records');
-        res.render('attendance-records', { attendanceRecords: attendanceRecords });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-    }
-});
 router.get('/leave-requests', async(req, res) => {
     try {
         // Retrieve employees from the database
@@ -260,6 +250,8 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
   const employeeId = req.params.employeeId;
 
   const { first_name,baseSalary,allowances, job_title, department } = req.body; // Destructure data from request body
+  const availability = req.body.availability ? 'Available' : 'On Leave';
+
   try {
     // Retrieve existing employee data from the database
     const [employee] = await database.query('SELECT * FROM employee_profile WHERE employeeID = ?', [employeeId]);
@@ -508,5 +500,39 @@ router.get('/search', async (req, res) => {
     console.error('Error executing search:', error);
     res.status(500).send('Internal Server Error');
   }
+});
+router.get('/deductions', async(req, res) => {
+  try {
+      // Retrieve employees from the database
+      const [deductions] = await database.query('SELECT * FROM employee_profile');
+      res.render('deductions', { deductions: deductions });
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  }
+
+});
+// Update employee allowances and deductions
+router.put('/deductions/:id', (req, res) => {
+  const employeeId = req.params.id;
+  const { transport_insurance, medical_insurance, meal_insurance, retirement_insurance } = req.body;
+  const query = `
+    UPDATE employees 
+    SET 
+      transport_insurance = ?, 
+      medical_insurance = ?, 
+      meal_insurance = ?, 
+      retirement_insurance = ? 
+    WHERE 
+      employee_id = ?
+  `;
+  database.query(query, [transport_insurance, medical_insurance, meal_insurance, retirement_insurance, employeeId], (err, results) => {
+    if (err) {
+      console.error('Error updating employee: ', err);
+      res.status(500).json({ error: 'Error updating allowances & deductions' });
+      return;
+    }
+    res.json({ message: 'Employee updated successfully' });
+  });
 });
 module.exports= router

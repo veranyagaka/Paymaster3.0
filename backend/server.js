@@ -33,16 +33,7 @@ app.get('/test', async (req, res) => {
     res.status(500).send('Database connection failed');
   }
 });
-app.get('/employees', async (req, res) => {
-  try {
-    const connection = await connectToDatabase();      
-      const [rows] = await connection.query('SELECT * FROM employee_profile');
-      res.send(rows);
-  } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-  }
-});
+
 app.use(cors(corsOptions));
 //enables cors
 app.use(cors({
@@ -52,6 +43,7 @@ app.use(cors({
   'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
   'preflightContinue': false
 }));
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../frontend/views'));
 
@@ -82,7 +74,14 @@ app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   next();
 });
-
+// Middleware to check for login success flag
+app.use((req, res, next) => {
+  res.locals.showLoginMessage = req.session.showLoginMessage;
+  if (req.session.showLoginMessage) {
+      req.session.showLoginMessage = false; // Reset the flag
+  }
+  next();
+});
 app.get('/', (req, res) => {
   res.render('land');
 });
@@ -140,6 +139,7 @@ app.post('/login', async (req, res) => {
                 const subject = 'New login detected!';
                 const message = `Hi there! New sign in to your PayMaster account <br> If this was you, then you don't need to do anything. <br>If you don't recognise this activity, please change your password.`;
                 //sendEmail3(subject, message);
+                //req.session.showLoginMessage = true;
                 res.redirect('employee-profile');
               }
             });
@@ -278,7 +278,7 @@ sendEmail()
     });
     */
 const reportsRouter =require('./routes/reports')
-app.use('/re', reportsRouter)
+app.use('/reports', reportsRouter)
 app.use((req, res, next) => {
   res.status(404).render('404');
 });

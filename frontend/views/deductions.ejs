@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Allowances and Deductions</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <%- include('admin-sidebar') %>
+
+  <div class="container mt-5">
+    <h1 class="mb-4">Employee Allowances and Deductions</h1>
+    <table id="employee-table" class="table table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th>Employee ID</th>
+          <th>Name</th>
+          <th>Base Salary</th>
+          <th>Transport Insurance</th>
+          <th>Medical Insurance</th>
+          <th>Meal Insurance</th>
+          <th>Retirement Insurance</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Employee data will be inserted here dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Allowances and Deductions</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form id="editForm">
+          <div class="modal-body">
+            <input type="hidden" id="editEmployeeId" name="editEmployeeId">
+            <div class="form-group">
+              <label for="editTransport">Transport Insurance:</label>
+              <input type="text" class="form-control" id="editTransport" name="editTransport">
+            </div>
+            <div class="form-group">
+              <label for="editMedical">Medical Insurance:</label>
+              <input type="text" class="form-control" id="editMedical" name="editMedical">
+            </div>
+            <div class="form-group">
+              <label for="editMeal">Meal Insurance:</label>
+              <input type="text" class="form-control" id="editMeal" name="editMeal">
+            </div>
+            <div class="form-group">
+              <label for="editRetirement">Retirement Insurance:</label>
+              <input type="text" class="form-control" id="editRetirement" name="editRetirement">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Custom JavaScript -->
+  <script>
+    $(document).ready(function() {
+  // Function to fetch and display employee data
+  function fetchEmployees() {
+    $.ajax({
+      url: '/employees', // Replace with your API endpoint
+      method: 'GET',
+      success: function(data) {
+        displayEmployees(data);
+      },
+      error: function(err) {
+        console.error('Error fetching employees: ', err);
+      }
+    });
+  }
+
+  // Function to display employees in the table
+  function displayEmployees(employees) {
+    const tbody = $('#employee-table tbody');
+    tbody.empty();
+
+    employees.forEach(function(employee) {
+      const row = `<tr>
+        <td>${employee.employee_id}</td>
+        <td>${employee.first_name} ${employee.last_name}</td>
+        <td>${employee.base_salary}</td>
+        <td>${employee.transport_insurance}</td>
+        <td>${employee.medical_insurance}</td>
+        <td>${employee.meal_insurance}</td>
+        <td>${employee.retirement_insurance}</td>
+        <td>
+          <button class="btn btn-primary edit-btn" data-id="${employee.employee_id}">Edit</button>
+        </td>
+      </tr>`;
+      tbody.append(row);
+    });
+
+    // Edit button click handler to open modal
+    $('.edit-btn').click(function() {
+      const employeeId = $(this).data('id');
+      openEditModal(employeeId);
+    });
+  }
+
+  // Function to open edit modal with employee data
+  function openEditModal(employeeId) {
+    $.ajax({
+      url: `/employees/${employeeId}`, // Replace with your API endpoint
+      method: 'GET',
+      success: function(employee) {
+        $('#editEmployeeId').val(employee.employee_id);
+        $('#editTransport').val(employee.transport_insurance);
+        $('#editMedical').val(employee.medical_insurance);
+        $('#editMeal').val(employee.meal_insurance);
+        $('#editRetirement').val(employee.retirement_insurance);
+        $('#editModal').modal('show'); // Show Bootstrap modal
+      },
+      error: function(err) {
+        console.error('Error fetching employee data: ', err);
+      }
+    });
+  }
+
+  // Submit edit form
+  $('#editForm').submit(function(event) {
+    event.preventDefault();
+    const employeeId = $('#editEmployeeId').val();
+    const transportInsurance = $('#editTransport').val();
+    const medicalInsurance = $('#editMedical').val();
+    const mealInsurance = $('#editMeal').val();
+    const retirementInsurance = $('#editRetirement').val();
+
+    $.ajax({
+      url: `/employees/${employeeId}`, // Replace with your API endpoint
+      method: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({ 
+        transport_insurance: transportInsurance,
+        medical_insurance: medicalInsurance,
+        meal_insurance: mealInsurance,
+        retirement_insurance: retirementInsurance
+      }),
+      success: function(response) {
+        console.log('Employee data updated successfully: ', response);
+        fetchEmployees(); // Refresh employee data after update
+        $('#editModal').modal('hide'); // Hide Bootstrap modal
+      },
+      error: function(err) {
+        console.error('Error updating employee data: ', err);
+      }
+    });
+  });
+
+  // Fetch employees on page load
+  fetchEmployees();
+});
+
+  </script>
+              <%- include('footer') %>
+</body>
+</html>

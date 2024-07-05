@@ -55,7 +55,7 @@
                         <th>Department</th>
                         <th>Base Salary</th>
                         <th>Allowance</th>
-
+                        <th>Availability</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -69,7 +69,7 @@
                             <td><%= employee.department %></td>
                             <td><%= employee.baseSalary %></td>
                             <td><%= employee.allowance %></td>
-
+                            <td><%= employee.availability %></td>
                             <td>
                                 <form action="/admin/employees/edit/<%= employee.employeeID %>" method="POST" class="d-inline">
                                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal<%= employee.employeeID %>">Edit</button>
@@ -133,7 +133,16 @@
                             </div>
                             <div class="form-group">
                                 <label for="department" class="form-label">Department:</label>
-                                <input type="text" id="department" name="department" class="form-control" value="<%= employee.department %>">
+                                <select id="department" name="department" class="form-control">
+                                    <option value="Recruitment" <%= employee.department === 'Recruitment' ? 'selected' : '' %>>Recruitment</option>
+                                    <option value="Compensation" <%= employee.department === 'Compensation' ? 'selected' : '' %>>Compensation</option>
+                                    <option value="Development" <%= employee.department === 'Development' ? 'selected' : '' %>>Development</option>
+                                    <option value="Compliance" <%= employee.department === 'Compliance' ? 'selected' : '' %>>Compliance</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="availability" class="form-label">Availability:</label>
+                                <input type="checkbox" id="availability" name="availability" value="Available" <%= employee.availability === 'Available' ? 'checked' : '' %>> Available
                             </div>
                             <button type="submit" class="btn btn-success">Save Changes</button>
                         </form>
