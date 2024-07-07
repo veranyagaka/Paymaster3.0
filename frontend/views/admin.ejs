@@ -44,7 +44,7 @@
         </select>
     </div>
             <!-- Table to display all employees -->
-            <h2>All Employees</h2>
+            <h2 class="text-center">All Employees</h2>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -54,7 +54,6 @@
                         <th>Job Title</th>
                         <th>Department</th>
                         <th>Base Salary</th>
-                        <th>Allowance</th>
                         <th>Availability</th>
                         <th>Action</th>
                     </tr>
@@ -68,7 +67,6 @@
                             <td><%= employee.job_title %></td>
                             <td><%= employee.department %></td>
                             <td><%= employee.baseSalary %></td>
-                            <td><%= employee.allowance %></td>
                             <td><%= employee.availability %></td>
                             <td>
                                 <form action="/admin/employees/edit/<%= employee.employeeID %>" method="POST" class="d-inline">
@@ -122,11 +120,6 @@
                                 <label for="baseSalary" class="form-label">Base Salary:</label>
                                 <input type="number" step="0.01" id="baseSalary" name="baseSalary" class="form-control" value="<%= employee.baseSalary %>">
                             </div>
-                            <div class="form-group">
-                                <label for="allowances" class="form-label">Allowances:</label>
-                                <input type="number" step="0.01" id="allowances" name="allowances" class="form-control" value="<%= employee.allowance %>">
-                            </div>
-                            
                             <div class="form-group">
                                 <label for="job_title" class="form-label">Job Title:</label>
                                 <input type="text" id="job_title" name="job_title" class="form-control" value="<%= employee.job_title %>">

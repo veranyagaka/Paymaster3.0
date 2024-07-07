@@ -249,8 +249,7 @@ router.post('/employees/add', async (req, res) => {
 router.post('/employees/edit/:employeeId', async (req, res) => {
   const employeeId = req.params.employeeId;
 
-  const { first_name,baseSalary,allowances, job_title, department } = req.body; // Destructure data from request body
-  const availability = req.body.availability ? 'Available' : 'On Leave';
+  const { first_name, baseSalary, job_title, department, availability } = req.body; // Destructure data from request body
 
   try {
     // Retrieve existing employee data from the database
@@ -264,25 +263,27 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
     const updatedEmployee = {
       first_name: first_name || employee.first_name,
       baseSalary: baseSalary || employee.baseSalary,
-      allowances: allowances || employee.allowance,
       job_title: job_title || employee.job_title,
       department: department || employee.department,
+      availability: availability ? 'Available' : 'On Leave'  // Update availability based on req.body
     };
 
-    // Update employee data in the database
+    // Update employee data in the database including availability
     await database.query(
-      'UPDATE employee_profile SET first_name = ?, baseSalary = ?, allowance = ?, job_title = ?, department = ? WHERE employeeID = ?',
-      [updatedEmployee.first_name, updatedEmployee.baseSalary, updatedEmployee.allowances, updatedEmployee.job_title, updatedEmployee.department, employeeId]
+      'UPDATE employee_profile SET first_name = ?, baseSalary = ?, job_title = ?, department = ?, availability = ? WHERE employeeID = ?',
+      [updatedEmployee.first_name, updatedEmployee.baseSalary, updatedEmployee.job_title, updatedEmployee.department, updatedEmployee.availability, employeeId]
     );
+
     // Handle successful update (e.g., redirect to employee list, display success message)
-    res.redirect('/admin'); // Replace as needed
+    res.redirect('/admin/employees'); // Replace as needed
 
   } catch (error) {
     console.error('Error updating employee:', error);
     // Handle errors (e.g., display error message to user, log the error)
     res.status(500).send('Internal Server Error');
-  } 
+  }
 });
+
   // Route to handle employee deletion
   router.post('/employees/delete/:employeeId', async (req, res) => {
     const employeeId = req.params.employeeId;
@@ -532,18 +533,19 @@ router.get('/deductions', async(req, res) => {
 
 });
 // Update employee allowances and deductions
-router.put('/deductions/:id', (req, res) => {
+router.post('/deductions/edit/:id', (req, res) => {
   const employeeId = req.params.id;
   const { transport_allowance, medical_allowance, meal_allowance, retirement_insurance } = req.body;
+  console.log(retirement_insurance);
   const query = `
-    UPDATE employees 
+    UPDATE employee_profile
     SET 
       transport_allowance = ?, 
       medical_allowance = ?, 
       meal_allowance = ?, 
-      retirement_allowance = ? 
+      retirement_insurance = ? 
     WHERE 
-      employee_id = ?
+      employeeID = ?
   `;
   database.query(query, [transport_allowance, medical_allowance, meal_allowance, retirement_insurance, employeeId], (err, results) => {
     if (err) {
@@ -551,7 +553,7 @@ router.put('/deductions/:id', (req, res) => {
       res.status(500).json({ error: 'Error updating allowances & deductions' });
       return;
     }
-    res.json({ message: 'Employee updated successfully' });
+    res.redirect('/admin/deductions'); 
   });
 });
 module.exports= router

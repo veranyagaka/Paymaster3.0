@@ -94,7 +94,7 @@ router.get('/payslip', async(req, res) => {
     console.error(err);
     res.status(500).send('Internal Server Error');
 }
-});function mapEmployeeData(employee, paymentdetails) {
+});function mapEmployeeData(employee, paymentdetails, overtimeHours) {
   return {
     firstName: employee.first_name || '',
     lastName: employee.last_name || '',
@@ -108,7 +108,7 @@ router.get('/payslip', async(req, res) => {
     mealAllowance: parseFloat(employee.meal_allowance) || 0,
     totalAllowances: parseFloat(employee.total_allowances) || 0,
     bonus: parseFloat(employee.bonus) || 0,
-    overtimeHours: parseFloat(employee.overtimeHours) || 0,
+    overtimeHours: parseFloat(overtimeHours) || 0,
     hourlyRate: parseFloat(employee.hourlyRate) || 0,
     bankName: paymentdetails.bankName || '',
     bankAccountName: paymentdetails.bankAccountName || '',
@@ -131,7 +131,7 @@ function calculateNetPay(employeeData) {
     taxRate = 0.30;
   }
 
-  const overtimePay = employeeData.overtimeHours * employeeData.hourlyRate;
+  const overtimePay = employeeData.overtimeHours * 25;
   finalSalaryBeforeDeductions += overtimePay;
 
   const taxAmount = finalSalaryBeforeDeductions * taxRate;
@@ -153,16 +153,26 @@ router.get('/finance', async (req, res) => {
   if (!req.session.EmployeeID) {
     return res.status(401).redirect('/login'); // Redirect to login if no session
   }
+  const currentDate = new Date();
+  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based in JavaScript
+  const currentYear = currentDate.getFullYear();
+  const currentYearMonth = `${currentYear}-${currentMonth}`;
 
+ console.log('date',currentYearMonth)
   const employeeID = req.session.EmployeeID;
   const [employee] = await database.query('SELECT * FROM employee_profile WHERE employeeID = ?', [employeeID]);
   const [paymentdetails] = await database.query('SELECT * FROM paymentdetails WHERE employeeID = ?', [employeeID]);
-
+  const [attendanceRecords] = await database.query(
+    'SELECT * FROM attendance_records WHERE employee_id = ?  AND month = ?',
+    [employeeID, currentYearMonth]
+  );
+  console.log(attendanceRecords)
   if (!employee.length) {
     return res.status(404).render('error', { message: 'Employee not found!' });
   }
+  const overtimeHours = attendanceRecords[0]?.overtime_hours || 0;
 
-  const employeeData = mapEmployeeData(employee[0], paymentdetails[0]);
+  const employeeData = mapEmployeeData(employee[0], paymentdetails[0], overtimeHours);
   const salaryComponents = calculateNetPay(employeeData);
 
   res.render('finance', { salaryComponents });
