@@ -39,12 +39,15 @@
                         <h6><%= salaryComponents.email %></h6>
                         <p><strong>Employee Number:</strong> <%= salaryComponents.employeeID %> | <%= salaryComponents.department %></p>
                     </div>
-                    <div class="card-body collapse show">
+                    <div class="card-body">
                         <p><strong>Base Salary:</strong> Ksh. <%= salaryComponents.baseSalary.toFixed(2) %></p>
-                        <p><strong>Allowances:</strong> Ksh. <%= salaryComponents.allowances.toFixed(2) %></p>
+                        <p><strong>Transport Allowance:</strong> Ksh. <%= salaryComponents.transportAllowance%></p>
+                        <p><strong>Medical Allowance:</strong> Ksh. <%= salaryComponents.medicalAllowance %></p>
+                        <p><strong>Meal Allowance:</strong> Ksh. <%= salaryComponents.mealAllowance%></p>
+                        <p><strong>Total allowances:</strong> Ksh. <%= salaryComponents.totalAllowances %></p>
+                        <p><strong>Bonus:</strong> Ksh. <%= salaryComponents.bonus %></p>
                         <p><strong>Overtime Hours:</strong> <%= salaryComponents.overtimeHours %> hours</p>
                         <p><strong>Overtime Pay:</strong> Ksh. <%= salaryComponents.overtimePay.toFixed(2) %></p>
-                                                <p><strong>Bonus:</strong> Ksh. <%= salaryComponents.bonus.toFixed(2) %></p>
                         <p><strong>Final Salary (Before Deductions):</strong> Ksh. <%= salaryComponents.finalSalaryBeforeDeductions.toFixed(2) %></p>
                         <p><strong>Tax Deduction:</strong> Ksh. <%= salaryComponents.taxAmount.toFixed(2) %></p>
                         <p><strong>Retirement Insurance Deduction:</strong> Ksh. <%= salaryComponents.retirementInsuranceAmount.toFixed(2) %></p>
@@ -53,6 +56,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Placeholder tabs for other months -->
             <div class="tab-pane fade" id="may" role="tabpanel" aria-labelledby="may-tab">
                 <p>Salary details for May will be displayed here.</p>
             </div>
@@ -76,6 +80,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Function to toggle collapse of card body
             $('.clickable').click(function() {
                 $(this).closest('.card').find('.card-body').collapse('toggle');
             });

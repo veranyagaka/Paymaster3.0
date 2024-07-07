@@ -8,8 +8,6 @@
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <%- include('admin-sidebar') %>
@@ -22,21 +20,54 @@
           <th>Employee ID</th>
           <th>Name</th>
           <th>Base Salary</th>
-          <th>Transport Insurance</th>
-          <th>Medical Insurance</th>
-          <th>Meal Insurance</th>
+          <th>Transport Allowance</th>
+          <th>Medical Allowance</th>
+          <th>Meal Allowance</th>
           <th>Retirement Insurance</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <!-- Employee data will be inserted here dynamically -->
+        <% for (const employee of employeeData) { %>
+          <tr>
+            <td><%= employee.employeeID %></td>
+            <td><%= employee.first_name %> <%= employee.last_name %></td>
+            <td><%= employee.baseSalary %></td>
+            <td><%= employee.transport_allowance %></td>
+            <td><%= employee.medical_allowance %></td>
+            <td><%= employee.meal_allowance %></td>
+            <td><%= employee.retirement_insurance %></td>
+            <td>
+              <button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#editModal" data-id="<%= employee.employeeID %>">Edit</button>
+            </td>
+          </tr>
+        <% } %>      
       </tbody>
     </table>
+    <!-- Pagination Controls -->
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <% if (currentPage > 1) { %>
+          <li class="page-item">
+            <a class="page-link" href="?page=<%= currentPage - 1 %>">Previous</a>
+          </li>
+        <% } %>
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+          </li>
+        <% } %>
+        <% if (currentPage < totalPages) { %>
+          <li class="page-item">
+            <a class="page-link" href="?page=<%= currentPage + 1 %>">Next</a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
   </div>
 
   <!-- Edit Modal -->
-  <div id="editModal" class="modal">
+  <div id="editModal" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -47,15 +78,15 @@
           <div class="modal-body">
             <input type="hidden" id="editEmployeeId" name="editEmployeeId">
             <div class="form-group">
-              <label for="editTransport">Transport Insurance:</label>
+              <label for="editTransport">Transport Allowance:</label>
               <input type="text" class="form-control" id="editTransport" name="editTransport">
             </div>
             <div class="form-group">
-              <label for="editMedical">Medical Insurance:</label>
+              <label for="editMedical">Medical Allowance:</label>
               <input type="text" class="form-control" id="editMedical" name="editMedical">
             </div>
             <div class="form-group">
-              <label for="editMeal">Meal Insurance:</label>
+              <label for="editMeal">Meal Allowance:</label>
               <input type="text" class="form-control" id="editMeal" name="editMeal">
             </div>
             <div class="form-group">
@@ -78,102 +109,101 @@
   <!-- Custom JavaScript -->
   <script>
     $(document).ready(function() {
-  // Function to fetch and display employee data
-  function fetchEmployees() {
-    $.ajax({
-      url: '/employees', // Replace with your API endpoint
-      method: 'GET',
-      success: function(data) {
-        displayEmployees(data);
-      },
-      error: function(err) {
-        console.error('Error fetching employees: ', err);
+      // Function to fetch and display employee data
+      function fetchEmployees() {
+        $.ajax({
+          url: '/employees', // Replace with your API endpoint
+          method: 'GET',
+          success: function(data) {
+            displayEmployees(data);
+          },
+          error: function(err) {
+            console.error('Error fetching employees: ', err);
+          }
+        });
       }
-    });
-  }
 
-  // Function to display employees in the table
-  function displayEmployees(employees) {
-    const tbody = $('#employee-table tbody');
-    tbody.empty();
+      // Function to display employees in the table
+      function displayEmployees(employees) {
+        const tbody = $('#employee-table tbody');
+        tbody.empty();
 
-    employees.forEach(function(employee) {
-      const row = `<tr>
-        <td>${employee.employee_id}</td>
-        <td>${employee.first_name} ${employee.last_name}</td>
-        <td>${employee.base_salary}</td>
-        <td>${employee.transport_insurance}</td>
-        <td>${employee.medical_insurance}</td>
-        <td>${employee.meal_insurance}</td>
-        <td>${employee.retirement_insurance}</td>
-        <td>
-          <button class="btn btn-primary edit-btn" data-id="${employee.employee_id}">Edit</button>
-        </td>
-      </tr>`;
-      tbody.append(row);
-    });
+        employees.forEach(function(employee) {
+          const row = `<tr>
+            <td>${employee.employeeID}</td>
+            <td>${employee.first_name} ${employee.last_name}</td>
+            <td>${employee.baseSalary}</td>
+            <td>${employee.transport_allowance}</td>
+            <td>${employee.medical_allowance}</td>
+            <td>${employee.meal_allowance}</td>
+            <td>${employee.retirement_insurance}</td>
+            <td>
+              <button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#editModal" data-id="${employee.employeeID}">Edit</button>
+            </td>
+          </tr>`;
+          tbody.append(row);
+        });
 
-    // Edit button click handler to open modal
-    $('.edit-btn').click(function() {
-      const employeeId = $(this).data('id');
-      openEditModal(employeeId);
-    });
-  }
-
-  // Function to open edit modal with employee data
-  function openEditModal(employeeId) {
-    $.ajax({
-      url: `/employees/${employeeId}`, // Replace with your API endpoint
-      method: 'GET',
-      success: function(employee) {
-        $('#editEmployeeId').val(employee.employee_id);
-        $('#editTransport').val(employee.transport_insurance);
-        $('#editMedical').val(employee.medical_insurance);
-        $('#editMeal').val(employee.meal_insurance);
-        $('#editRetirement').val(employee.retirement_insurance);
-        $('#editModal').modal('show'); // Show Bootstrap modal
-      },
-      error: function(err) {
-        console.error('Error fetching employee data: ', err);
+        // Edit button click handler to open modal
+        $('.edit-btn').click(function() {
+          const employeeId = $(this).data('id');
+          openEditModal(employeeId);
+        });
       }
-    });
-  }
 
-  // Submit edit form
-  $('#editForm').submit(function(event) {
-    event.preventDefault();
-    const employeeId = $('#editEmployeeId').val();
-    const transportInsurance = $('#editTransport').val();
-    const medicalInsurance = $('#editMedical').val();
-    const mealInsurance = $('#editMeal').val();
-    const retirementInsurance = $('#editRetirement').val();
-
-    $.ajax({
-      url: `/employees/${employeeId}`, // Replace with your API endpoint
-      method: 'PUT',
-      contentType: 'application/json',
-      data: JSON.stringify({ 
-        transport_insurance: transportInsurance,
-        medical_insurance: medicalInsurance,
-        meal_insurance: mealInsurance,
-        retirement_insurance: retirementInsurance
-      }),
-      success: function(response) {
-        console.log('Employee data updated successfully: ', response);
-        fetchEmployees(); // Refresh employee data after update
-        $('#editModal').modal('hide'); // Hide Bootstrap modal
-      },
-      error: function(err) {
-        console.error('Error updating employee data: ', err);
+      // Function to open edit modal with employee data
+      function openEditModal(employeeId) {
+        $.ajax({
+          url: `/employees/${employeeId}`, // Replace with your API endpoint
+          method: 'GET',
+          success: function(employee) {
+            $('#editEmployeeId').val(employee.employeeID);
+            $('#editTransport').val(employee.transport_allowance);
+            $('#editMedical').val(employee.medical_allowance);
+            $('#editMeal').val(employee.meal_allowance);
+            $('#editRetirement').val(employee.retirement_insurance);
+            $('#editModal').modal('show'); // Show Bootstrap modal
+          },
+          error: function(err) {
+            console.error('Error fetching employee data: ', err);
+          }
+        });
       }
+
+      // Submit edit form
+      $('#editForm').submit(function(event) {
+        event.preventDefault();
+        const employeeId = $('#editEmployeeId').val();
+        const transportAllowance = $('#editTransport').val();
+        const medicalAllowance = $('#editMedical').val();
+        const mealAllowance = $('#editMeal').val();
+        const retirementInsurance = $('#editRetirement').val();
+
+        $.ajax({
+          url: `/employees/${employeeId}`, // Replace with your API endpoint
+          method: 'PUT',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            transport_allowance: transportAllowance,
+            medical_allowance: medicalAllowance,
+            meal_allowance: mealAllowance,
+            retirement_insurance: retirementInsurance
+          }),
+          success: function(response) {
+            console.log('Employee data updated successfully: ', response);
+            fetchEmployees(); // Refresh employee data after update
+            $('#editModal').modal('hide'); // Hide Bootstrap modal
+          },
+          error: function(err) {
+            console.error('Error updating employee data: ', err);
+          }
+        });
+      });
+
+      // Fetch employees on page load
+      fetchEmployees();
     });
-  });
-
-  // Fetch employees on page load
-  fetchEmployees();
-});
-
   </script>
-              <%- include('footer') %>
+  <%- include('footer') %>
 </body>
 </html>

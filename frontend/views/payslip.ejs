@@ -63,7 +63,7 @@
                     <p><strong>Employee ID:</strong> <%= salaryComponents.employeeID %></p>
                     <p><strong>Department:</strong> <%= salaryComponents.department %></p>
                     <p><strong>Base Salary:</strong> Ksh. <%= salaryComponents.baseSalary.toFixed(2) %></p>
-                    <p><strong>Allowances:</strong> Ksh. <%= salaryComponents.allowances.toFixed(2) %></p>
+                    <p><strong>Allowances:</strong> Ksh. <%= salaryComponents.totalAllowances.toFixed(2) %></p>
                     <% if (salaryComponents.overtimeHours > 0) { %>
                         <p><strong>Overtime Hours:</strong> <%= salaryComponents.overtimeHours %> hours</p>
                         <p><strong>Overtime Pay:</strong> Ksh. <%= salaryComponents.overtimePay.toFixed(2) %></p>
@@ -72,8 +72,7 @@
                     <p><strong>Final Salary (Before Deductions):</strong> Ksh. <%= salaryComponents.finalSalaryBeforeDeductions.toFixed(2) %></p>
                     <p><strong>Tax Deduction:</strong> Ksh. <%= salaryComponents.taxAmount.toFixed(2) %></p>
                     <p><strong>Retirement Insurance Deduction:</strong> Ksh. <%= salaryComponents.retirementInsuranceAmount.toFixed(2) %></p>
-                    <p><strong>Net Salary:</strong> Ksh. <%= salaryComponents.netSalary.toFixed(2) %></p>
-                </div>
+                    <p><strong>Net Salary:</strong> Ksh. <%= salaryComponents.netSalary.toFixed(2) %></p> </div>
                 <div class="signature">
                   <div>
                       <p>Payment Date: <%= paymentDate %></p>
@@ -86,7 +85,6 @@
                       <p>Authorized Signature</p>
                   </div>
               </div>
-                <button class="btn btn-primary btn-print" onclick="window.print()">Print Payslip</button>
             </div>
         </div>
     </div>

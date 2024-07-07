@@ -502,11 +502,30 @@ router.get('/search', async (req, res) => {
   }
 });
 router.get('/deductions', async(req, res) => {
-  try {
-      // Retrieve employees from the database
-      const [deductions] = await database.query('SELECT * FROM employee_profile');
-      res.render('deductions', { deductions: deductions });
-  } catch (err) {
+  const limit = 5;
+  // Get the current page from the query parameters (default to 1 if not specified)
+  const page = parseInt(req.query.page) || 1;
+  // Calculate the offset
+  const offset = (page - 1) * limit;
+
+  // Fetch the total number of employee records
+  const [countResult] = await database.query('SELECT COUNT(*) as totalRecords FROM employee_profile');
+  
+  // Extract totalRecords value or default to 0 if no records found
+  const totalRecords = countResult.length > 0 ? countResult[0].totalRecords : 0;
+  
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(totalRecords / limit);
+
+  // Fetch the employee records for the current page
+  try{
+  const [employeeData] = await database.query('SELECT * FROM employee_profile LIMIT ? OFFSET ?', [limit, offset]);
+  res.render('deductions', { employeeData: employeeData,
+    currentPage: page, 
+    totalPages 
+   });
+  }
+  catch (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');
   }
@@ -515,18 +534,18 @@ router.get('/deductions', async(req, res) => {
 // Update employee allowances and deductions
 router.put('/deductions/:id', (req, res) => {
   const employeeId = req.params.id;
-  const { transport_insurance, medical_insurance, meal_insurance, retirement_insurance } = req.body;
+  const { transport_allowance, medical_allowance, meal_allowance, retirement_insurance } = req.body;
   const query = `
     UPDATE employees 
     SET 
-      transport_insurance = ?, 
-      medical_insurance = ?, 
-      meal_insurance = ?, 
-      retirement_insurance = ? 
+      transport_allowance = ?, 
+      medical_allowance = ?, 
+      meal_allowance = ?, 
+      retirement_allowance = ? 
     WHERE 
       employee_id = ?
   `;
-  database.query(query, [transport_insurance, medical_insurance, meal_insurance, retirement_insurance, employeeId], (err, results) => {
+  database.query(query, [transport_allowance, medical_allowance, meal_allowance, retirement_insurance, employeeId], (err, results) => {
     if (err) {
       console.error('Error updating employee: ', err);
       res.status(500).json({ error: 'Error updating allowances & deductions' });

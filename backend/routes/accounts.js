@@ -94,95 +94,80 @@ router.get('/payslip', async(req, res) => {
     console.error(err);
     res.status(500).send('Internal Server Error');
 }
-});
-function calculateNetPay({ firstName, lastName, email, employeeID, department, bio, baseSalary, allowances, bonus, overtimeHours, hourlyRate,bankName, bankAccountName,   bankAccountNumber }) {
-  // Assume tax rate and retirement insurance rate are constants for simplicity
-  const retirementInsuranceRate = 0.1; // 10% retirement insurance rate
-
-  // Calculate final salary before deductions
-  let finalSalaryBeforeDeductions = baseSalary + allowances;
-// Determine tax rate based on salary
-let taxRate;
-if (finalSalaryBeforeDeductions <= 24000.00) {
-  taxRate = 0.10;
-} else if (finalSalaryBeforeDeductions <= 32333.00) {
-  taxRate = 0.25;
-} else {
-  taxRate = 0.30;
-}
-  // Calculate overtime pay
-  if (overtimeHours && hourlyRate) {
-    const overtimePay = overtimeHours * hourlyRate;
-    finalSalaryBeforeDeductions += overtimePay;
-  }
-
-  // Calculate deductions
-  const taxAmount = finalSalaryBeforeDeductions * taxRate;
-  const retirementInsuranceAmount = finalSalaryBeforeDeductions * retirementInsuranceRate;
-
-  // Calculate net salary
-  const netSalary = finalSalaryBeforeDeductions - taxAmount - retirementInsuranceAmount;
-
+});function mapEmployeeData(employee, paymentdetails) {
   return {
-    firstName,
-    lastName,
-    email,
-    employeeID,
-    department,
-    bio,
-    baseSalary,
-    allowances,
-    bonus,
-    overtimeHours,
-    hourlyRate,
-    finalSalaryBeforeDeductions,
-    overtimePay: overtimeHours ? overtimeHours * hourlyRate : 0,
-    taxAmount,
-    retirementInsuranceAmount,
-    netSalary,
-    bankName,
-    bankAccountName,
-    bankAccountNumber
+    firstName: employee.first_name || '',
+    lastName: employee.last_name || '',
+    email: employee.email || '',
+    employeeID: employee.employeeID,
+    department: employee.department || '',
+    bio: employee.bio || '',
+    baseSalary: parseFloat(employee.baseSalary) || 0,
+    transportAllowance: parseFloat(employee.transport_allowance) || 0,
+    medicalAllowance: parseFloat(employee.medical_allowance) || 0,
+    mealAllowance: parseFloat(employee.meal_allowance) || 0,
+    totalAllowances: parseFloat(employee.total_allowances) || 0,
+    bonus: parseFloat(employee.bonus) || 0,
+    overtimeHours: parseFloat(employee.overtimeHours) || 0,
+    hourlyRate: parseFloat(employee.hourlyRate) || 0,
+    bankName: paymentdetails.bankName || '',
+    bankAccountName: paymentdetails.bankAccountName || '',
+    bankAccountNumber: paymentdetails.bankAccountNumber || ''
   };
 }
 
+// Calculate net pay function
+function calculateNetPay(employeeData) {
+  const retirementInsuranceRate = 0.1;
 
-router.get('/finance', async(req,res )=>{
+  let finalSalaryBeforeDeductions = employeeData.baseSalary + employeeData.totalAllowances;
+
+  let taxRate;
+  if (finalSalaryBeforeDeductions <= 24000.00) {
+    taxRate = 0.10;
+  } else if (finalSalaryBeforeDeductions <= 32333.00) {
+    taxRate = 0.25;
+  } else {
+    taxRate = 0.30;
+  }
+
+  const overtimePay = employeeData.overtimeHours * employeeData.hourlyRate;
+  finalSalaryBeforeDeductions += overtimePay;
+
+  const taxAmount = finalSalaryBeforeDeductions * taxRate;
+  const retirementInsuranceAmount = finalSalaryBeforeDeductions * retirementInsuranceRate;
+
+  const netSalary = finalSalaryBeforeDeductions - taxAmount - retirementInsuranceAmount;
+
+  return {
+    ...employeeData,
+    finalSalaryBeforeDeductions,
+    overtimePay,
+    taxAmount,
+    retirementInsuranceAmount,
+    netSalary
+  };
+}
+
+router.get('/finance', async (req, res) => {
   if (!req.session.EmployeeID) {
     return res.status(401).redirect('/login'); // Redirect to login if no session
   }
-  const employeeID = req.session.EmployeeID;
-  const [employee] = await database.query('SELECT * FROM employee_profile where employeeID =?',[employeeID])
-  console.log(employee);
-  const [paymentdetails] = await database.query('SELECT * FROM paymentdetails where employeeID =?',[employeeID])
 
-  if (!employee) {
-    // Employee not found with this ID
+  const employeeID = req.session.EmployeeID;
+  const [employee] = await database.query('SELECT * FROM employee_profile WHERE employeeID = ?', [employeeID]);
+  const [paymentdetails] = await database.query('SELECT * FROM paymentdetails WHERE employeeID = ?', [employeeID]);
+
+  if (!employee.length) {
     return res.status(404).render('error', { message: 'Employee not found!' });
   }
-    // Ensure proper mapping of employee data
-    const employeeData = {
-      firstName: employee[0].first_name || '',
-      lastName: employee[0].last_name || '',
-      email: employee[0].email || '',
-      employeeID: req.session.EmployeeID || 0,
-      department: employee[0].department || '',
-      bio: employee[0].bio || '',
-      baseSalary: parseFloat(employee[0].baseSalary) || 0,
-      allowances: parseFloat(employee[0].allowance) || 0,
-      bonus: parseFloat(employee[0].bonus) || 0,
-      overtimeHours: parseFloat(employee[0].overtimeHours) || 0,
-      hourlyRate: parseFloat(employee[0].hourlyRate) || 0,
-      bankName: paymentdetails[0].bankName || '',
-    bankAccountName: paymentdetails[0].bankAccountName || '',
-    bankAccountNumber: paymentdetails[0].bankName || ''
-    };
-    console.log(employeeData);
 
-    const salaryComponents = calculateNetPay(employeeData);
-    console.log(salaryComponents);
-  res.render('finance', {salaryComponents: salaryComponents});
+  const employeeData = mapEmployeeData(employee[0], paymentdetails[0]);
+  const salaryComponents = calculateNetPay(employeeData);
+
+  res.render('finance', { salaryComponents });
 });
+
 router.post('/employees/payment-details/', async (req, res) => {
   const employeeID = req.session.EmployeeID;
   const { setbankName, setbankAccountName, setbankAccountNumber } = req.body;
@@ -282,43 +267,6 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
       res.status(500).send('Internal Server Error');
     } 
   });
-const employees = [
-    {
-        id: 1,
-        first_name: 'John',
-        last_name: 'Doe',
-        email: 'john.doe@example.com',
-        employeeID: '1',
-        department: 'Engineering',
-        bio: 'Software Engineer with 5 years of experience.',
-        baseSalary: 60000,
-        bonusPercentage: 10,
-        socialSecurityDeduction: 3000,
-        healthcareDeduction: 2000,
-        taxPercentage: 20,
-        totalHoursWorked: 200,
-        housingAllowance: 5000,
-        transportAllowance: 2000
-    },
-    {
-        id: 2,
-        first_name: 'Jane',
-        last_name: 'Smith',
-        email: 'jane.smith@example.com',
-        employeeID: '2',
-        department: 'Marketing',
-        bio: 'Marketing Specialist with 3 years of experience.',
-        baseSalary: 55000,
-        bonusPercentage: 12,
-        socialSecurityDeduction: 2800,
-        healthcareDeduction: 1800,
-        totalHoursWorked: 180,
-        taxPercentage: 18,
-        housingAllowance: 4000,
-        transportAllowance: 1500
-    }
-    // Add more employees as needed
-];
 router.get('/employee/salary/:id', (req, res) => {
   const employeeId = parseInt(req.params.id, 10);
   console.log(employeeId);
@@ -333,100 +281,48 @@ router.get('/employee/salary/:id', (req, res) => {
   res.render('salary', { salaryComponents,employee });
 });
 // Route to generate PDF
-router.get('/employee/salary/:id/download', async(req, res) => {
+router.get('/employee/salary/:id/download', async (req, res) => {
   const employeeId = parseInt(req.params.id, 10);
   console.log(employeeId);
-  const [employee] = await database.query('SELECT * FROM employee_profile where employeeID =?',[employeeId])
-  const [paymentdetails] = await database.query('SELECT * FROM paymentdetails where employeeID =?',[employeeId])
+  const [employee] = await database.query('SELECT * FROM employee_profile WHERE employeeID = ?', [employeeId]);
+  const [paymentdetails] = await database.query('SELECT * FROM paymentdetails WHERE employeeID = ?', [employeeId]);
 
-  console.log('Employee: ,' ,employee)
-  if (!employee) {
-      return res.status(404).send('Employee not found');
+  console.log('Employee: ', employee);
+  if (!employee.length) {
+    return res.status(404).send('Employee not found');
   }
 
-  const employeeData = {
-    firstName: employee[0].first_name || '',
-    lastName: employee[0].last_name || '',
-    email: employee[0].email || '',
-    employeeID: req.session.EmployeeID || 0,
-    department: employee[0].department || '',
-    bio: employee[0].bio || '',
-    baseSalary: parseFloat(employee[0].baseSalary) || 0,
-    allowances: parseFloat(employee[0].allowance) || 0,
-    bonus: parseFloat(employee[0].bonus) || 0,
-    overtimeHours: parseFloat(employee[0].overtimeHours) || 0,
-    hourlyRate: parseFloat(employee[0].hourlyRate) || 0,
-    bankName: paymentdetails[0].bankName || '',
-    bankAccountName: paymentdetails[0].bankAccountName || '',
-    bankAccountNumber: paymentdetails[0].bankName || ''
-    
-  };
-  console.log(employeeData);
-
+  const employeeData = mapEmployeeData(employee[0], paymentdetails[0]);
   const salaryComponents = calculateNetPay(employeeData);
-  res.render('payslip', { salaryComponents, paymentDate: new Date().toLocaleDateString('en-US')  }, (err, html) => {
+
+  res.render('payslip', { salaryComponents, paymentDate: new Date().toLocaleDateString('en-US') }, (err, html) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send('Error generating PDF');
+    }
+
+    const options = { format: 'Letter' };
+
+    pdf.create(html, options).toFile('./employee-payslip.pdf', (err, result) => {
       if (err) {
-          console.log(err);
-          return res.status(500).send('Error generating PDF');
-          console.log(err);
+        return res.status(500).send('Error generating payslip');
       }
 
-      const options = { format: 'Letter' };
+      res.download(result.filename, 'employee-payslip.pdf', (err) => {
+        if (err) {
+          return res.status(500).send('Error downloading payslip');
+        }
 
-      pdf.create(html, options).toFile('./employee-report.pdf', (err, result) => {
+        // Delete the file after download
+        fs.unlink(result.filename, (err) => {
           if (err) {
-              return res.status(500).send('Error generating PDF');
+            console.error('Error deleting payslip:', err);
           }
-
-          res.download(result.filename, 'employee-report.pdf', (err) => {
-              if (err) {
-                  return res.status(500).send('Error downloading PDF');
-              }
-
-              // Delete the file after download
-              fs.unlink(result.filename, (err) => {
-                  if (err) {
-                      console.error('Error deleting PDF file:', err);
-                  }
-              });
-          });
+        });
       });
+    });
   });
 });
-function calculateFinalSalary(employee, month) {
-    const baseSalary = employee.baseSalary;
-    const bonus = (baseSalary * employee.bonusPercentage) / 100;
-    const grossIncome = baseSalary + bonus;
-    const totalDeductions = employee.socialSecurityDeduction + employee.healthcareDeduction;
-    const taxableIncome = grossIncome - totalDeductions;
-    const tax = (taxableIncome * employee.taxPercentage) / 100;
-    const allowances = employee.housingAllowance + employee.transportAllowance;
-    const regularHours = 160; // 40 hours * 4 weeks
-    const overtimeHours = employee.totalHoursWorked > regularHours ? employee.totalHoursWorked - regularHours : 0;
-    const overtimePay = overtimeHours * (employee.baseSalary / regularHours * 1.5);
-    const finalSalary = grossIncome + allowances - totalDeductions - tax + overtimePay;
-
-
-    return {
-        firstName: employee.first_name,
-        lastName: employee.last_name,
-        email: employee.email,
-        employeeID: employee.employeeID,
-        department: employee.department,
-        bio: employee.bio,
-        baseSalary,
-        bonus,
-        grossIncome,
-        allowances,
-        overtimeHours,
-        overtimePay,
-        totalDeductions,
-        taxableIncome,
-        tax,
-        finalSalary,
-        month
-    };
-}
 router.get('/reset_password', (req, res) => {
     const token = req.query.token;
     if (verifyResetToken(token)) {
