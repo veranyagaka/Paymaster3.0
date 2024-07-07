@@ -159,6 +159,107 @@ router.post('/importAttendance', upload.single('attendanceFile'), async (req, re
       fs.unlinkSync(filePath);
   }
 });
+const Directory = path.join(__dirname,'../', 'uploads', 'payroll');
+console.log(Directory);
+// Multer setup
+const storages = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, Directory);
+  },
+  filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+const uploads = multer({ storages: storages });
+
+// Route to handle file upload and import payroll history data
+router.post('/importPayrollHistory', uploads.single('payrollFile'), async (req, res) => {
+
+  console.log('Importing Payroll History');
+  
+  if (!req.file) {
+    console.error('File not provided');
+    return res.status(400).send('File not provided');
+  }
+
+  const filePath = req.file.path;
+  const fileExtension = path.extname(req.file.originalname).toLowerCase();
+  console.log('File extension:', fileExtension);
+
+  try {
+    if (fileExtension === '.csv') {
+      // Parse CSV file
+      const payrollRecords = [];
+      fs.createReadStream(filePath)
+        .pipe(csv())
+        .on('data', (row) => {
+          // Trim spaces and check if essential fields are not null
+          const record = {
+            employeeID: row.employeeID?.trim(),
+            pay_period_start: row.pay_period_start?.trim(),
+            pay_period_end: row.pay_period_end?.trim(),
+            baseSalary: row.baseSalary?.trim(),
+            allowances: row.allowances?.trim(),
+            finalSalary: row.finalSalary?.trim(),
+            deductions: row.deductions?.trim()
+          };
+
+          if (record.employeeID && record.pay_period_start && record.pay_period_end) {
+            console.log('Parsed record:', record);
+            payrollRecords.push(record);
+          } else {
+            console.warn('Skipping invalid record:', row);
+          }
+        })
+        .on('end', async () => {
+          try {
+            // Insert data into the payroll_history table
+            for (const record of payrollRecords) {
+              const { employeeID, pay_period_start, pay_period_end, baseSalary, allowances, finalSalary, deductions } = record;
+              const [result, fields] = await database.query(
+                'INSERT INTO payroll_history (employeeID, pay_period_start, pay_period_end, baseSalary, allowances, finalSalary, deductions) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                [employeeID, pay_period_start, pay_period_end, baseSalary, allowances, finalSalary, deductions]
+              );
+              console.log('Inserted row:', result);
+            }
+            res.status(200).send('Payroll history imported successfully');
+          } catch (err) {
+            console.error('Error inserting data into database:', err);
+            res.status(500).send('Error importing payroll history records');
+          }
+        });
+    } else if (fileExtension === '.xlsx') {
+      // Parse Excel file
+      const workbook = xlsx.readFile(filePath);
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const payrollRecords = xlsx.utils.sheet_to_json(sheet);
+
+      try {
+        // Insert data into the payroll_history table
+        for (const record of payrollRecords) {
+          const { employeeID, pay_period_start, pay_period_end, baseSalary, allowances, finalSalary, deductions } = record;
+          await database.query(
+            'INSERT INTO payroll_history (employeeID, pay_period_start, pay_period_end, baseSalary, allowances, finalSalary, deductions) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [employeeID, pay_period_start, pay_period_end, baseSalary, allowances, finalSalary, deductions]
+          );
+        }
+        res.status(200).send('Payroll history imported successfully');
+      } catch (err) {
+        console.error('Error inserting data into database:', err);
+        res.status(500).send('Error importing payroll history records');
+      }
+    } else {
+      res.status(400).send('Unsupported file format');
+    }
+  } catch (err) {
+    console.error('Error processing file:', err);
+    res.status(500).send('Internal Server Error');
+  } finally {
+    // Remove the uploaded file after processing
+    fs.unlinkSync(filePath);
+  }
+});
 router.get('/', (req, res) => {
     res.render('admin-dashboard'); 
 });

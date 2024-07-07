@@ -38,6 +38,7 @@
     <div class="mb-4">
         <label for="sortOptions" class="form-label">Sort by:</label>
         <select id="sortOptions" class="form-control">
+            <option value="---">---</option>
             <option value="department">Department</option>
             <option value="availability">Availability</option>
             <option value="gender">Gender</option>
@@ -45,7 +46,7 @@
     </div>
             <!-- Table to display all employees -->
             <h2 class="text-center">All Employees</h2>
-            <table class="table table-bordered">
+            <table class="table table-bordered" id="employeeTable">
                 <thead>
                     <tr>
                         <th>EmployeeID</th>
@@ -158,35 +159,74 @@
 
     // Sorting function
     document.getElementById('sortOptions').addEventListener('change', function() {
-        const table = document.getElementById('employeeTable');
-        const rows = Array.from(table.rows);
+        const tableBody = document.getElementById('employeeTable').querySelector('tbody');
+                if (!tableBody) {
+                    console.error('Table body not found');
+                    return;
+                }        
+        const rows = Array.from(tableBody.rows);
         const option = this.value;
 
         rows.sort((a, b) => {
-            const aText = a.querySelector(`td:nth-child(${getSortIndex(option)})`).textContent.trim();
-            const bText = b.querySelector(`td:nth-child(${getSortIndex(option)})`).textContent.trim();
-            return aText.localeCompare(bText);
-        });
+                    const aCell = a.querySelector(`td:nth-child(${getSortIndex(option)})`);
+                    const bCell = b.querySelector(`td:nth-child(${getSortIndex(option)})`);
+                    
+                    if (!aCell || !bCell) {
+                        console.error('Cell not found:', aCell, bCell);
+                        return 0;
+                    }
 
-        while (table.firstChild) {
-            table.removeChild(table.firstChild);
-        }
-        
-        rows.forEach(row => table.appendChild(row));
-    });
+                    const aText = aCell.textContent.trim();
+                    const bText = bCell.textContent.trim();
+                    
+                    console.log(`Comparing: ${aText} with ${bText}`);  // Debugging information
+
+                    return aText.localeCompare(bText);
+                });
+
+                while (tableBody.firstChild) {
+                    tableBody.removeChild(tableBody.firstChild);
+                }
+
+                rows.forEach(row => tableBody.appendChild(row));
+            });
 
     function getSortIndex(option) {
         switch (option) {
             case 'department':
                 return 5; // Department column index
             case 'availability':
-                return 8; // Availability column index
+                return 7; // Availability column index
             case 'gender':
                 return 9; // Gender column index
             default:
                 return 0;
         }
     }
+    // Search function
+    document.getElementById('search-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const query = document.getElementById('search-query').value.toLowerCase();
+                const tableBody = document.getElementById('employeeTable').querySelector('tbody');
+                if (!tableBody) {
+                    console.error('Table body not found');
+                    return;
+                }
+
+                const rows = Array.from(tableBody.rows);
+
+                rows.forEach(row => {
+                    const employeeID = row.cells[0].textContent.toLowerCase();
+                    const firstName = row.cells[1].textContent.toLowerCase();
+                    const lastName = row.cells[2].textContent.toLowerCase();
+
+                    if (employeeID.includes(query) || firstName.includes(query) || lastName.includes(query)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
 </script>
 </body>
 </html>
