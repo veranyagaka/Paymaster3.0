@@ -63,11 +63,12 @@ router.get('/data', async (req, res) => {
   }
 });
 
-
+const uploadDirectory = path.join(__dirname,'../', 'uploads', 'attendance');
+console.log(uploadDirectory);
 // Multer setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, 'uploads/attendance');
+      cb(null, uploadDirectory);
   },
   filename: (req, file, cb) => {
       cb(null, `${Date.now()}-${file.originalname}`);
@@ -77,9 +78,14 @@ const upload = multer({ storage: storage });
 
 // Route to handle file upload and import attendance data
 router.post('/importAttendance', upload.single('attendanceFile'), async (req, res) => {
+  console.log('Importing Attendance ')
+  if (!req.file) {
+    console.error('File not provided');
+    return res.status(400).send('File not provided');
+}
   const filePath = req.file.path;
   const fileExtension = path.extname(req.file.originalname).toLowerCase();
-
+  console.log(fileExtension);
   try {
       if (fileExtension === '.csv') {
           // Parse CSV file
@@ -87,17 +93,33 @@ router.post('/importAttendance', upload.single('attendanceFile'), async (req, re
           fs.createReadStream(filePath)
               .pipe(csv())
               .on('data', (row) => {
-                  attendanceRecords.push(row);
-              })
+                // Trim spaces and check if essential fields are not null
+                const record = {
+                    employeeID: row.employeeID?.trim(),
+                    month: row.month?.trim(),
+                    daysPresent: row.daysPresent?.trim(),
+                    daysAbsent: row.daysAbsent?.trim(),
+                    overtimeHours: row.overtimeHours?.trim()
+                };
+
+                if (record.employeeID && record.month) {
+                  console.log('Parsed record:', record);
+                  attendanceRecords.push(record);
+              } else {
+                  console.warn('Skipping invalid record:', row);
+              }
+          })
               .on('end', async () => {
                   try {
+
                       // Insert data into the attendance_records table
                       for (const record of attendanceRecords) {
                           const { employeeID, month, daysPresent, daysAbsent, overtimeHours } = record;
-                          await database.query(
-                              'INSERT INTO attendance_records (employeeID, month, daysPresent, daysAbsent, overtimeHours) VALUES (?, ?, ?, ?, ?)',
-                              [employeeID, month, daysPresent, daysAbsent, overtimeHours]
-                          );
+                          const [result, fields] = await database.query(
+                            'INSERT INTO attendance_records (employee_id, month, daysPresent, daysAbsent, overtime_hours) VALUES (?, ?, ?, ?, ?)',
+                            [employeeID, month, daysPresent, daysAbsent, overtimeHours]
+                        );
+                        console.log('Inserted row:', result);
                       }
                       res.status(200).send('Attendance records imported successfully');
                   } catch (err) {
@@ -349,9 +371,6 @@ router.get('/employee-attendance', async (req, res) => {
     // Fetch the attendance records for the current page
     const [attendanceRecords] = await database.query('SELECT * FROM attendance_records LIMIT ? OFFSET ?', [limit, offset]);
     const [leaveRequests] = await database.query('SELECT * FROM leave_requests');
-
-    console.log(attendanceRecords);
-
     res.render('admin-attendance', { 
       attendanceRecords, 
       leaveRequests, 
