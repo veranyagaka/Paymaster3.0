@@ -20,7 +20,7 @@
             <div class="alert alert-info"><%= message %></div>
         <% } %>
         <% if (payrolls.length > 0) { %>
-            <table class="table table-bordered">
+            <table class="table table-bordered" id="payrollTable">
                 <thead>
                     <tr>
                         <th>Record ID</th>
@@ -98,6 +98,31 @@ $(document).ready(function() {
                 $('#importPayrollModal').modal('show');
             });
         });
+    
+     // Search function
+     document.getElementById('search-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const query = document.getElementById('search-query').value.toLowerCase();
+                const tableBody = document.getElementById('payrollTable').querySelector('tbody');
+                if (!tableBody) {
+                    console.error('Table body not found');
+                    return;
+                }
+
+                const rows = Array.from(tableBody.rows);
+
+                rows.forEach(row => {
+                    const employeeID = row.cells[0].textContent.toLowerCase();
+                    const firstName = row.cells[1].textContent.toLowerCase();
+                    const lastName = row.cells[2].textContent.toLowerCase();
+
+                    if (employeeID.includes(query) || firstName.includes(query) || lastName.includes(query)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
     </script>
     <%- include('footer') %>
 

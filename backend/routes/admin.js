@@ -614,7 +614,7 @@ router.get('/deductions', async(req, res) => {
 
 });
 // Update employee allowances and deductions
-router.post('/deductions/edit/:id', (req, res) => {
+router.post('/deductions/edit/:id', async (req, res) => {
   const employeeId = req.params.id;
   const { transport_allowance, medical_allowance, meal_allowance, retirement_insurance } = req.body;
   console.log(retirement_insurance);
@@ -628,13 +628,15 @@ router.post('/deductions/edit/:id', (req, res) => {
     WHERE 
       employeeID = ?
   `;
-  database.query(query, [transport_allowance, medical_allowance, meal_allowance, retirement_insurance, employeeId], (err, results) => {
-    if (err) {
-      console.error('Error updating employee: ', err);
-      res.status(500).json({ error: 'Error updating allowances & deductions' });
-      return;
-    }
-    res.redirect('/admin/deductions'); 
-  });
+
+  try {
+    const [results] = await database.query(query, [transport_allowance, medical_allowance, meal_allowance, retirement_insurance, employeeId]);
+    console.log('Successful thingi' , results);
+    res.redirect('/admin/deductions');
+  } catch (err) {
+    console.error('Error updating employee: ', err);
+    res.status(500).json({ error: 'Error updating allowances & deductions' });
+  }
 });
+
 module.exports= router

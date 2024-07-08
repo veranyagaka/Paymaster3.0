@@ -14,7 +14,7 @@
 
   <div class="container mt-5">
     <h1 class="mb-4">Employee Allowances and Deductions</h1>
-    <table id="employee-table" class="table table-bordered">
+    <table id="deductionTable" class="table table-bordered">
       <thead class="thead-dark">
         <tr>
           <th>Employee ID</th>
@@ -38,10 +38,9 @@
             <td><%= employee.meal_allowance %></td>
             <td><%= employee.retirement_insurance %></td>
             <td>
-              <button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#editModal" data-id="<%= employee.employeeID %>">Edit</button>
+              <button class="btn btn-primary edit-btn-sm" data-toggle="modal" data-target="#editModal<%= employee.employeeID %>">Edit</button>
             </td>
           </tr>
-          
         <% } %>      
       </tbody>
     </table>
@@ -66,50 +65,75 @@
       </ul>
     </nav>
   </div>
-  <% employeeData.forEach(employee => { %>
-<!-- Edit Modal -->
- <div class="modal fade" id="editModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Edit Allowances & Deductions</h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <form id="editForm<%= employee.employeeID %>" action="/admin/deductions/edit/<%= employee.employeeID %>"" method="POST">
-        <div class="modal-body">
-          <input type="hidden" id="editEmployeeId" name="editEmployeeId">
-          <div class="form-group">
-            <label for="editTransport">Transport Allowance:</label>
-            <input type="text" class="form-control" id="editTransport" name="transport_allowance" value="<%= employee.transport_allowance %>">
-          </div>
-          <div class="form-group">
-            <label for="editMedical">Medical Allowance:</label>
-            <input type="text" class="form-control" id="editMedical" name="medical_allowance" value="<%= employee.medical_allowance %>">
-          </div>
-          <div class="form-group">
-            <label for="editMeal">Meal Allowance:</label>
-            <input type="text" class="form-control" id="editMeal" name="meal_allowance" value="<%= employee.meal_allowance %>">
-          </div>
-          <div class="form-group">
-            <label for="editRetirement">Retirement Insurance:</label>
-            <input type="text" class="form-control" id="editRetirement" name="retirement_insurance" value="<%= employee.retirement_insurance %>">
-          </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
-        </div>
-      </form>
-    </div>
-    <% }) %>      
 
+  <% employeeData.forEach(employee => { %>
+  <!-- Edit Modal -->
+  <div class="modal fade" id="editModal<%= employee.employeeID %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Allowances & Deductions</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form id="editForm<%= employee.employeeID %>" action="/admin/deductions/edit/<%= employee.employeeID %>" method="POST">
+          <div class="modal-body">
+            <input type="hidden" id="editEmployeeId<%= employee.employeeID %>" name="editEmployeeId" value="<%= employee.employeeID %>">
+            <div class="form-group">
+              <label for="editTransport<%= employee.employeeID %>">Transport Allowance:</label>
+              <input type="text" class="form-control" id="editTransport<%= employee.employeeID %>" name="transport_allowance" value="<%= employee.transport_allowance %>">
+            </div>
+            <div class="form-group">
+              <label for="editMedical<%= employee.employeeID %>">Medical Allowance:</label>
+              <input type="text" class="form-control" id="editMedical<%= employee.employeeID %>" name="medical_allowance" value="<%= employee.medical_allowance %>">
+            </div>
+            <div class="form-group">
+              <label for="editMeal<%= employee.employeeID %>">Meal Allowance:</label>
+              <input type="text" class="form-control" id="editMeal<%= employee.employeeID %>" name="meal_allowance" value="<%= employee.meal_allowance %>">
+            </div>
+            <div class="form-group">
+              <label for="editRetirement<%= employee.employeeID %>">Retirement Insurance:</label>
+              <input type="text" class="form-control" id="editRetirement<%= employee.employeeID %>" name="retirement_insurance" value="<%= employee.retirement_insurance %>">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-</div>
+  <% }) %>      
+
   <!-- Bootstrap JS and jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script>
+    // Search function
+    document.getElementById('search-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const query = document.getElementById('search-query').value.toLowerCase();
+                const tableBody = document.getElementById('deductionTable').querySelector('tbody');
+                if (!tableBody) {
+                    console.error('Table body not found');
+                    return;
+                }
 
-  </script>
+                const rows = Array.from(tableBody.rows);
+
+                rows.forEach(row => {
+                    const employeeID = row.cells[0].textContent.toLowerCase();
+                    const firstName = row.cells[1].textContent.toLowerCase();
+                    const lastName = row.cells[2].textContent.toLowerCase();
+
+                    if (employeeID.includes(query) || firstName.includes(query) || lastName.includes(query)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+</script>
   <%- include('footer') %>
 </body>
 </html>

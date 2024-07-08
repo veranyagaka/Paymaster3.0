@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="leaveTable">
     <h1 class="my-4 text-center">Leave Requests</h1>
 
     <% if (leave_requests.length > 0) { %>
@@ -127,6 +127,32 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Search function
+    document.getElementById('search-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const query = document.getElementById('search-query').value.toLowerCase();
+                const tableBody = document.getElementById('leaveTable').querySelectorAll('tbody');
+                if (!tableBody) {
+                    console.error('Table body not found');
+                    return;
+                }
+
+                const rows = Array.from(tableBody.rows);
+
+                rows.forEach(row => {
+                    const employeeID = row.cells[0].textContent.toLowerCase();
+                    const firstName = row.cells[1].textContent.toLowerCase();
+                    const lastName = row.cells[2].textContent.toLowerCase();
+
+                    if (employeeID.includes(query) || firstName.includes(query) || lastName.includes(query)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+</script>
 <%- include('footer') %>
 
 </body>
