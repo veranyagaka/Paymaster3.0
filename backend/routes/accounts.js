@@ -94,7 +94,8 @@ router.get('/payslip', async(req, res) => {
     console.error(err);
     res.status(500).send('Internal Server Error');
 }
-});function mapEmployeeData(employee, paymentdetails, overtimeHours) {
+});
+function mapEmployeeData(employee, paymentdetails, overtimeHours) {
   return {
     firstName: employee.first_name || '',
     lastName: employee.last_name || '',
@@ -153,13 +154,22 @@ router.get('/finance', async (req, res) => {
   if (!req.session.EmployeeID) {
     return res.status(401).redirect('/login'); // Redirect to login if no session
   }
+  const employeeID = req.session.EmployeeID;
+  async function getPaymentDetailsByEmployeeId(employeeID) {
+    const query = 'SELECT * FROM paymentdetails WHERE employeeID = ?';
+    const [rows] = await database.query(query, [employeeID]);
+    return rows;
+  }
+  const paymentDetails = await getPaymentDetailsByEmployeeId(req.session.EmployeeID);
+    if (paymentDetails.length === 0) {
+      return res.redirect('/employee-profile'); // Redirect to payment details entry page
+    }
   const currentDate = new Date();
   const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based in JavaScript
   const currentYear = currentDate.getFullYear();
   const currentYearMonth = `${currentYear}-${currentMonth}`;
 
  console.log('date',currentYearMonth)
-  const employeeID = req.session.EmployeeID;
   const [employee] = await database.query('SELECT * FROM employee_profile WHERE employeeID = ?', [employeeID]);
   const [paymentdetails] = await database.query('SELECT * FROM paymentdetails WHERE employeeID = ?', [employeeID]);
   const [attendanceRecords] = await database.query(

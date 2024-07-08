@@ -268,7 +268,14 @@ app.get('/employee-profile', async (req, res) => {
       if (!employee) {
         return res.status(404).send('Employee profile not found');
       }
-      const showPaymentButton = false;
+      async function getPaymentDetailsByEmployeeId(employeeID) {
+        const query = 'SELECT * FROM paymentdetails WHERE employeeID = ?';
+        const [rows] = await database.query(query, [employeeID]);
+        return rows;
+      }
+      const paymentDetails = await getPaymentDetailsByEmployeeId(req.session.EmployeeID);
+      const showPaymentButton = paymentDetails.length == 0;
+      console.log(showPaymentButton);
       res.render('employee-profile', { employee: employee, showPaymentButton: showPaymentButton });
   } catch (err) {
       console.error(err);
