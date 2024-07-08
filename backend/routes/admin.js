@@ -7,7 +7,6 @@ const database = require('../db.js');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const csv = require('csv-parser'); // For CSV files
-const xlsx = require('xlsx'); // For Excel files
 const multer = require('multer');
 // Route for payroll history with pagination
 
@@ -128,26 +127,7 @@ router.post('/importAttendance', upload.single('attendanceFile'), async (req, re
                   }
               });
       } else if (fileExtension === '.xlsx') {
-          // Parse Excel file
-          const workbook = xlsx.readFile(filePath);
-          const sheetName = workbook.SheetNames[0];
-          const sheet = workbook.Sheets[sheetName];
-          const attendanceRecords = xlsx.utils.sheet_to_json(sheet);
-
-          try {
-              // Insert data into the attendance_records table
-              for (const record of attendanceRecords) {
-                  const { employeeID, month, daysPresent, daysAbsent, overtimeHours } = record;
-                  await database.query(
-                      'INSERT INTO attendance_records (employeeID, month, daysPresent, daysAbsent, overtimeHours) VALUES (?, ?, ?, ?, ?)',
-                      [employeeID, month, daysPresent, daysAbsent, overtimeHours]
-                  );
-              }
-              res.status(200).send('Attendance records imported successfully');
-          } catch (err) {
-              console.error('Error inserting data into database:', err);
-              res.status(500).send('Error importing attendance records');
-          }
+          //smth
       } else {
           res.status(400).send('Unsupported file format');
       }
@@ -229,26 +209,7 @@ router.post('/importPayrollHistory', uploads.single('payrollFile'), async (req, 
           }
         });
     } else if (fileExtension === '.xlsx') {
-      // Parse Excel file
-      const workbook = xlsx.readFile(filePath);
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const payrollRecords = xlsx.utils.sheet_to_json(sheet);
-
-      try {
-        // Insert data into the payroll_history table
-        for (const record of payrollRecords) {
-          const { employeeID, pay_period_start, pay_period_end, baseSalary, allowances, finalSalary, deductions } = record;
-          await database.query(
-            'INSERT INTO payroll_history (employeeID, pay_period_start, pay_period_end, baseSalary, allowances, finalSalary, deductions) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [employeeID, pay_period_start, pay_period_end, baseSalary, allowances, finalSalary, deductions]
-          );
-        }
-        res.status(200).send('Payroll history imported successfully');
-      } catch (err) {
-        console.error('Error inserting data into database:', err);
-        res.status(500).send('Error importing payroll history records');
-      }
+      //smth
     } else {
       res.status(400).send('Unsupported file format');
     }

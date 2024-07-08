@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "connect-flash": "^0.1.1",
+    "connect-redis": "^7.1.1",
     "cors": "^2.8.5",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",
@@ -37,6 +38,6 @@
     "mysql2": "^3.10.1",
     "pdfkit": "^0.15.0",
     "pdfmake": "^0.2.10",
-    "xlsx": "^0.18.5"
+    "redis": "^4.6.15"
   }
 }

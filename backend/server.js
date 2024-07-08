@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 2000;
-//const config = require('/config');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2');
@@ -14,10 +13,6 @@ const sendEmail = require('./routes/sendEmail');
 const {sendEmail2} = require('./routes/sendEmail'); 
 const {sendEmail3} = require('./routes/sendEmail'); 
 const database = require('./db.js');
-//const database = connectToDatabase;
-
-// Local MySQL connection
-//const database = require('./database.js')
 
 const corsOptions = {
   origin: ['https://your-frontend-app.com', 'http://localhost:2000'],
@@ -58,12 +53,39 @@ app.use(express.static('frontend', {
       }
   }
 }));
+const redis = require('redis');
+const RedisStore = require("connect-redis").default;
+const redisClient = redis.createClient({
+    host: process.env.REDIS_HOST || 'localhost',
+    port: process.env.REDIS_PORT || 6379,
+    url: process.env.REDIS_URL || 'redis://localhost:6379',
+});
+redisClient.connect()
+  .then(() => console.log('Redis client connected'))
+  .catch(console.error);
+let redisStore = new RedisStore({
+    client: redisClient,
+});
 app.use(session({
-  secret: 'your_secret_key_here',
+  store: redisStore,
+  secret: process.env.SESSION_SECRET || 'your_secret_key_here',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: { secure: false, maxAge: 1000 * 60 * 60 } // Expires in 1 hour
 }));
+// Example route to test session
+app.get('/redis', (req, res) => {
+  if (req.session.views) {
+    req.session.views++;
+    res.setHeader('Content-Type', 'text/html');
+    res.write('<p>Views: ' + req.session.views + '</p>');
+    res.write('<p>Expires in: ' + (req.session.cookie.maxAge / 1000) + 's</p>');
+    res.end();
+  } else {
+    req.session.views = 1;
+    res.end('Welcome to the session demo. Refresh!');
+  }
+});
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(bodyParser.json());
 

@@ -66,16 +66,16 @@
       </ul>
     </nav>
   </div>
-  
- <!-- Edit Modal -->
- <div id="editModal" class="modal fade">
+  <% employeeData.forEach(employee => { %>
+<!-- Edit Modal -->
+ <div class="modal fade" id="editModal">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Edit Allowances & Deductions for <%= employee.employeeID %></h5>
+        <h5 class="modal-title">Edit Allowances & Deductions</h5>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-      <form id="editForm" action="/admin/deductions/edit/<%= employee.employeeID %>" method="POST">
+      <form id="editForm<%= employee.employeeID %>" action="/admin/deductions/edit/<%= employee.employeeID %>"" method="POST">
         <div class="modal-body">
           <input type="hidden" id="editEmployeeId" name="editEmployeeId">
           <div class="form-group">
@@ -100,6 +100,7 @@
         </div>
       </form>
     </div>
+    <% }) %>      
 
   </div>
 </div>
