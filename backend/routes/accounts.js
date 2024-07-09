@@ -255,6 +255,7 @@ router.get('/leave_application', async (req, res) => {
     try {
         // Retrieve employees from the database
         const [leaveRequests] = await database.query('SELECT * FROM leave_requests where employee_id=?', [employeeId]);
+        console.log(leaveRequests);
         res.render('leave_application', { leaveRequests: leaveRequests });
     } catch (err) {
         console.error(err);
@@ -275,8 +276,7 @@ router.post('/apply_leave', async (req, res) => {
             'INSERT INTO leave_requests (employee_id, leave_type, start_date, end_date) VALUES (?, ?, ?, ?)',
             [employeeId, leave_type, start_date, end_date]
         );        
-        res.json({ message: 'Leave application submitted successfully.' });
-        res.redirect('/accounts/leave_application')
+        return res.json({ message: 'Leave application submitted successfully.' });
     } catch (error) {
         console.error('Error submitting leave application:', error);
         res.status(500).send('Internal Server Error');

@@ -176,15 +176,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% leaveRequests.forEach(request => { %>
+                        <% if (leaveRequests && leaveRequests.length > 0) { %>
+                            <% leaveRequests.forEach(request => { %>
+                                <tr>
+                                    <td><%= request.request_id %></td>
+                                    <td><%= request.leave_type %></td>
+                                    <td><%= request.start_date %></td>
+                                    <td><%= request.end_date %></td>
+                                    <td><%= request.status %></td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
                             <tr>
-                                <td><%= request.request_id %></td>
-                                <td><%= request.leave_type %></td>
-                                <td><%= request.start_date %></td>
-                                <td><%= request.end_date %></td>
-                                <td><%= request.status %></td>
+                                <td colspan="5">No leave requests found.</td>
                             </tr>
-                        <% }); %>
+                        <% } %>
                     </tbody>
                 </table>
             </div>
@@ -212,7 +218,9 @@
                 success: function(response) {
                     $('#successMessage').show();
                     setTimeout(() => {
-                        $('#successMessage').fadeOut('slow');
+                        $('#successMessage').fadeOut('slow', function() {
+                            window.location.href = '/accounts/leave_application'; // Redirect after displaying the message
+                        });
                     }, 3000);
                 },
                 error: function(xhr, status, error) {
