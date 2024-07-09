@@ -10,12 +10,13 @@
             margin: 0;
             padding: 0;
             background-color: #fff;
+            font-size: 10px; /* Reduced font size */
         }
         .container {
             width: 100%;
             max-width: 800px;
             margin: auto;
-            padding: 20px;
+            padding: 10px; /* Reduced padding */
             border: 1px solid #000;
             box-sizing: border-box;
         }
@@ -23,14 +24,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 10px;
+            padding-bottom: 5px;
             border-bottom: 1px solid #000;
         }
         .header img {
-            height: 50px;
+            height: 40px; /* Reduced image size */
         }
         .header .title {
             text-align: center;
+            font-size: 12px; /* Reduced font size */
         }
         .header .confidential {
             text-align: right;
@@ -38,7 +40,7 @@
         .main-content {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 10px; /* Reduced margin */
         }
         .main-content div {
             width: 48%;
@@ -46,13 +48,13 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px; /* Reduced margin */
         }
         table, th, td {
             border: 1px solid #000;
         }
         th, td {
-            padding: 8px;
+            padding: 4px; /* Reduced padding */
             text-align: left;
         }
         thead {
@@ -60,14 +62,14 @@
             color: #fff;
         }
         .summary {
-            margin-top: 20px;
+            margin-top: 10px; /* Reduced margin */
         }
         .summary .netpay {
             text-align: right;
             background-color: #4CAF50;
             color: #fff;
-            padding: 10px;
-            font-size: 1.2em;
+            padding: 5px; /* Reduced padding */
+            font-size: 1em; /* Reduced font size */
         }
         .summary p {
             text-align: right;
@@ -76,7 +78,7 @@
         .signature {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 10px; /* Reduced margin */
         }
         .signature div {
             width: 48%;
@@ -91,8 +93,8 @@
         <div class="header">
             <img src="/favicon.ico" alt="Company Logo">
             <div class="title">
-                <h1>SALARY SLIP</h1>
-                <p>January 2018</p>
+                <h3>SALARY SLIP</h3>
+                <p> <%= currentYearMonth %></p>
             </div>
             <div class="confidential">
                 <p>CONFIDENTIAL</p>
@@ -100,13 +102,13 @@
         </div>
         <div class="main-content">
             <div>
-                <p><strong>Name:</strong> Wayne Doorprize</p>
-                <p><strong>Employee ID:</strong> -</p>
+                <p><strong>Name:</strong> <%= salaryComponents.firstName %> <%= salaryComponents.lastName %></p>
+                <p><strong>Employee ID:</strong> <%= salaryComponents.employeeID %> </p>
                 <p><strong>Title:</strong> Cleaning Service Staff</p>
             </div>
             <div>
                 <p><strong>Directorate:</strong> Operation</p>
-                <p><strong>Department:</strong> General Affairs</p>
+                <p><strong>Department:</strong> <%= salaryComponents.department %></p>
             </div>
         </div>
         <table>
@@ -120,52 +122,52 @@
             <tbody>
                 <tr>
                     <td>Basic Salary</td>
-                    <td>$2000.00</td>
+                    <td>Ksh. <%= salaryComponents.baseSalary.toFixed(2) %></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Meal Allowance</td>
-                    <td>$300.00</td>
+                    <td>Ksh. <%= salaryComponents.mealAllowance.toFixed(2) %></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Transportation Allowance</td>
-                    <td>$300.00</td>
+                    <td>Ksh. <%= salaryComponents.transportAllowance.toFixed(2) %></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Medical Allowance</td>
-                    <td>$300.00</td>
+                    <td>Ksh. <%= salaryComponents.medicalAllowance.toFixed(2) %></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Retirement Insurance</td>
                     <td></td>
-                    <td>$25.00</td>
+                    <td>Ksh. <%= salaryComponents.retirementInsuranceAmount.toFixed(2) %></td>
                 </tr>
                 <tr>
                     <td>Tax</td>
                     <td></td>
-                    <td>$25.00</td>
+                    <td>Ksh. <%= salaryComponents.taxAmount.toFixed(2) %></td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <th>Total</th>
-                    <th>$2900.00</th>
-                    <th>$50.00</th>
+                    <th>Ksh. <%= salaryComponents.finalSalaryBeforeDeductions.toFixed(2) %></th>
+                    <th>Ksh. <%= salaryComponents.totalDeductions.toFixed(2) %></th>
                 </tr>
             </tfoot>
         </table>
         <div class="summary">
-            <p><strong>NET PAY:</strong> $2850.00</p>
-            <p>Two Thousand Eight Hundred Fifty Dollars</p>
+            <p><strong>NET PAY:</strong> Ksh. <%= salaryComponents.netSalary.toFixed(2) %></p>
+            <p>Ksh. <%= salaryComponents.netSalaryInWords %></p>
             <div class="signature">
                 <div>
-                    <p>Payment Date: January 28, 2018</p>
-                    <p>Bank Name: Bank of America</p>
-                    <p>Bank Account Name: Wayne Doorprize</p>
-                    <p>Bank Account #: 1234567890</p>
+                    <p>Payment Date: <%= paymentDate %></p>
+                    <p>Bank Name:  <%= salaryComponents.bankName %></p>
+                    <p>Bank Account Name: <%= salaryComponents.bankAccountName %></p>
+                    <p>Bank Account #: <%= salaryComponents.bankAccountNumber %></p>
                 </div>
                 <div class="auth-sign">
                     <p>_______________________</p>

@@ -122,7 +122,6 @@ function calculateNetPay(employeeData) {
   const retirementInsuranceRate = 0.1;
 
   let finalSalaryBeforeDeductions = employeeData.baseSalary + employeeData.totalAllowances;
-
   let taxRate;
   if (finalSalaryBeforeDeductions <= 24000.00) {
     taxRate = 0.10;
@@ -137,16 +136,33 @@ function calculateNetPay(employeeData) {
 
   const taxAmount = finalSalaryBeforeDeductions * taxRate;
   const retirementInsuranceAmount = finalSalaryBeforeDeductions * retirementInsuranceRate;
+  const totalDeductions = retirementInsuranceAmount + taxAmount;
 
   const netSalary = finalSalaryBeforeDeductions - taxAmount - retirementInsuranceAmount;
+  const numberToWords = require('number-to-words');
+
+  let netSalaryInWords = numberToWords.toWords(netSalary);
+
+// Function to convert string to title case
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, (txt) => {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
+
+// Format the output in title case
+netSalaryInWords = toTitleCase(netSalaryInWords);
+console.log(`Net Salary in Words: ${netSalaryInWords}`);
 
   return {
     ...employeeData,
     finalSalaryBeforeDeductions,
     overtimePay,
     taxAmount,
+    totalDeductions,
     retirementInsuranceAmount,
-    netSalary
+    netSalary,
+    netSalaryInWords
   };
 }
 
@@ -238,8 +254,8 @@ router.get('/leave_application', async (req, res) => {
 
     try {
         // Retrieve employees from the database
-        const [leave_requests] = await database.query('SELECT * FROM leave_requests where employee_id=?', [employeeId]);
-        res.render('leave_application', { leaveRequests: leave_requests });
+        const [leaveRequests] = await database.query('SELECT * FROM leave_requests where employee_id=?', [employeeId]);
+        res.render('leave_application', { leaveRequests: leaveRequests });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -259,7 +275,8 @@ router.post('/apply_leave', async (req, res) => {
             'INSERT INTO leave_requests (employee_id, leave_type, start_date, end_date) VALUES (?, ?, ?, ?)',
             [employeeId, leave_type, start_date, end_date]
         );        
-        res.send('Leave application submitted successfully.');
+        res.json({ message: 'Leave application submitted successfully.' });
+        res.redirect('/accounts/leave_application')
     } catch (error) {
         console.error('Error submitting leave application:', error);
         res.status(500).send('Internal Server Error');
@@ -287,19 +304,6 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
       res.status(500).send('Internal Server Error');
     } 
   });
-router.get('/employee/salary/:id', (req, res) => {
-  const employeeId = parseInt(req.params.id, 10);
-  console.log(employeeId);
-
-  const employee = employees.find(emp => emp.id === employeeId);
-
-  if (!employee) {
-      return res.status(404).send('Employee not found');
-  }
-
-  const salaryComponents = calculateFinalSalary(employee, 'June');
-  res.render('salary', { salaryComponents,employee });
-});
 // Route to generate PDF
 router.get('/employee/salary/:id/download', async (req, res) => {
   const employeeId = parseInt(req.params.id, 10);
@@ -314,8 +318,18 @@ router.get('/employee/salary/:id/download', async (req, res) => {
 
   const employeeData = mapEmployeeData(employee[0], paymentdetails[0]);
   const salaryComponents = calculateNetPay(employeeData);
+  const currentDate = new Date();
+const monthNames = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+const currentMonth = monthNames[currentDate.getMonth()]; // Get the month name
+const currentYear = currentDate.getFullYear();
+const currentYearMonth = `${currentMonth} ${currentYear}`;
 
-  res.render('payslip', { salaryComponents, paymentDate: new Date().toLocaleDateString('en-US') }, (err, html) => {
+console.log(currentYearMonth); // Output: e.g., "July 2024"
+
+  res.render('payslip', { salaryComponents,currentYearMonth, paymentDate: new Date().toLocaleDateString('en-US') }, (err, html) => {
     if (err) {
       console.log(err);
       return res.status(500).send('Error generating PDF');

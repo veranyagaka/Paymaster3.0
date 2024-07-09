@@ -159,7 +159,6 @@
             </div>
         </form>
     </div>
-
         <!-- Leave Requests -->
         <div class="card mb-4">
             <div class="card-header">
@@ -177,7 +176,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Loop through leave requests -->
                         <% leaveRequests.forEach(request => { %>
                             <tr>
                                 <td><%= request.request_id %></td>
@@ -196,5 +194,33 @@
 </div>
 <%- include('footer') %>
 
+<script>
+    $(document).ready(function() {
+        $('#leaveForm').on('submit', function(e) {
+            e.preventDefault();
+            const formData = {
+                leave_type: $('#leave_type').val(),
+                start_date: $('#start_date').val(),
+                end_date: $('#end_date').val()
+            };
+
+            $.ajax({
+                url: '/apply_leave',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    $('#successMessage').show();
+                    setTimeout(() => {
+                        $('#successMessage').fadeOut('slow');
+                    }, 3000);
+                },
+                error: function(xhr, status, error) {
+                    alert('Error: ' + xhr.responseJSON.message);
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

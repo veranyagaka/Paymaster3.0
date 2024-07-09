@@ -3,88 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Payslip</title>
+    <title>Your Salary Payslip</title>
     <style>
         body {
-            font-size: 14px;
+            font-family: Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            font-size: 10px; /* Reduced font size */
         }
         .container {
+            width: 100%;
             max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            margin: auto;
+            padding: 10px; /* Reduced padding */
+            border: 1px solid #000;
+            box-sizing: border-box;
         }
-        .card {
-            margin-bottom: 20px;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #000;
         }
-        .card-header {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px;
-            border-radius: 5px 5px 0 0;
+        .header img {
+            height: 40px; /* Reduced image size */
         }
-        .card-body {
-            padding: 15px;
-        }
-        .payslip-title {
+        .header .title {
             text-align: center;
-            margin-bottom: 20px;
+            font-size: 12px; /* Reduced font size */
         }
-        .payslip-details {
-            margin-bottom: 10px;
+        .header .confidential {
+            text-align: right;
         }
-        .btn-print {
-            margin-top: 20px;
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px; /* Reduced margin */
         }
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            .payslip, .payslip * {
-                visibility: visible;
-            }
-            .payslip {
-                position: absolute;
-                left: 0;
-                top: 0;
-            }
+        .main-content div {
+            width: 48%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px; /* Reduced margin */
+        }
+        table, th, td {
+            border: 1px solid #000;
+        }
+        th, td {
+            padding: 4px; /* Reduced padding */
+            text-align: left;
+        }
+        thead {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        .summary {
+            margin-top: 10px; /* Reduced margin */
+        }
+        .summary .netpay {
+            text-align: right;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 5px; /* Reduced padding */
+            font-size: 1em; /* Reduced font size */
+        }
+        .summary p {
+            text-align: right;
+            margin: 0;
+        }
+        .signature {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px; /* Reduced margin */
+        }
+        .signature div {
+            width: 48%;
+        }
+        .signature .auth-sign {
+            text-align: right;
         }
     </style>
 </head>
 <body>
-    <div class="container payslip">
-        <div class="card">
-            <div class="card-header">
-                <h2 class="payslip-title">Employee Payslip</h2>
+    <div class="container">
+        <div class="header">
+            <img src="/favicon.ico" alt="Company Logo">
+            <div class="title">
+                <h3>SALARY SLIP</h3>
+                <p> <%= currentYearMonth %></p>
             </div>
-            <div class="card-body">
-                <div class="payslip-details">
-                    <p><strong>Name:</strong> <%= salaryComponents.firstName %> <%= salaryComponents.lastName %></p>
-                    <p><strong>Email:</strong> <%= salaryComponents.email %></p>
-                    <p><strong>Employee ID:</strong> <%= salaryComponents.employeeID %></p>
-                    <p><strong>Department:</strong> <%= salaryComponents.department %></p>
-                    <p><strong>Base Salary:</strong> Ksh. <%= salaryComponents.baseSalary.toFixed(2) %></p>
-                    <p><strong>Allowances:</strong> Ksh. <%= salaryComponents.totalAllowances.toFixed(2) %></p>
-                    <% if (salaryComponents.overtimeHours > 0) { %>
-                        <p><strong>Overtime Hours:</strong> <%= salaryComponents.overtimeHours %> hours</p>
-                        <p><strong>Overtime Pay:</strong> Ksh. <%= salaryComponents.overtimePay.toFixed(2) %></p>
-                    <% } %>
-                    <p><strong>Bonus:</strong> Ksh. <%= salaryComponents.bonus.toFixed(2) %></p>
-                    <p><strong>Final Salary (Before Deductions):</strong> Ksh. <%= salaryComponents.finalSalaryBeforeDeductions.toFixed(2) %></p>
-                    <p><strong>Tax Deduction:</strong> Ksh. <%= salaryComponents.taxAmount.toFixed(2) %></p>
-                    <p><strong>Retirement Insurance Deduction:</strong> Ksh. <%= salaryComponents.retirementInsuranceAmount.toFixed(2) %></p>
-                    <p><strong>Net Salary:</strong> Ksh. <%= salaryComponents.netSalary.toFixed(2) %></p> </div>
-                <div class="signature">
-                  <div>
-                      <p>Payment Date: <%= paymentDate %></p>
-                      <p>Bank Name: <%= salaryComponents.bankName %></p>
-                      <p>Bank Account Name: <%= salaryComponents.bankAccountName %></p>
-                      <p>Bank Account #: <%= salaryComponents.bankAccountNumber %></p>
-                  </div>
-                  <div>
-                      <p>_______________________</p>
-                      <p>Authorized Signature</p>
-                  </div>
-              </div>
+            <div class="confidential">
+                <p>CONFIDENTIAL</p>
+            </div>
+        </div>
+        <div class="main-content">
+            <div>
+                <p><strong>Name:</strong> <%= salaryComponents.firstName %> <%= salaryComponents.lastName %></p>
+                <p><strong>Employee ID:</strong> <%= salaryComponents.employeeID %> </p>
+                <p><strong>Title:</strong> Cleaning Service Staff</p>
+            </div>
+            <div>
+                <p><strong>Directorate:</strong> Operation</p>
+                <p><strong>Department:</strong> <%= salaryComponents.department %></p>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Earnings</th>
+                    <th>Deductions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Basic Salary</td>
+                    <td>Ksh. <%= salaryComponents.baseSalary.toFixed(2) %></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Meal Allowance</td>
+                    <td>Ksh. <%= salaryComponents.mealAllowance.toFixed(2) %></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Transportation Allowance</td>
+                    <td>Ksh. <%= salaryComponents.transportAllowance.toFixed(2) %></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Medical Allowance</td>
+                    <td>Ksh. <%= salaryComponents.medicalAllowance.toFixed(2) %></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Retirement Insurance</td>
+                    <td></td>
+                    <td>Ksh. <%= salaryComponents.retirementInsuranceAmount.toFixed(2) %></td>
+                </tr>
+                <tr>
+                    <td>Tax</td>
+                    <td></td>
+                    <td>Ksh. <%= salaryComponents.taxAmount.toFixed(2) %></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th>Ksh. <%= salaryComponents.finalSalaryBeforeDeductions.toFixed(2) %></th>
+                    <th>Ksh. <%= salaryComponents.totalDeductions.toFixed(2) %></th>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="summary">
+            <p><strong>NET PAY:</strong> Ksh. <%= salaryComponents.netSalary.toFixed(2) %></p>
+            <p>Ksh. <%= salaryComponents.netSalaryInWords %></p>
+            <div class="signature">
+                <div>
+                    <p>Payment Date: <%= paymentDate %></p>
+                    <p>Bank Name:  <%= salaryComponents.bankName %></p>
+                    <p>Bank Account Name: <%= salaryComponents.bankAccountName %></p>
+                    <p>Bank Account #: <%= salaryComponents.bankAccountNumber %></p>
+                </div>
+                <div class="auth-sign">
+                    <p>_______________________</p>
+                    <p>Authorized Signature</p>
+                </div>
             </div>
         </div>
     </div>

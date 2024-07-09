@@ -13,7 +13,10 @@
         <h1 class="my-4">Employee Salary Details</h1>
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="june-tab" data-toggle="tab" href="#june" role="tab" aria-controls="june" aria-selected="true">June</a>
+                <a class="nav-link active" id="july-tab" data-toggle="tab" href="#july" role="tab" aria-controls="july" aria-selected="true">July</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="june-tab" data-toggle="tab" href="#june" role="tab" aria-controls="june" aria-selected="false">June</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="may-tab" data-toggle="tab" href="#may" role="tab" aria-controls="may" aria-selected="false">May</a>
@@ -32,7 +35,7 @@
             </li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="june" role="tabpanel" aria-labelledby="june-tab">
+            <div class="tab-pane fade show active" id="july" role="tabpanel" aria-labelledby="july-tab">
                 <div class="card">
                     <div class="card-header">
                         <h2><%= salaryComponents.firstName %> <%= salaryComponents.lastName %></h2>
@@ -57,6 +60,9 @@
                 </div>
             </div>
             <!-- Placeholder tabs for other months -->
+            <div class="tab-pane fade" id="june" role="tabpanel" aria-labelledby="june-tab">
+                <p>Salary details for June will be displayed here.</p>
+            </div>
             <div class="tab-pane fade" id="may" role="tabpanel" aria-labelledby="may-tab">
                 <p>Salary details for May will be displayed here.</p>
             </div>
