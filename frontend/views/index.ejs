@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulting Website</title>
+    <title>Paymaster</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css"/>
 
@@ -14,6 +14,10 @@
         }
         ul{
         list-style: none;
+    }
+    p{
+        font-size: 1.25em;
+
     }
         .btn-outline-dark {
             color: #2c3e50;
@@ -27,11 +31,16 @@
 
         .hero-section {
             padding-top: 100px;
+            padding-bottom: 20px;
+
         }
 
         .hero-section h1 {
             color: #2c3e50;
             margin-bottom: 20px;
+        }
+        .hero-section h2 {
+            padding-top: 30px;
         }
 
         .hero-section p {
@@ -183,7 +192,6 @@
     display: inline-block;
     padding: 10px 20px;
     margin: 10px;
-    background-color: #007bff;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
@@ -199,6 +207,7 @@
     section{
         background-color: #030303;
         color: #f0f8ff;
+        padding: 50px; 
 
     }
     #hearder {
@@ -270,6 +279,12 @@
 .active-tab {
     display: block;
 }
+.line {
+        width: 400px;
+        height: 4px;
+        background-color: #F48FB1;
+        margin: auto;
+    }
 
 /* Services Section Styles */
 #services {
@@ -314,24 +329,29 @@
             <li class="dropdown">
                 <a href="#">Why PayMaster</a>
                 <ul class="dropdown-content">
-                    <li><a href="#">Dropdown Link 1</a></li>
-                    <li><a href="#">Dropdown Link 2</a></li>
+                    <p><a href="#">Comprehensive Payroll Management</a></p>
+                    <p><a href="#">Efficient Time Tracking</a></p>
+                    <p><a href="#">Customizable Reports</a></p>
+                    <p><a href="#">Reliable Support</a></p>
                 </ul>
             </li>
+            
             <li class="dropdown">
-                <a href="#about">About</a>
+                <a href="#services2">About</a>
             </li>
             <li class="dropdown">
                 <a href="#services2">Services</a>
-                
+            </li>
+            <li class="dropdown">
+                <a href="#services2">Admin</a>
             </li>
             <li class="dropdown">
                 <a href="#pricing">Pricing</a>
-                <ul class="dropdown-content">
-                    <a href="#">Dropdown Link 1</a>
-                    <a href="#">Dropdown Link 2</a>
-                    <a href="#">Dropdown Link 3</a>
-                </ul>
+                <p class="dropdown-content">
+                    <a href="#">Billing</a>
+                    <a href="#">Compare plans</a>
+                    <a href="#">FAQ</a>
+                </p>
             </li>
             <li><a href="#contact">Contact</a></li>
         </ul>
@@ -343,19 +363,23 @@
         </div>
     </nav>
 <div>
-
     <div class="container text-center hero-section">
-    <h1 class="display-4">Welcome to PayMaster</h1>
-    <p class="lead">PayMaster is a web-based payroll management system for the Ministry of Education. It helps manage payroll, employee records, and more.</p>
+    <h1 class="display-4" style="font-weight: 900;">Welcome to PayMaster</h1>
+    <h3>PayMaster is a web-based payroll management system for the Ministry of Education. It helps manage payroll, employee records, and more.</h3>
     <h2>Please log in to access the system</h2>
-    <a class="btn" href="login">Log In</a>
-	</div>
-    <div class="container text-center hero-section">
-        <h1 class="display-4">Empower Your Organization</h1> <p class="lead">Introducing PayMaster, a secure web platform designed to streamline payroll, manage employee records, and enhance efficiency for your organization.</p>
+    <a class="btn btn-primary btn-lg m-2" href="/login">Log In</a>
+</div>
+
+<section>
+    <div class="container text-center">
+        <h1 class="display-4" style="font-weight: 700;">Empower Your Organization</h1>
+        <h3 style="padding-top: 20px; padding-bottom: 20px;">Introducing PayMaster, a secure web platform designed to streamline payroll, manage employee records, and enhance efficiency for your organization.</h3>
         <h2>Get Started Today!</h2>
-        <a class="btn btn-primary" href="register">Sign Up</a>
+        <a class="btn btn-primary btn-lg m-2" href="/register">Sign Up</a>
     </div>
+</section>
     <div class="container services-section" id="services2">
+        
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h6 class="text-uppercase">Toolkit</h6>
@@ -363,10 +387,16 @@
       <p>Our dedicated customer support team is available 24/7 to assist you with any inquiries or issues you may have.</p>
             </div>
             <div class="col-md-6">
-                <img src="services-image.png" alt="Our Services" class="img-fluid">
+                <h2 class="text-center">Admin</h2>
+            <p>If you are an admin, please log in to manage the system and access administrative tools.</p>
+            <div class="text-center">
+                <button onclick="location.href='/admin-login';" class="btn btn-dark btn-lg m-2">Login Here For Administrators</button>
             </div>
+                        
+        </div>
         </div>
     </div>
+    <div class="line"></div>
 
     <div class="container interested-section" id="contact">
         <div class="text-center">
@@ -377,28 +407,32 @@
             <div class="col-md-6 form-section">
                 <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="firstName" placeholder="First Name">
+                        <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+                        <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" class="form-control" id="email" placeholder="Email">
+                        <input type="email" class="form-control" id="email" placeholder="Email" required>
+                    </div>
+                    <div class="text-center">
+                        <button  class="btn btn-dark ">Submit</button>
                     </div>
                 </form>
             </div>
+            
             <div class="col-md-6" >
                 <div class="service-item">
-                    <h4>E-Commerce</h4>
-                    <p>Maecenas varius nunc a odio ultrices, non consectetur nunc scelerisque. Mauris nec condimentum est, id eleifend orci.</p>
+                    <h4>Attendance Tracking</h4>
+                    <p>Track employee attendance seamlessly with our automated system. Ensure accurate records and monitor punctuality with ease.</p>
                 </div>
                 <div class="service-item">
-                    <h4>Email Systems</h4>
-                    <p>Maecenas varius nunc a odio ultrices, non consectetur nunc scelerisque. Mauris nec condimentum est, id eleifend orci.</p>
+                    <h4>Reports and Analytics</h4>
+                    <p>Generate detailed reports and gain valuable insights with our advanced analytics tools. Make informed decisions based on real-time data.</p>
                 </div>
                 <div class="service-item">
-                    <h4>Video Production</h4>
-                    <p>Maecenas varius nunc a odio ultrices, non consectetur nunc scelerisque. Mauris nec condimentum est, id eleifend orci.</p>
+                    <h4>Leave Applications</h4>
+                    <p>Manage leave requests efficiently with our user-friendly application process. Streamline approvals and keep track of employee leave balances.</p>
                 </div>
             </div>
         </div>

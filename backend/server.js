@@ -106,12 +106,6 @@ app.use((req, res, next) => {
   next();
 });
 app.get('/', (req, res) => {
-  res.render('land');
-});
-app.get('/nav', (req, res) => {
-  res.render('navigationbar');
-});
-app.get('/css', (req, res) => {
   res.render('index');
 });
 app.listen(port, () => {
@@ -125,14 +119,10 @@ app.use(express.static(path.join(__dirname, '../frontend/public')));
 app.get('/login', (req, res) => {
   res.render('login');
 });
-app.get('/side', (req, res) => {
-  res.render('test');
-});
+
 app.get('/register', (req, res) => {
   res.render('register');
   });
-
-
 // Login route
 app.post('/login', async (req, res) => {
     const { employeeID, password } = req.body;
@@ -253,7 +243,7 @@ app.post('/admin-login', async (req, res) => {
         }
       });
 const adminRouter =require('./routes/admin')
-app.use('/admin', adminRouter)
+app.use('/admin',isAuthenticated, adminRouter)
 
 app.get('/employee-profile', async (req, res) => {
   req.flash('success', 'Login successful!');

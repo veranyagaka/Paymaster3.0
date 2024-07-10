@@ -88,6 +88,16 @@
 <body>
     <!-- Main Content -->
     <div class="container">
+        <div class="container">
+            <!-- Notification Alert -->
+            <% if (!employee || !employee.profile_picture || !employee.bio || showPaymentButton) { %>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Incomplete Profile!</strong> Please complete your profile and set your payment details.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <% } %>
         <div class="profile-content">
             <div class="container emp-profile">
                 <div class="row">
