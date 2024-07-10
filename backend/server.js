@@ -152,7 +152,6 @@ app.post('/login', async (req, res) => {
                 const subject = 'New login detected!';
                 const message = `Hi there! New sign in to your PayMaster account <br> If this was you, then you don't need to do anything. <br>If you don't recognise this activity, please change your password.`;
                 //sendEmail3(subject, message);
-                //req.session.showLoginMessage = true;
                 res.redirect('employee-profile');
               }
             });
@@ -236,6 +235,7 @@ app.post('/admin-login', async (req, res) => {
    }
           req.session.adminId = result[0].id;  // Set admin ID in session
           console.log('Stored Password:', result[0].password);
+          console.log('session check' ,req.session.adminId)
           return res.redirect('/admin');
      } catch (err) {
           console.error(err);

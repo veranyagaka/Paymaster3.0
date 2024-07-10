@@ -125,17 +125,16 @@
                       <% } %>  
                 </div>
                     <div class="row">
+                        <div class="col-md-12 text-md-center">
+                            <% if (showPaymentButton) { %>
+                                <button class="btn btn-dark payment-details-btn" data-toggle="modal" data-target="#editPaymentModal">Set Payment Method</button>
+                            <% } %>
+                        </div>
                         <div class="col-md-12 text-md-right">
                             <button class="btn btn-primary profile-edit-btn" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 text-md-center">
-                            <% if (showPaymentButton) { %>
-                                <button class="btn btn-primary payment-details-btn" data-toggle="modal" data-target="#editPaymentModal">Set Payment Method</button>
-                            <% } %>
-                        </div>
-                    </div>
+
                     
             </div>
         </div>
