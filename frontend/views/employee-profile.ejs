@@ -95,7 +95,7 @@
 
                     <div class="col-md-4">
                         <div class="profile-img">
-                            <img src="<%= employee.profile_picture ? `../../backend/${employee.profile_picture}` : '/images/user.png' %>" alt="profile pic" class="img-fluid"/>
+                            <img src="<%= employee.profile_picture ? employee.profile_picture : '/uploads/profile_pics/user.png' %>" alt="profile picture" class="img-fluid"/>
                         </div>
                     </div>
                     <div class="col-md-8">

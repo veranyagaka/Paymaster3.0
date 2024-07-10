@@ -276,7 +276,9 @@ app.get('/employee-profile', async (req, res) => {
       const paymentDetails = await getPaymentDetailsByEmployeeId(req.session.EmployeeID);
       const showPaymentButton = paymentDetails.length == 0;
       console.log(showPaymentButton);
-      res.render('employee-profile', { employee: employee, showPaymentButton: showPaymentButton });
+      const location =(path.join(__dirname, '../frontend/public'));
+      console.log(location)
+      res.render('employee-profile', { employee: employee, showPaymentButton: showPaymentButton, location });
   } catch (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');

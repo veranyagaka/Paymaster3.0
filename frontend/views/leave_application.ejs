@@ -123,13 +123,29 @@
         button:hover {
             background: #555;
         }
+        .status-approved {
+            color: green;
+        }
+
+        .status-denied {
+            color: red;
+        }
+
+        .status-pending {
+            color: orange;
+        }
+        .alert {
+            display: none;
+        }
     </style>
 </head>
 <body>
 <div class="container">
 
 <div class="emp-profile">
-
+    <div class="alert alert-success" id="successMessage" role="alert">
+        Leave application submitted successfully!
+    </div>
     <div class="wrapper">
         <h1>Leave Application Form</h1>
         <form action="/accounts/apply_leave" method="POST">
@@ -181,10 +197,11 @@
                                 <tr>
                                     <td><%= request.request_id %></td>
                                     <td><%= request.leave_type %></td>
-                                    <td><%= request.start_date %></td>
-                                    <td><%= request.end_date %></td>
-                                    <td><%= request.status %></td>
-                                </tr>
+                                    <td><%= request.start_date.toLocaleDateString('en-US') %></td>
+                                    <td><%= request.end_date.toLocaleDateString('en-US') %></td>
+                                    <td class="<%= request.status === 'Approved' ? 'status-approved' : request.status === 'Denied' ? 'status-denied' : 'status-pending' %>">
+                                        <%= request.status %>
+                                    </td>                                </tr>
                             <% }); %>
                         <% } else { %>
                             <tr>

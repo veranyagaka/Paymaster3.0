@@ -19,7 +19,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
 // Change profile picture route for employees
 router.post('/changeProfilePic', upload.single('profilePic'), async (req, res) => {
   
@@ -28,7 +27,7 @@ router.post('/changeProfilePic', upload.single('profilePic'), async (req, res) =
   }
 
   const employeeId = req.session.EmployeeID;
-  const profilePicPath = `/uploads/profile_pics/${req.file.filename}`;
+  const profilePicPath = path.join(__dirname,`../../frontend/uploads/profile_pics/${req.file.filename}`);
 
   try {
     // Update the employee's profile picture path in the database
@@ -256,12 +255,11 @@ router.get('/leave_application', async (req, res) => {
         // Retrieve employees from the database
         const [leaveRequests] = await database.query('SELECT * FROM leave_requests where employee_id=?', [employeeId]);
         console.log(leaveRequests);
-        res.render('leave_application', { leaveRequests: leaveRequests });
+        return res.render('leave_application', { leaveRequests: leaveRequests });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
     }
-    res.render('leave_application'); 
 });
 
 // Route to handle leave application form submission
