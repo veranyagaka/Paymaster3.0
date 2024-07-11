@@ -367,8 +367,25 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+router.post('/payroll-history/delete/:record_id', async (req, res) => {
+  const recordId = req.params.record_id;
 
-  // Route to handle employee deletion
+  try {
+    // Perform the deletion asynchronously using await
+    const deleteResult = await database.query('DELETE FROM payroll_history WHERE record_id = ?', [recordId]);
+
+    if (deleteResult.affectedRows === 0) {
+      return res.status(404).send('Record not found');
+    }
+
+    // Redirect to the admin page after successful deletion (replace with desired action)
+    res.redirect('/admin');
+  } catch (error) {
+    console.error('Error deleting record:', error);
+    return res.status(500).send('Internal Server Error');
+  }
+});
+ // Route to handle employee deletion
   router.post('/employees/delete/:employeeId', async (req, res) => {
     const employeeId = req.params.employeeId;
   
