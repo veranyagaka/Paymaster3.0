@@ -65,7 +65,7 @@ router.get('/data', async (req, res) => {
 const uploadDirectory = path.join(__dirname,'../', 'uploads', 'attendance');
 console.log(uploadDirectory);
 // Multer setup
-const storage = multer.diskStorage({
+const attendanceStorage = multer.diskStorage({
   destination: (req, file, cb) => {
       cb(null, uploadDirectory);
   },
@@ -73,10 +73,10 @@ const storage = multer.diskStorage({
       cb(null, `${Date.now()}-${file.originalname}`);
   }
 });
-const upload = multer({ storage: storage });
+const uploadAttendance = multer({ storage: attendanceStorage });
 
 // Route to handle file upload and import attendance data
-router.post('/importAttendance', upload.single('attendanceFile'), async (req, res) => {
+router.post('/importAttendance', uploadAttendance.single('attendanceFile'), async (req, res) => {
   console.log('Importing Attendance ')
   if (!req.file) {
     console.error('File not provided');
@@ -142,7 +142,7 @@ router.post('/importAttendance', upload.single('attendanceFile'), async (req, re
 const Directory = path.join(__dirname,'../', 'uploads', 'payroll');
 console.log(Directory);
 // Multer setup
-const storages = multer.diskStorage({
+const payrollStorage = multer.diskStorage({
   destination: (req, file, cb) => {
       cb(null, Directory);
   },
@@ -150,10 +150,10 @@ const storages = multer.diskStorage({
       cb(null, `${Date.now()}-${file.originalname}`);
   }
 });
-const uploads = multer({ storages: storages });
+const uploadPayroll = multer({ storage: payrollStorage });
 
 // Route to handle file upload and import payroll history data
-router.post('/importPayrollHistory', uploads.single('payrollFile'), async (req, res) => {
+router.post('/importPayrollHistory', uploadPayroll.single('payrollFile'), async (req, res) => {
 
   console.log('Importing Payroll History');
   

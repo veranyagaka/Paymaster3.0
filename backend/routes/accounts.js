@@ -274,7 +274,7 @@ router.post('/apply_leave', async (req, res) => {
             'INSERT INTO leave_requests (employee_id, leave_type, start_date, end_date) VALUES (?, ?, ?, ?)',
             [employeeId, leave_type, start_date, end_date]
         );        
-        return res.json({ message: 'Leave application submitted successfully.' });
+res.redirect('/accounts/leave_application');
     } catch (error) {
         console.error('Error submitting leave application:', error);
         res.status(500).send('Internal Server Error');

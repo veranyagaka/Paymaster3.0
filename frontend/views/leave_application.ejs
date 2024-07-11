@@ -148,7 +148,7 @@
     </div>
     <div class="wrapper">
         <h1>Leave Application Form</h1>
-        <form action="/accounts/apply_leave" method="POST">
+        <form id="leaveForm" action="/accounts/apply_leave" method="POST">
             <div class="input-field">
                 <select id="leave_type" name="leave_type" required>
                     <option value="">Select Leave Type</option>
@@ -171,7 +171,7 @@
             </div>
 
             <div class="button-container">
-                <button type="submit">Submit Application</button>
+                <button type="submit" id="submitBtn">Submit Application</button>
             </div>
         </form>
     </div>
@@ -219,7 +219,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#leaveForm').on('submit', function(e) {
+        $('#submitBtn').on('submit', function(e) {
             e.preventDefault();
             const formData = {
                 leave_type: $('#leave_type').val(),
