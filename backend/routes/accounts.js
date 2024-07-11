@@ -289,19 +289,50 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
     const { firstName, bio, lastName, gender } = req.body; // Destructure data from request body
   
     try {
+      // Retrieve existing employee data
+      const [existingProfileData] = await database.query('SELECT first_name, bio, last_name, gender FROM employee_profile WHERE employeeID = ?', [employeeId]);
+      const [existingEmployeeData] = await database.query('SELECT FirstName, LastName FROM Employee WHERE EmployeeID = ?', [employeeId]);
+      console.log('exisiting: ', existingEmployeeData)
+      if (!existingProfileData || !existingEmployeeData) {
+          res.status(404).send('Employee not found');
+          return;
+      }
+
+      // Merge existing data with new data
+      const updatedProfileData = {
+          first_name: firstName || existingProfileData[0].first_name,
+          bio: bio || existingProfileData[0].bio,
+          last_name: lastName || existingProfileData[0].last_name,
+          gender: gender || existingProfileData[0].gender
+      };
+
+      const updatedEmployeeData = {
+          FirstName: firstName || existingEmployeeData[0].FirstName,
+          LastName: lastName || existingEmployeeData[0].LastName
+      };
+      console.log('first: ', existingEmployeeData[0].FirstName)
+
+      console.log('last: ', existingEmployeeData[0].LastName)
+
       // Update employee data in the database
-      await database.query('UPDATE employee_profile SET first_name = ?, bio = ?,last_name = ?, gender = ? WHERE employeeID = ?', [firstName, bio, lastName, gender,employeeId]);
-      await database.query('UPDATE Employee SET FirstName = ?,LastName = ? WHERE EmployeeID = ?', [firstName,lastName,employeeId]);
+      await database.query(
+          'UPDATE employee_profile SET first_name = ?, bio = ?, last_name = ?, gender = ? WHERE employeeID = ?',
+          [updatedProfileData.first_name, updatedProfileData.bio, updatedProfileData.last_name, updatedProfileData.gender, employeeId]
+      );
+      await database.query(
+          'UPDATE Employee SET FirstName = ?, LastName = ? WHERE EmployeeID = ?',
+          [updatedEmployeeData.FirstName, updatedEmployeeData.LastName, employeeId]
+      );
 
       // Handle successful update (e.g., redirect to employee list, display success message)
       res.redirect('/employee-profile'); // Replace as needed
-  
-    } catch (error) {
+
+  } catch (error) {
       console.error('Error updating profile:', error);
       // Handle errors (e.g., display error message to user, log the error)
       res.status(500).send('Internal Server Error');
-    } 
-  });
+  }
+});
 // Route to generate PDF
 router.get('/employee/salary/:id/download', async (req, res) => {
   const employeeId = parseInt(req.params.id, 10);
@@ -342,7 +373,7 @@ console.log(currentYearMonth); // Output: e.g., "July 2024"
 
       res.download(result.filename, 'employee-payslip.pdf', (err) => {
         if (err) {
-          return res.status(500).send('Error downloading payslip');
+          return res.status(500).send('Error downloading payslip',err);
         }
 
         // Delete the file after download
