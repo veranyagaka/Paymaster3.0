@@ -373,6 +373,8 @@ console.log(currentYearMonth); // Output: e.g., "July 2024"
 
       res.download(result.filename, 'employee-payslip.pdf', (err) => {
         if (err) {
+          console.log('Payslip error', err)
+
           return res.status(500).send('Error downloading payslip',err);
         }
 
