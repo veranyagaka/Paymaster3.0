@@ -7,17 +7,17 @@ Check if attensance moduleis actually working
 - [x] Better css for all the pages
 - [x] Use Bootstrap for the css
 - [x] All the 5 modules- Finish attendance module tmr
-- [ ] Working of all the modules
+- [x] Working of all the modules
 - [x] Fix the mime type and the working of the javascript files!!
-- [ ] Change password
-- [ ] Change profile pic
-- [ ] Redirection to all the pages
-- [ ] Ensure the restricted entry method
-- [ ] Deployment && docker
-- [ ] Database syncing
+- [x] Change password
+- [x] Change profile pic
+- [x] Redirection to all the pages
+- [x] Ensure the restricted entry method
+- [] Deployment, Redis connection timeout and some few problems
+- [x] Database syncing
 - [x] DB Deployment
-- [ ] Importing Attendance and Exporting
-- [ ] FINALLY REVIEW EVERYTHING FROM ZE BEGINNING
+- [x] Importing Attendance and Exporting
+- [x] FINALLY REVIEW EVERYTHING FROM ZE BEGINNING
 
 
 
