@@ -364,10 +364,12 @@ const currentYearMonth = `${currentMonth} ${currentYear}`;
     }
 
     const options = { format: 'Letter' };
+    const pdfPath = path.join(__dirname, 'employee-payslip.pdf');
 
-    pdf.create(html, options).toFile('./employee-payslip.pdf', (err, result) => {
+    pdf.create(html, options).toFile(pdfPath, (err, result) => {
       if (err) {
-        return res.status(500).send('Error generating payslip');
+        console.log('Payslip error', err)
+        return res.status(500).send('Error generating payslip', err);
       }
 
       res.download(result.filename, 'employee-payslip.pdf', (err) => {
