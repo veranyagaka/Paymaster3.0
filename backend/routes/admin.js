@@ -62,12 +62,15 @@ router.get('/data', async (req, res) => {
   }
 });
 
-const uploadDirectory = path.join(__dirname,'../', 'uploads', 'attendance');
-console.log(uploadDirectory);
+const attendanceDirectory = path.join(__dirname,'../', 'uploads', 'attendance');
+if (!fs.existsSync(attendanceDirectory)) {
+  fs.mkdirSync(attendanceDirectory, { recursive: true });
+}
+console.log(attendanceDirectory);
 // Multer setup
 const attendanceStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, uploadDirectory);
+      cb(null, attendanceDirectory);
   },
   filename: (req, file, cb) => {
       cb(null, `${Date.now()}-${file.originalname}`);
@@ -139,12 +142,15 @@ router.post('/importAttendance', uploadAttendance.single('attendanceFile'), asyn
       fs.unlinkSync(filePath);
   }
 });
-const Directory = path.join(__dirname,'../', 'uploads', 'payroll');
-console.log(Directory);
+const payrollDirectory = path.join(__dirname,'../', 'uploads', 'payroll');
+if (!fs.existsSync(payrollDirectory)) {
+  fs.mkdirSync(payrollDirectory, { recursive: true });
+}
+console.log(payrollDirectory);
 // Multer setup
 const payrollStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, Directory);
+      cb(null, payrollDirectory);
   },
   filename: (req, file, cb) => {
       cb(null, `${Date.now()}-${file.originalname}`);

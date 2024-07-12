@@ -371,7 +371,7 @@ const currentYearMonth = `${currentMonth} ${currentYear}`;
         console.log('Payslip error', err)
         return res.status(500).send('Error generating payslip', err);
       }
-
+        //insert the data into the payroll table probably
       res.download(result.filename, 'employee-payslip.pdf', (err) => {
         if (err) {
           console.log('Payslip error', err)
