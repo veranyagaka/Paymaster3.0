@@ -356,10 +356,8 @@ const currentMonth = monthNames[currentDate.getMonth()]; // Get the month name
 const currentYear = currentDate.getFullYear();
 const currentYearMonth = `${currentMonth} ${currentYear}`;
 
-console.log(currentYearMonth); // Output: e.g., "July 2024"
-const logo = "/favicon.ico"
-console.log('logo:',logo)
-  res.render('payslip', { salaryComponents,currentYearMonth,logo, paymentDate: new Date().toLocaleDateString('en-US') }, (err, html) => {
+
+  res.render('payslip', { salaryComponents,currentYearMonth, paymentDate: new Date().toLocaleDateString('en-US') }, (err, html) => {
     if (err) {
       console.log(err);
       return res.status(500).send('Error generating PDF');

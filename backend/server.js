@@ -59,7 +59,12 @@ const redisClient = redis.createClient({
     host: process.env.REDIS_HOST,
     port: process.env.REDIS_PORT,
     url: process.env.REDIS_URL,
-    password: process.env.REDIS_PASS
+    password: process.env.REDIS_PASS,
+    socket: {
+      tls: true,
+      rejectUnauthorized: false,
+      connectTimeout: 300000    // Timeout in milliseconds (300,000 ms = 5 minutes)
+}
   });
 redisClient.connect()
   .then(() => console.log('Redis client connected'))
