@@ -13,7 +13,7 @@ Check if attensance moduleis actually working
 - [x] Change profile pic
 - [x] Redirection to all the pages
 - [x] Ensure the restricted entry method
-- [x] Deployment && docker
+- [] Deployment, Redis connection timeout and some few problems
 - [x] Database syncing
 - [x] DB Deployment
 - [x] Importing Attendance and Exporting
