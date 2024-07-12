@@ -120,14 +120,14 @@ router.post('/importAttendance', uploadAttendance.single('attendanceFile'), asyn
                         );
                         console.log('Inserted row:', result);
                       }
-                      res.status(200).send('Attendance records imported successfully');
+                      res.redirect('/admin/employee-attendance');
                   } catch (err) {
                       console.error('Error inserting data into database:', err);
                       res.status(500).send('Error importing attendance records');
                   }
               });
       } else if (fileExtension === '.xlsx') {
-          //smth
+        res.status(400).send('Unsupported file format');
       } else {
           res.status(400).send('Unsupported file format');
       }
@@ -202,14 +202,14 @@ router.post('/importPayrollHistory', uploadPayroll.single('payrollFile'), async 
               );
               console.log('Inserted row:', result);
             }
-            res.status(200).send('Payroll history imported successfully');
+            res.redirect('/admin/payrollhistory')
           } catch (err) {
             console.error('Error inserting data into database:', err);
             res.status(500).send('Error importing payroll history records');
           }
         });
     } else if (fileExtension === '.xlsx') {
-      //smth
+      res.status(400).send('Unsupported file format');
     } else {
       res.status(400).send('Unsupported file format');
     }

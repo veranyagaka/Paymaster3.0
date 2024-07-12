@@ -8,7 +8,10 @@
 </head>
 <body>
     <%- include('admin-sidebar') %>
-    
+      <!-- Success message element -->
+  <div id="successMessage" class="alert alert-success" style="display:none;">
+    Payroll record submitted successfully.
+  </div>
     <div class="container mt-5">
         <div class="row">
             <div class="col text-right">
@@ -90,7 +93,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/admin/importPayroll" method="POST" id="importPayrollModalForm" enctype="multipart/form-data">  <div class="form-group">
+                    <form action="/admin/importPayrollHistory" method="POST" id="importPayrollModalForm" enctype="multipart/form-data">  <div class="form-group">
                             <label for="attendance">Upload Payroll Data</label> <input type="file" class="form-control-file" id="attendance"  id="payrollFile" name="payrollFile" required>  </div>
                         <button type="submit" class="btn btn-primary">Import</button>  </form>
                 </div>
@@ -105,6 +108,28 @@ $(document).ready(function() {
                 $('#importPayrollModal').modal('show');
             });
         });
+     // Listen for form submission
+     $('#importPayrollModalForm').submit(function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+          url: $(this).attr('action'),
+          type: $(this).attr('method'),
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            $('#importPayrollModal').modal('hide');
+            $('#successMessage').show().delay(3000).fadeOut();
+          },
+          error: function(response) {
+            alert('There was an error submitting the form.');
+          }
+        });
+      });
+
     function confirmDelete(event) {
         if (!confirm('Are you sure you want to delete this record?')) {
             event.preventDefault();

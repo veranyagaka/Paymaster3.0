@@ -64,10 +64,10 @@ async function sendEmail2(email, subject, message,employeeID) {
           throw new Error('Failed to send email');
         }
       }
-async function sendEmail3(subject, message) {
+async function sendEmail3(subject, message, email) {
         const msg = {
-          to: 'vera.nyagaka@strathmore.edu',
-          from: 'nyagakavera@gmail.com', // Replace with your verified sender
+          to: email,
+          from: 'vera.nyagaka@strathmore.edu', // Replace with your verified sender
           subject: subject,
           html: `
           <h1>${message}</h1>

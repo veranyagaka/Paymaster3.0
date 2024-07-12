@@ -135,7 +135,7 @@ app.post('/login', async (req, res) => {
       if (!result.length) {
         return res.render('login', { error: 'Incorrect Employee ID or Password.' });
       }
-  
+      const email = result[0].email 
       const validPassword = await bcrypt.compare(password, result[0].password);
   
       if (!validPassword) {
@@ -151,7 +151,7 @@ app.post('/login', async (req, res) => {
                 console.log('Session saved:', req.session.EmployeeID);
                 const subject = 'New login detected!';
                 const message = `Hi there! New sign in to your PayMaster account <br> If this was you, then you don't need to do anything. <br>If you don't recognise this activity, please change your password.`;
-                sendEmail3(subject, message);
+                sendEmail3(subject, message, email);
                 res.redirect('employee-profile');
               }
             });
