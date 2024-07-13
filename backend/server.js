@@ -141,14 +141,14 @@ app.post('/login', async (req, res) => {
             console.log('Stored Password:', result[0].password);
             //maybe jwt functionality?
             req.session.EmployeeID = result[0].EmployeeID;
-            req.session.save((err) => {
+            req.session.save(async (err) => {
               if (err) {
                 console.error(err);
               } else {
                 console.log('Session saved:', req.session.EmployeeID);
                 const subject = 'New login detected!';
                 const message = `Hi there! New sign in to your PayMaster account <br> If this was you, then you don't need to do anything. <br>If you don't recognise this activity, please change your password.`;
-                //sendEmail3(subject, message, email);
+                await sendEmail3(email,subject, message);
                 res.redirect('employee-profile');
               }
             });
@@ -189,7 +189,10 @@ app.post('/register', async (req, res) => {
     const profile = 'INSERT INTO employee_profile (employeeID, email) VALUES (?,?)';
     await database.query(profile, [employeeID, email]);
     const subject = 'Welcome to Paymaster';
-    const message = `Hi there! You've successfully registered for an account. Your employee ID is ${employeeID}. <br> You can login to your account here: `;
+    const message = `
+    Hi there! You've successfully registered for an account. Your employee ID is ${employeeID}.
+  `;
+  
     await sendEmail2(email, subject, message, employeeID);
     setTimeout(() => {
       res.redirect('/login');
@@ -284,18 +287,6 @@ const payRouter =require('./routes/payslip')
 app.use('/pay', payRouter)
 const accountsRouter =require('./routes/accounts')
 app.use('/accounts', accountsRouter)
-//const sendEmail = require('./routes/sendEmail'); 
-/*
-sendEmail()
-    .then(() => {
-        console.log('Email sent successfully');
-        // Handle any further logic after email is sent
-    })
-    .catch(err => {
-        console.error('Failed to send email:', err);
-        // Handle error condition
-    });
-    */
 const reportsRouter =require('./routes/reports')
 app.use('/reports', reportsRouter)
 app.use((req, res, next) => {

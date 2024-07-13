@@ -54,6 +54,7 @@
                         <th>Last Name</th>
                         <th>Job Title</th>
                         <th>Department</th>
+                        <th>Gender</th>
                         <th>Base Salary</th>
                         <th>Availability</th>
                         <th>Action</th>
@@ -67,6 +68,7 @@
                             <td><%= employee.last_name %></td>
                             <td><%= employee.job_title %></td>
                             <td><%= employee.department %></td>
+                            <td><%= employee.gender %></td>
                             <td><%= employee.baseSalary %></td>
                             <td><%= employee.availability %></td>
                             <td>
@@ -196,9 +198,9 @@
             case 'department':
                 return 5; // Department column index
             case 'availability':
-                return 7; // Availability column index
+                return 8; // Availability column index
             case 'gender':
-                return 9; // Gender column index
+                return 6; // Gender column index
             default:
                 return 0;
         }

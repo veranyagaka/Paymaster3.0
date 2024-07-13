@@ -107,6 +107,7 @@ function mapEmployeeData(employee, paymentdetails, overtimeHours) {
     medicalAllowance: parseFloat(employee.medical_allowance) || 0,
     mealAllowance: parseFloat(employee.meal_allowance) || 0,
     totalAllowances: parseFloat(employee.total_allowances) || 0,
+    retirementInsurance: parseFloat(employee.retirement_insurance) || 0,
     bonus: parseFloat(employee.bonus) || 0,
     overtimeHours: parseFloat(overtimeHours) || 0,
     hourlyRate: parseFloat(employee.hourlyRate) || 0,
@@ -118,7 +119,7 @@ function mapEmployeeData(employee, paymentdetails, overtimeHours) {
 
 // Calculate net pay function
 function calculateNetPay(employeeData) {
-  const retirementInsuranceRate = 0.1;
+  const retirementInsuranceRate = employeeData.retirementInsurance;
 
   let finalSalaryBeforeDeductions = employeeData.baseSalary + employeeData.totalAllowances;
   let taxRate;
@@ -333,6 +334,8 @@ router.post('/employees/edit/:employeeId', async (req, res) => {
       res.status(500).send('Internal Server Error');
   }
 });
+const {sendPayrollNotification} = require('./sendEmail'); 
+
 // Route to generate PDF
 router.get('/employee/salary/:id/download', async (req, res) => {
   const employeeId = parseInt(req.params.id, 10);
@@ -362,6 +365,10 @@ const currentYearMonth = `${currentMonth} ${currentYear}`;
       console.log(err);
       return res.status(500).send('Error generating PDF');
     }
+    const email = salaryComponents.email;
+    const salaryAmount = salaryComponents.netSalary;
+    sendPayrollNotification(email, salaryAmount);
+
 
     const options = { format: 'Letter' };
     const pdfPath = path.join(__dirname, 'employee-payslip.pdf');
