@@ -6,7 +6,7 @@
     <title>Employee Attendance</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <style>
         .attendance-table th, .attendance-table td {
             vertical-align: middle;
@@ -15,10 +15,10 @@
 </head>
 <body>
     <%- include('admin-sidebar') %>
-      <!-- Success message element -->
-      <div id="successMessage" class="alert alert-success" style="display:none;">
+    <!-- Success message element -->
+    <div id="successMessage" class="alert alert-success" style="display:none;">
         Attendance record submitted successfully.
-      </div>
+    </div>
     <div class="container mt-4">
         <h2 class="mb-4">Employee Attendance Tracking</h2>
         <div class="row">
@@ -55,7 +55,7 @@
                                     <td><%= record.daysAbsent %></td>
                                     <td><%= record.overtime_hours %></td>
                                     <td>
-                                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editAttendanceModal" data-id="<%= record.employeeID %>" data-month="<%= record.month %>">Edit</button>
+                                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editAttendanceModal<%= record.record_id %>">Edit</button>
                                     </td>
                                 </tr>
                             <% }); %>
@@ -144,38 +144,40 @@
         </div>
     </div>
 
-    <!-- Edit Attendance Modal -->
-    <div class="modal fade" id="editAttendanceModal" tabindex="-1" role="dialog" aria-labelledby="editAttendanceModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editAttendanceModalLabel">Edit Attendance</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/editAttendance" method="POST">
-                        <input type="hidden" id="editEmployeeID" name="employeeID">
-                        <input type="hidden" id="editMonth" name="month">
-                        <div class="form-group">
-                            <label for="editDaysPresent">Days Present</label>
-                            <input type="number" class="form-control" id="editDaysPresent" name="daysPresent" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="editDaysAbsent">Days Absent</label>
-                            <input type="number" class="form-control" id="editDaysAbsent" name="daysAbsent" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="editOvertimeHours">Overtime Hours</label>
-                            <input type="number" class="form-control" id="editOvertimeHours" name="overtimeHours" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </form>
+    <% attendanceRecords.forEach(record => { %>
+        <!-- Edit Attendance Modal -->
+        <div class="modal fade" id="editAttendanceModal<%= record.record_id %>" tabindex="-1" role="dialog" aria-labelledby="editAttendanceModalLabel<%= record.record_id %>" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editAttendanceModalLabel<%= record.record_id %>">Edit Attendance</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/editAttendance/<%= record.record_id %>" method="POST">
+                            <input type="hidden" name="employeeID" value="<%= record.employee_id %>">
+                            <input type="hidden" name="RecordID" value="<%= record.record_id %>">
+                            <div class="form-group">
+                                <label for="editDaysPresent<%= record.record_id %>">Days Present</label>
+                                <input type="number" class="form-control" id="editDaysPresent<%= record.record_id %>" name="daysPresent" value="<%= record.daysPresent %>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editDaysAbsent<%= record.record_id %>">Days Absent</label>
+                                <input type="number" class="form-control" id="editDaysAbsent<%= record.record_id %>" name="daysAbsent" value="<%= record.daysAbsent %>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editOvertimeHours<%= record.record_id %>">Overtime Hours</label>
+                                <input type="number" class="form-control" id="editOvertimeHours<%= record.record_id %>" name="overtimeHours" value="<%= record.overtime_hours %>" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    <% }); %>
 
     <!-- Import Attendance Modal -->
     <div class="modal fade" id="importAttendanceModal" tabindex="-1" aria-labelledby="importAttendanceModalLabel" aria-hidden="true">
@@ -190,8 +192,8 @@
                 <div class="modal-body">
                     <form action="/admin/importAttendance" method="POST" id="importAttendanceModalForm" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label for="attendance">Upload Attendance</label>
-                            <input type="file" class="form-control-file" id="attendance"  id="attendanceFile" name="attendanceFile" required>
+                            <label for="attendanceFile">Upload Attendance</label>
+                            <input type="file" class="form-control-file" id="attendanceFile" name="attendanceFile" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Import Attendance</button>
                     </form>
@@ -205,43 +207,35 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        $('#editAttendanceModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var employeeID = button.data('id');
-            var month = button.data('month');
-
-            var modal = $(this);
-            modal.find('#editEmployeeID').val(employeeID);
-            modal.find('#editMonth').val(month);
-        });
-        
         $(document).ready(function() {
             $('#import-attendance-btn').click(function(e) {
                 e.preventDefault(); // Prevent default button action (if applicable)
                 $('#importAttendanceModal').modal('show');
             });
         });
-// Listen for form submission
-$('#importAttendanceModalForm').submit(function(event) {
-        event.preventDefault();
 
-        var formData = new FormData(this);
+        // Listen for form submission
+        $('#importAttendanceModalForm').submit(function(event) {
+            event.preventDefault();
 
-        $.ajax({
-          url: $(this).attr('action'),
-          type: $(this).attr('method'),
-          data: formData,
-          processData: false,
-          contentType: false,
-          success: function(response) {
-            $('#importAttendanceModal').modal('hide');
-            $('#successMessage').show().delay(3000).fadeOut();
-          },
-          error: function(response) {
-            alert('There was an error submitting the form.');
-          }
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    $('#importAttendanceModal').modal('hide');
+                    $('#successMessage').show().delay(3000).fadeOut();
+                },
+                error: function(response) {
+                    alert('There was an error submitting the form.');
+                }
+            });
         });
-      });
+
         function approveLeave(requestId) {
             $.ajax({
                 url: '/admin/approve-leave/' + requestId,
@@ -273,30 +267,31 @@ $('#importAttendanceModalForm').submit(function(event) {
                 }
             });
         }
+
         // Search function
-     document.getElementById('search-form').addEventListener('submit', function(event) {
-                event.preventDefault();
-                const query = document.getElementById('search-query').value.toLowerCase();
-                const tableBody = document.getElementById('attendanceTable').querySelector('tbody');
-                if (!tableBody) {
-                    console.error('Table body not found');
-                    return;
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const query = document.getElementById('search-query').value.toLowerCase();
+            const tableBody = document.getElementById('attendanceTable').querySelector('tbody');
+            if (!tableBody) {
+                console.error('Table body not found');
+                return;
+            }
+
+            const rows = Array.from(tableBody.rows);
+
+            rows.forEach(row => {
+                const employeeID = row.cells[0].textContent.toLowerCase();
+                const firstName = row.cells[1].textContent.toLowerCase();
+                const lastName = row.cells[2].textContent.toLowerCase();
+
+                if (employeeID.includes(query) || firstName.includes(query) || lastName.includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
                 }
-
-                const rows = Array.from(tableBody.rows);
-
-                rows.forEach(row => {
-                    const employeeID = row.cells[0].textContent.toLowerCase();
-                    const firstName = row.cells[1].textContent.toLowerCase();
-                    const lastName = row.cells[2].textContent.toLowerCase();
-
-                    if (employeeID.includes(query) || firstName.includes(query) || lastName.includes(query)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
             });
+        });
     </script>
 </body>
 </html>

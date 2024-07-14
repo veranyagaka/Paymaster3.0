@@ -8,6 +8,31 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const csv = require('csv-parser'); // For CSV files
 const multer = require('multer');
+// Route to handle editing attendance
+router.post('/editAttendance/:id', async (req, res) => {
+  const RecordID = req.params.id;
+
+  const {daysPresent, daysAbsent, overtimeHours } = req.body;
+console.log('Editing attendance for record no:' ,RecordID);
+const sql = `
+UPDATE attendance_records SET daysPresent = ?, daysAbsent = ?, overtime_hours = ? WHERE record_id = ?
+`;
+const values = [daysPresent, daysAbsent, overtimeHours, RecordID];
+
+try {
+// Execute the SQL query using async/await
+const result = await database.query(sql, values);
+
+// Check if any rows were affected
+if (result.affectedRows === 0) {
+  return res.status(404).json({ error: 'Attendance record not found' });
+}
+res.redirect('/admin/employee-attendance');
+} catch (err) {
+console.error('Error updating attendance:', err);
+res.status(500).json({ error: 'Failed to update attendance record' });
+}
+});
 // Route for payroll history with pagination
 
 router.get('/payrollhistory', async (req, res) => {
@@ -469,20 +494,8 @@ router.get('/employee-attendance', async (req, res) => {
 });
 
 
-// Route to handle editing attendance
-router.post('/editAttendance', (req, res) => {
-  const { employeeID, month, daysPresent, daysAbsent, overtimeHours } = req.body;
 
-  // Find the attendance record and update it
-  const record = attendanceRecords.find(rec => rec.employeeID === employeeID && rec.month === month);
-  if (record) {
-      record.daysPresent = parseInt(daysPresent);
-      record.daysAbsent = parseInt(daysAbsent);
-      record.overtimeHours = parseInt(overtimeHours);
-  }
 
-  res.redirect('/admin-attendance');
-});
 // Route to handle form submission and generate PDF report
 router.post('/generateAttendanceReport', (req, res) => {
   const { reportMonth } = req.body;

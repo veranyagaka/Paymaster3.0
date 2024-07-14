@@ -7,11 +7,12 @@ const pdf = require('html-pdf');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const database = require('../db.js');
-
+const filepath =path.join(__dirname,'../../frontend/public/uploads/profile_pics')
+console.log('File path: ', filepath)
 // Set up multer for file upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'backend/uploads/profile_pics');
+    cb(null, filepath);
   },
   filename: (req, file, cb) => {
     cb(null, `${req.session.employeeID}-${Date.now()}${path.extname(file.originalname)}`);
@@ -27,7 +28,7 @@ router.post('/changeProfilePic', upload.single('profilePic'), async (req, res) =
   }
 
   const employeeId = req.session.EmployeeID;
-  const profilePicPath = path.join(__dirname,`../../frontend/uploads/profile_pics/${req.file.filename}`);
+  const profilePicPath = `/uploads/profile_pics/${req.file.filename}`;
 
   try {
     // Update the employee's profile picture path in the database
