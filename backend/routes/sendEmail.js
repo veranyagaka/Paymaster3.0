@@ -17,12 +17,12 @@ async function sendEmail() {
         throw new Error('Failed to send email');
     }
 }*/
-async function sendEmail(subject, message) {
+async function sendEmail(subject, message,employeeId) {
     const msg = {
       to: 'vera.nyagaka@strathmore.edu',
       from: 'nyagakavera@gmail.com', // Replace with your verified sender
       subject: subject,
-      html: message,
+      html: message + '<p>Employee ID: ' + employeeId + '</p>',
     };
   
     try {

@@ -46,7 +46,7 @@
                 No attendance records at the moment.
             </div>
         <% } %>        <h3 class="mt-4">Contact Admin</h3>
-        <form action="/accounts/contact-admin" method="POST">
+        <form id="contactForm" action="/accounts/contact-admin" method="POST">
             <input type="hidden" name="employeeID" value="MISSING">
             <div class="form-group">
                 <label for="subject">Subject</label>
@@ -65,6 +65,22 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <%- include('footer') %>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Assuming the email is sent successfully
+            document.getElementById('successMessage').style.display = 'block';
+
+            // Hide the success message after a few seconds
+            setTimeout(function() {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 3000);
+
+            // You can optionally clear the form inputs
+            this.reset();
+        });
+    </script>
 
 </body>
 </html>

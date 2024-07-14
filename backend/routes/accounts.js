@@ -434,19 +434,21 @@ router.get('/employee-attendance', async(req, res) => {
         res.status(500).send('Internal Server Error');    }
 });
 //email sending bruh
-const sendEmail = require('./sendEmail'); 
+const {sendEmail} = require('./sendEmail'); 
 
 router.post('/contact-admin', async (req, res) => {
+
     try {
       //const employeeID = req.body.employeeID; // Access employee ID from form data
       const subject = req.body.subject;
       const message = req.body.message;
-  
+    const employeeId = req.session.EmployeeID;
+
       // Optional: Validate and sanitize form data (if needed)
   
-      await sendEmail(subject, message); // Call your sendEmail function
+      await sendEmail(subject, message, employeeId); // Call your sendEmail function
   
-      res.status(200).send('Email sent successfully!'); // Respond to the client
+      res.redirect('/accounts/employee-attendance'); // Respond to the client
     } catch (error) {
       console.error('Error sending email:', error);
       res.status(500).send('Failed to send email'); // Handle errors

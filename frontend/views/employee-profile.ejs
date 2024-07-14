@@ -127,7 +127,7 @@
                     <div class="row">
                         <div class="col-md-12 text-md-center">
                             <% if (showPaymentButton) { %>
-                                <button class="btn btn-dark payment-details-btn" data-toggle="modal" data-target="#editPaymentModal">Set Payment Method</button>
+                                <button class="btn btn-dark payment-details-btn" data-toggle="modal" data-target="#setPaymentModal">Set Payment Method</button>
                             <% } %>
                         </div>
                         <div class="col-md-12 text-md-right">
@@ -182,28 +182,28 @@
         </div>
     </div>
     <!-- Payment Details Modal -->
-<div class="modal fade" id="editPaymentModal" tabindex="-1" role="dialog" aria-labelledby="editPaymentModalLabel" aria-hidden="true">
+<div class="modal fade" id="setPaymentModal" tabindex="-1" role="dialog" aria-labelledby="setPaymentModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editPaymentModalLabel">Set Payment Details</h5>
+                <h5 class="modal-title" id="setPaymentModalLabel">Set Payment Details</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/accounts/employees/payment-details/<%= employee.employeeID %>" method="POST">
+                <form action="/accounts/employees/payment-details/" method="POST">
                     <div class="form-group">
                         <label for="bankName">Bank Name</label>
-                        <input type="text" class="form-control" id="setbankName" name="bankName" placeholder="Enter bank name">
+                        <input type="text" class="form-control" id="setbankName" name="setbankName" placeholder="Enter bank name">
                     </div>
                     <div class="form-group">
                         <label for="bankAccountName">Bank Account Name</label>
-                        <input type="text" class="form-control" id="setbankAccountName" name="bankAccountName" placeholder="Enter bank account name">
+                        <input type="text" class="form-control" id="setbankAccountName" name="setbankAccountName" placeholder="Enter bank account name">
                     </div>
                     <div class="form-group">
                         <label for="bankAccountNumber">Bank Account Number</label>
-                        <input type="text" class="form-control" id="setbankAccountNumber" name="bankAccountNumber" placeholder="Enter bank account number">
+                        <input type="text" class="form-control" id="setbankAccountNumber" name="setbankAccountNumber" placeholder="Enter bank account number">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
