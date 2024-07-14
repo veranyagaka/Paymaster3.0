@@ -12,7 +12,7 @@
 <body>
     <%- include('navigationbar') %>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Payroll History</h1>
+        <h1 class="text-center mb-4">Your Payroll History</h1>
         <% if (payrollData.length > 0) { %>
           
           <table class="table table-bordered table-striped">
@@ -38,9 +38,9 @@
                   <td><%= record.pay_period_end.toLocaleDateString('en-US') %></td>
                   <td>Ksh.<%= record.baseSalary %></td>
                   <td>Ksh.<%= record.allowances %></td>
+                  <td>Ksh.<%= record.deductions %></td>
                   <td>Ksh.<%= record.finalSalary%></td>
                   <td><%= record.created_at.toLocaleDateString('en-US') %></td>
-
                 </tr>
               <% }); %>
             </tbody>
