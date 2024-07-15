@@ -45,9 +45,9 @@
             <div class="alert alert-info" role="alert">
                 No attendance records at the moment.
             </div>
-        <% } %>        <h3 class="mt-4">Contact Admin</h3>
+        <% } %>        
+        <h3 class="mt-4">Contact Admin</h3>
         <form id="contactForm" action="/accounts/contact-admin" method="POST">
-            <input type="hidden" name="employeeID" value="MISSING">
             <div class="form-group">
                 <label for="subject">Subject</label>
                 <input type="text" class="form-control" id="subject" name="subject" required>
@@ -59,7 +59,11 @@
             <button type="submit" class="btn btn-primary">Send</button>
         </form>
     </div>
-
+        <!-- Success message element -->
+        <div id="successMessage" class="alert alert-success mt-3" style="display: none;">
+            Email sent successfully.
+        </div>
+    </div>
     <!-- jQuery and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -67,20 +71,39 @@
     <%- include('footer') %>
     <script>
         document.getElementById('contactForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+            event.preventDefault(); // Prevent the default form submission
 
-            // Assuming the email is sent successfully
-            document.getElementById('successMessage').style.display = 'block';
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
 
-            // Hide the success message after a few seconds
-            setTimeout(function() {
-                document.getElementById('successMessage').style.display = 'none';
-            }, 3000);
+            // Send the form data using AJAX
+            $.ajax({
+                url: '/accounts/contact-admin',
+                type: 'POST',
+                data: {
+                    subject: subject,
+                    message: message
+                },
+                success: function(response) {
+                    // Show the success message
+                    document.getElementById('successMessage').style.display = 'block';
 
-            // You can optionally clear the form inputs
-            this.reset();
+                    // Hide the success message after a few seconds
+                    setTimeout(function() {
+                        document.getElementById('successMessage').style.display = 'none';
+                    }, 3000);
+
+                    // Clear the form inputs
+                    document.getElementById('contactForm').reset();
+                },
+                error: function(error) {
+                    console.error('Error sending email:', error);
+                    alert('Failed to send email');
+                }
+            });
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 </body>
 </html>

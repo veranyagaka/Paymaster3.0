@@ -27,7 +27,7 @@ async function sendEmail(subject, message,employeeId) {
   
     try {
       await sgMail.send(msg);
-      console.log('Email sent successfully');
+      console.log('Contact Email sent successfully');
     } catch (error) {
       console.error('Error sending email:', error.toString());
       throw new Error('Failed to send email');

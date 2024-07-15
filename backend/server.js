@@ -63,7 +63,7 @@ const redisClient = redis.createClient({
     socket: {
       tls: true,
       rejectUnauthorized: false,
-      connectTimeout: 300000    // Timeout in milliseconds (300,000 ms = 5 minutes)
+      connectTimeout: 600000    // Timeout in milliseconds (300,000 ms = 5 minutes)
 }
   });
 redisClient.connect()

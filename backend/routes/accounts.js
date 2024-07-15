@@ -132,7 +132,7 @@ function calculateNetPay(employeeData) {
     taxRate = 0.30;
   }
 
-  const overtimePay = employeeData.overtimeHours * 25;
+  const overtimePay = employeeData.overtimeHours * 125;
   finalSalaryBeforeDeductions += overtimePay;
 
   const taxAmount = finalSalaryBeforeDeductions * taxRate;
@@ -437,17 +437,19 @@ router.get('/employee-attendance', async(req, res) => {
 const {sendEmail} = require('./sendEmail'); 
 
 router.post('/contact-admin', async (req, res) => {
+  console.log('sending email');
 
     try {
-      //const employeeID = req.body.employeeID; // Access employee ID from form data
       const subject = req.body.subject;
+      console.log('mail', subject);
+
       const message = req.body.message;
     const employeeId = req.session.EmployeeID;
 
       // Optional: Validate and sanitize form data (if needed)
   
       await sendEmail(subject, message, employeeId); // Call your sendEmail function
-  
+      console.log('right email');
       res.redirect('/accounts/employee-attendance'); // Respond to the client
     } catch (error) {
       console.error('Error sending email:', error);
