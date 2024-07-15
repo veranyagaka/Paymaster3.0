@@ -1,8 +1,4 @@
-Salary calculation module
-Payroll history module
-oh nananana
-wiiih
-Check if attensance moduleis actually working
+DONE!!
 # Paymaster -Payroll Management System
 - [x] Better css for all the pages
 - [x] Use Bootstrap for the css
@@ -13,7 +9,7 @@ Check if attensance moduleis actually working
 - [x] Change profile pic
 - [x] Redirection to all the pages
 - [x] Ensure the restricted entry method
-- [] Deployment, Redis connection timeout and some few problems
+- [x] Deployment, Redis connection timeout and some few problems
 - [x] Database syncing
 - [x] DB Deployment
 - [x] Importing Attendance and Exporting
